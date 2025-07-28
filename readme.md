@@ -1,160 +1,118 @@
-# Template Fullstack React TypeScript + NestJS
+# ![Node.js](https://img.shields.io/badge/Node.js-339933?style=flat&logo=node.js&logoColor=white) ![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=flat&logo=typescript&logoColor=white) ![React](https://img.shields.io/badge/React-61DAFB?style=flat&logo=react&logoColor=black) ![NestJS](https://img.shields.io/badge/NestJS-E0234E?style=flat&logo=nestjs&logoColor=white) ![Vite](https://img.shields.io/badge/Vite-646CFF?style=flat&logo=vite&logoColor=white)
 
-Un template complet pour une application fullstack avec authentification, utilisant React TypeScript pour le frontend et NestJS pour le backend.
+# School_projet
 
-## 🚀 Fonctionnalités
+Ce projet est une application web développée pour la gestion scolaire. Il permet aux utilisateurs de s'inscrire, de se connecter et d'accéder à un tableau de bord administrateur pour gérer les utilisateurs et les rôles. Ce projet utilise une architecture client-serveur, avec une interface utilisateur construite en React et un backend développé avec NestJS.
 
-- **Frontend React TypeScript** avec routing et context d'authentification
-- **Backend NestJS** avec authentification JWT
-- **Base de données SQLite** avec TypeORM
-- **Authentification complète** (inscription, connexion, déconnexion)
-- **Routes protégées** côté frontend et backend
-- **Validation des données** avec class-validator
-- **Hashage des mots de passe** avec bcryptjs
-- **Interface utilisateur moderne** et responsive
+## Fonctionnalités clés
 
-## 📁 Structure du projet
+- **Inscription et connexion des utilisateurs** : Les utilisateurs peuvent créer un compte et se connecter.
+- **Tableau de bord administrateur** : Accès à un tableau de bord pour gérer les utilisateurs et les rôles.
+- **Routes protégées** : Accès sécurisé aux pages en fonction des rôles des utilisateurs.
+
+## Stack Technologique
+
+| Technologie       | Description                                                |
+|-------------------|------------------------------------------------------------|
+| ![Node.js](https://img.shields.io/badge/Node.js-339933?style=flat&logo=node.js&logoColor=white) | Environnement d'exécution JavaScript côté serveur.        |
+| ![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=flat&logo=typescript&logoColor=white) | Superset de JavaScript qui ajoute des types statiques.    |
+| ![React](https://img.shields.io/badge/React-61DAFB?style=flat&logo=react&logoColor=black) | Bibliothèque JavaScript pour construire des interfaces utilisateur. |
+| ![NestJS](https://img.shields.io/badge/NestJS-E0234E?style=flat&logo=nestjs&logoColor=white) | Framework pour construire des applications serveur efficaces. |
+| ![Vite](https://img.shields.io/badge/Vite-646CFF?style=flat&logo=vite&logoColor=white) | Outil de construction et de développement rapide pour les projets modernes. |
+
+## Instructions d'installation
+
+### Prérequis
+
+- Node.js (version 14 ou supérieure)
+- npm (version 6 ou supérieure)
+
+### Étapes d'installation
+
+1. Clonez le dépôt :
+   ```bash
+   git clone https://github.com/triafus/School_projet.git
+   cd School_projet
+   ```
+
+2. Installez les dépendances pour le client :
+   ```bash
+   cd client
+   npm install
+   ```
+
+3. Installez les dépendances pour le serveur :
+   ```bash
+   cd ../server
+   npm install
+   ```
+
+4. Configurez les variables d'environnement (si nécessaire) :
+   - Créez un fichier `.env` à la racine du dossier `server` et ajoutez les variables nécessaires, par exemple :
+     ```
+     DATABASE_URL=your_database_url
+     JWT_SECRET=your_jwt_secret
+     ```
+
+## Utilisation
+
+### Démarrer le projet
+
+1. Démarrez le serveur :
+   ```bash
+   cd server
+   npm run start
+   ```
+
+2. Démarrez le client :
+   ```bash
+   cd ../client
+   npm run dev
+   ```
+
+### Exemple d'utilisation
+
+- Accédez à l'application via `http://localhost:3000` dans votre navigateur.
+- Utilisez les formulaires d'inscription et de connexion pour accéder au tableau de bord.
+
+## Structure du projet
+
+Voici un aperçu de la structure du projet :
 
 ```
-fullstack-auth-app/
-├── client/                 # Frontend React TypeScript
-│   ├── src/
+School_projet/
+├── client/                # Code source de l'application frontend
+│   ├── public/            # Fichiers publics (images, etc.)
+│   ├── src/               # Code source de l'application
 │   │   ├── components/     # Composants React
-│   │   ├── contexts/       # Context d'authentification
+│   │   ├── hooks/          # Hooks personnalisés
 │   │   ├── services/       # Services API
-│   │   ├── App.tsx
-│   │   └── index.tsx
-│   ├── package.json
-│   └── tsconfig.json
-├── server/                 # Backend NestJS
-│   ├── src/
-│   │   ├── auth/          # Module d'authentification
-│   │   ├── users/         # Module utilisateurs
-│   │   ├── app.module.ts
-│   │   └── main.ts
-│   ├── package.json
-│   ├── tsconfig.json
-│   └── nest-cli.json
-├── package.json           # Scripts racine
-└── README.md
+│   │   ├── types/          # Types TypeScript
+│   │   ├── App.tsx         # Point d'entrée de l'application
+│   │   └── main.tsx        # Fichier principal pour le rendu
+├── server/                # Code source de l'application backend
+│   ├── src/               # Code source du serveur
+│   │   ├── auth/          # Gestion de l'authentification
+│   │   ├── users/         # Gestion des utilisateurs
+│   │   └── app.module.ts   # Module principal de l'application
+└── package.json           # Fichier de configuration des dépendances
 ```
 
-## 🛠️ Installation
+### Explication des fichiers principaux
 
-### 1. Cloner le projet et installer les dépendances
+- **client/src/App.tsx** : Point d'entrée de l'application React.
+- **server/src/main.ts** : Point d'entrée de l'application NestJS.
+- **server/src/auth/** : Contient la logique d'authentification (contrôleurs, services, etc.).
+- **server/src/users/** : Contient la logique de gestion des utilisateurs.
 
-```bash
-# Installer les dépendances du projet principal
-npm install
+## Contribuer
 
-# Installer toutes les dépendances (client + server)
-npm run install:all
-```
+Les contributions sont les bienvenues ! Si vous souhaitez contribuer à ce projet, veuillez suivre ces étapes :
 
-### 2. Variables d'environnement
+1. Forkez le dépôt.
+2. Créez une branche pour votre fonctionnalité (`git checkout -b feature/ma-fonctionnalité`).
+3. Effectuez vos modifications et validez (`git commit -m 'Ajout d'une nouvelle fonctionnalité'`).
+4. Poussez vos modifications (`git push origin feature/ma-fonctionnalité`).
+5. Ouvrez une Pull Request.
 
-Créer un fichier `.env` dans le dossier `server/` :
-
-```env
-JWT_SECRET=votre-secret-jwt-super-securise-et-long
-DATABASE_URL=./database.sqlite
-```
-
-## 🚀 Démarrage
-
-### Mode développement
-
-```bash
-# Démarrer le frontend et le backend simultanément
-npm run dev
-
-# Ou séparément :
-npm run start:client   # Frontend sur http://localhost:3000
-npm run start:server   # Backend sur http://localhost:3001
-```
-
-### Mode production
-
-```bash
-# Build les deux applications
-npm run build
-
-# Démarrer en production
-npm run start:prod
-```
-
-## 🔐 API Endpoints
-
-### Authentification
-
-- `POST /api/auth/register` - Inscription
-- `POST /api/auth/login` - Connexion
-
-### Utilisateurs (protégées)
-
-- `GET /api/users/profile` - Profil utilisateur
-
-## 🧪 Utilisation
-
-1. **Inscription** : Créer un compte avec email, mot de passe, prénom et nom
-2. **Connexion** : Se connecter avec email et mot de passe
-3. **Dashboard** : Accéder à l'espace personnel après connexion
-4. **Profil** : Voir les informations utilisateur
-5. **Déconnexion** : Se déconnecter et être redirigé vers la page de connexion
-
-## 🔒 Sécurité
-
-- Mots de passe hashés avec bcryptjs
-- Authentification JWT avec expiration
-- Routes protégées côté frontend et backend
-- Validation des données d'entrée
-- Gestion des erreurs et des cas d'edge
-- CORS configuré pour la sécurité
-
-## 🎨 Personnalisation
-
-- Modifier les styles dans `client/src/App.css`
-- Ajouter de nouvelles routes dans `client/src/App.tsx`
-- Créer de nouveaux modules NestJS dans `server/src/`
-- Personnaliser la base de données dans `server/src/app.module.ts`
-
-## 📝 Scripts disponibles
-
-```bash
-npm run dev           # Démarrage en mode développement
-npm run build         # Build frontend + backend
-npm run start:client  # Frontend uniquement
-npm run start:server  # Backend uniquement
-npm run install:all   # Installer toutes les dépendances
-```
-
-## 🔧 Technologies utilisées
-
-### Frontend
-- React 18
-- TypeScript
-- React Router DOM
-- Axios
-- CSS3
-
-### Backend
-- NestJS
-- TypeScript
-- TypeORM
-- SQLite
-- JWT
-- Bcryptjs
-- Class Validator
-
-## 🎯 Prochaines étapes
-
-- Ajouter des tests unitaires
-- Implémenter la réinitialisation de mot de passe
-- Ajouter des rôles utilisateur
-- Implémenter la pagination
-- Ajouter des fonctionnalités métier
-- Migrer vers PostgreSQL en production
-
-## 📄 Licence
-
-Ce template est libre d'utilisation pour vos projets personnels et commerciaux.
+Merci de votre intérêt pour ce projet !
