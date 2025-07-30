@@ -12,12 +12,10 @@ import {
   Button,
   Alert,
   CircularProgress,
-  Backdrop,
   IconButton,
   Tooltip,
   TextField,
   InputAdornment,
-  Checkbox,
   Select,
   MenuItem,
   FormControl,
@@ -33,11 +31,9 @@ import {
 } from "@mui/icons-material";
 import { useAuth } from "../hooks/useAuth";
 import { useUsers, useUpdateUserRole, useDeleteUser } from "../hooks/useUser";
-import { UserRole } from "../types/user";
 
 const AdminDashboard: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedUsers, setSelectedUsers] = useState<number[]>([]);
   const [filterRole, setFilterRole] = useState("All");
   const [error, setError] = useState<string | null>(null);
   const [updatingUserId, setUpdatingUserId] = useState<number | null>(null);
@@ -55,22 +51,6 @@ const AdminDashboard: React.FC = () => {
 
   const getInitials = (firstName: string, lastName: string) => {
     return `${firstName[0]}${lastName[0]}`.toUpperCase();
-  };
-
-  const handleSelectUser = (userId: number) => {
-    setSelectedUsers((prev) =>
-      prev.includes(userId)
-        ? prev.filter((id) => id !== userId)
-        : [...prev, userId]
-    );
-  };
-
-  const handleSelectAll = () => {
-    if (selectedUsers.length === filteredUsers.length) {
-      setSelectedUsers([]);
-    } else {
-      setSelectedUsers(filteredUsers.map((user) => user.id));
-    }
   };
 
   useEffect(() => {

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "../hooks/useAuth";
 import { useNavigate, Link } from "react-router-dom";
 import {
@@ -12,16 +12,19 @@ import {
 export const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { login, isLoggingIn } = useAuth();
+  const { login, isLoggingIn, isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const from = "/home";
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate(from, { replace: true });
+    }
+  }, [isAuthenticated, navigate, from]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     login({ email, password });
-    if (isLoggingIn) {
-      navigate(from, { replace: true });
-    }
   };
 
   return (
@@ -93,7 +96,7 @@ export const Login = () => {
                   color: "#64748b",
                 }}
               >
-                Already have an account?
+                Already have an account ?{" "}
                 <Typography
                   component={Link}
                   to="/register"
@@ -221,7 +224,7 @@ export const Login = () => {
                     Connexion...
                   </Box>
                 ) : (
-                  "Join"
+                  "Se connecter"
                 )}
               </Button>
             </form>

@@ -1,13 +1,5 @@
 import { apiClient } from "../apiClient";
-import { ApiError } from "../types/api";
 import { User, UserRole } from "../types/user";
-
-const handleServiceError = (error: unknown) => {
-  const err = error as ApiError;
-  throw new Error(
-    err.response?.data?.message || err.message || "An unexpected error occurred"
-  );
-};
 
 export const UserService = {
   getAllUsers: async (): Promise<User[]> => {

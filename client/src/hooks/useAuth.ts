@@ -10,9 +10,11 @@ export const useAuth = () => {
     queryKey: ["auth", "user"],
     queryFn: async () => {
       try {
-        if (!localStorage.getItem("token")) return null;
+        const token = localStorage.getItem("token");
+        if (!token) return null;
         return await AuthService.getProfile();
       } catch {
+        localStorage.removeItem("token");
         return null;
       }
     },
@@ -23,17 +25,29 @@ export const useAuth = () => {
   const loginMutation = useMutation({
     mutationFn: (credentials: { email: string; password: string }) =>
       AuthService.login(credentials.email, credentials.password),
-    onSuccess: (data) => {
+    onMutate: () => {
+      queryClient.setQueryData(["auth", "error"], null);
+    },
+    onSuccess: async (data) => {
       localStorage.setItem("token", data.access_token);
-      queryClient.setQueryData(["auth", "user"], data.user);
+      await queryClient.refetchQueries({
+        queryKey: ["auth", "user"],
+        exact: true,
+      });
+    },
+    onError: (error) => {
+      queryClient.setQueryData(["auth", "error"], error);
     },
   });
 
   const registerMutation = useMutation({
     mutationFn: (userData: RegisterData) => AuthService.register(userData),
-    onSuccess: (data) => {
+    onSuccess: async (data) => {
       localStorage.setItem("token", data.access_token);
-      queryClient.setQueryData(["auth", "user"], data.user);
+      await queryClient.refetchQueries({
+        queryKey: ["auth", "user"],
+        exact: true,
+      });
     },
   });
 
@@ -48,9 +62,12 @@ export const useAuth = () => {
     isLoading: userQuery.isLoading,
     isAuthenticated: !!userQuery.data,
     login: loginMutation.mutate,
-    isLoggingIn: loginMutation.isPending,
+    isLoggingIn:
+      loginMutation.isPending ||
+      (loginMutation.isSuccess && userQuery.isFetching),
     register: registerMutation.mutate,
     isRegistering: registerMutation.isPending,
     logout,
+    error: queryClient.getQueryData(["auth", "error"]),
   };
 };
