@@ -23,6 +23,7 @@ import {
   FormControl,
   FormControlLabel,
   Switch,
+  Container,
 } from "@mui/material";
 import {
   Person as PersonIcon,
@@ -31,7 +32,7 @@ import {
   Delete as DeleteIcon,
 } from "@mui/icons-material";
 import { useAuth } from "../hooks/useAuth";
-import { useUsers, useUpdateUserRole } from "../hooks/useUser";
+import { useUsers, useUpdateUserRole, useDeleteUser } from "../hooks/useUser";
 import { UserRole } from "../types/user";
 
 const AdminDashboard: React.FC = () => {
@@ -41,6 +42,7 @@ const AdminDashboard: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [updatingUserId, setUpdatingUserId] = useState<number | null>(null);
   const [roleToggles, setRoleToggles] = useState<Record<number, boolean>>({});
+  const [userToDelete, setUserToDelete] = useState<number | null>(null);
 
   const { user: currentUser } = useAuth();
   const {
@@ -82,7 +84,7 @@ const AdminDashboard: React.FC = () => {
     setRoleToggles(initialToggles);
   }, [users]);
 
-  const handleToggleChange = async (userId: number) => {
+  const handleUpdateRole = async (userId: number) => {
     const currentState = roleToggles[userId];
     const newRole = currentState ? "user" : "admin";
     setRoleToggles((prev) => ({ ...prev, [userId]: !currentState }));
@@ -95,6 +97,24 @@ const AdminDashboard: React.FC = () => {
       setError("Échec de la mise à jour du rôle");
     } finally {
       setUpdatingUserId(null);
+    }
+  };
+
+  const deleteUserMutation = useDeleteUser();
+
+  const handleDeleteUser = async (userId: number) => {
+    if (userId === currentUser?.id) {
+      setError("Vous ne pouvez pas supprimer votre propre compte");
+      return;
+    }
+
+    try {
+      setUserToDelete(userId);
+      await deleteUserMutation.mutateAsync(userId);
+    } catch (error) {
+      setError("Échec de la suppression de l'utilisateur");
+    } finally {
+      setUserToDelete(null);
     }
   };
 
@@ -121,7 +141,7 @@ const AdminDashboard: React.FC = () => {
   );
 
   return (
-    <Box sx={{ p: 4, bgcolor: "#fafafa", minHeight: "100vh" }}>
+    <Container sx={{ p: 4, bgcolor: "#fafafa", minHeight: "100vh" }}>
       {error && (
         <Alert
           severity="error"
@@ -226,21 +246,7 @@ const AdminDashboard: React.FC = () => {
           >
             <TableHead>
               <TableRow sx={{ bgcolor: "#f9fafb" }}>
-                <TableCell padding="checkbox" sx={{ width: 48 }}>
-                  <Checkbox
-                    size="small"
-                    indeterminate={
-                      selectedUsers.length > 0 &&
-                      selectedUsers.length < filteredUsers.length
-                    }
-                    checked={
-                      filteredUsers.length > 0 &&
-                      selectedUsers.length === filteredUsers.length
-                    }
-                    onChange={handleSelectAll}
-                    sx={{ color: "#9ca3af" }}
-                  />
-                </TableCell>
+                <TableCell padding="checkbox" sx={{ width: 48 }}></TableCell>
                 <TableCell
                   sx={{
                     color: "#6b7280",
@@ -298,14 +304,7 @@ const AdminDashboard: React.FC = () => {
                     "&:last-child td": { borderBottom: 0 },
                   }}
                 >
-                  <TableCell padding="checkbox">
-                    <Checkbox
-                      size="small"
-                      checked={selectedUsers.includes(user.id)}
-                      onChange={() => handleSelectUser(user.id)}
-                      sx={{ color: "#9ca3af" }}
-                    />
-                  </TableCell>
+                  <TableCell padding="checkbox"></TableCell>
                   <TableCell>
                     <Box display="flex" alignItems="center" gap={2}>
                       <Avatar
@@ -346,7 +345,7 @@ const AdminDashboard: React.FC = () => {
                         control={
                           <Switch
                             checked={roleToggles[user.id] || false}
-                            onChange={() => handleToggleChange(user.id)}
+                            onChange={() => handleUpdateRole(user.id)}
                             disabled={
                               user.id === currentUser?.id ||
                               updatingUserId === user.id
@@ -380,12 +379,18 @@ const AdminDashboard: React.FC = () => {
                       <Tooltip title="Supprimer l'utilisateur">
                         <IconButton
                           size="small"
+                          onClick={() => handleDeleteUser(user.id)}
+                          disabled={userToDelete === user.id}
                           sx={{
                             color: "#9ca3af",
                             "&:hover": { color: "#ef4444" },
                           }}
                         >
-                          <DeleteIcon fontSize="small" />
+                          {userToDelete === user.id ? (
+                            <CircularProgress size={20} />
+                          ) : (
+                            <DeleteIcon fontSize="small" />
+                          )}
                         </IconButton>
                       </Tooltip>
                     )}
@@ -426,7 +431,7 @@ const AdminDashboard: React.FC = () => {
           <></>
         )}
       </Box>
-    </Box>
+    </Container>
   );
 };
 

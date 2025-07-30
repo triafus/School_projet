@@ -32,8 +32,10 @@ export const useDeleteUser = () => {
   return useMutation({
     mutationFn: (userId: number) => UserService.deleteUser(userId),
     onSuccess: (_, userId) => {
-      queryClient.removeQueries({ queryKey: ["user", userId] });
-      queryClient.invalidateQueries({ queryKey: ["user"] });
+      queryClient.setQueryData<User[]>(
+        ["users"],
+        (old) => old?.filter((user) => user.id !== userId) || []
+      );
     },
   });
 };
