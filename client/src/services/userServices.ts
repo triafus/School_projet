@@ -11,39 +11,23 @@ const handleServiceError = (error: unknown) => {
 
 export const UserService = {
   getAllUsers: async (): Promise<User[]> => {
-    try {
-      const { data } = await apiClient.get<User[]>("/users");
-      return data;
-    } catch (error) {
-      return handleServiceError(error);
-    }
+    const { data } = await apiClient.get<User[]>("/users");
+    return data;
   },
 
   updateUserRole: async (userId: number, role: UserRole): Promise<User> => {
-    try {
-      const { data } = await apiClient.patch<User>(`/users/${userId}/role`, {
-        role,
-      });
-      return data;
-    } catch (error) {
-      return handleServiceError(error);
-    }
+    const { data } = await apiClient.patch<User>(`/users/${userId}/role`, {
+      role,
+    });
+    return data;
   },
 
   getUserById: async (userId: number): Promise<User> => {
-    try {
-      const { data } = await apiClient.get<User>(`/users/${userId}`);
-      return data;
-    } catch (error) {
-      return handleServiceError(error);
-    }
+    const { data } = await apiClient.get<User>(`/users/${userId}`);
+    return data;
   },
 
   deleteUser: async (userId: number): Promise<void> => {
-    try {
-      await apiClient.delete(`/users/${userId}`);
-    } catch (error) {
-      return handleServiceError(error);
-    }
+    await apiClient.delete(`/users/${userId}`);
   },
 };

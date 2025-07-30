@@ -49,8 +49,9 @@ export const Register = () => {
 
   return (
     <Box
+      display="flex"
+      flexDirection="row-reverse"
       sx={{
-        display: "flex",
         minHeight: "100vh",
         bgcolor: "#fafafa",
       }}
@@ -91,6 +92,19 @@ export const Register = () => {
             }}
           >
             The Best Architecture Magazine
+          </Typography>
+        </Box>
+
+        <Box>
+          <Typography
+            variant="h6"
+            sx={{
+              fontWeight: 600,
+              color: "rgb(236, 237, 240)",
+              mb: 0.5,
+            }}
+          >
+            Architecture, Spain
           </Typography>
         </Box>
       </Box>

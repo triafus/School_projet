@@ -20,6 +20,12 @@ import { UsersService } from "./users.service";
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
+  @Get()
+  @Roles("admin")
+  async findAll() {
+    return this.usersService.findAll();
+  }
+
   @Get("profile")
   async getProfile(@Request() req) {
     return this.usersService.findById(req.user.id);
