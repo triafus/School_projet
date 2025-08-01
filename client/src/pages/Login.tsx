@@ -14,7 +14,7 @@ export const Login = () => {
   const [password, setPassword] = useState("");
   const { login, isLoggingIn } = useAuth();
   const navigate = useNavigate();
-  const from = "/";
+  const from = "/home";
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

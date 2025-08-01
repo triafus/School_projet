@@ -6,7 +6,8 @@ export const useUsers = () => {
   return useQuery<User[]>({
     queryKey: ["users"],
     queryFn: UserService.getAllUsers,
-    staleTime: 5 * 60 * 1000, // 5 minutes
+    staleTime: 5 * 60 * 1000,
+    retry: 1,
   });
 };
 
@@ -14,23 +15,14 @@ export const useUser = (userId: number) => {
   return useQuery<User>({
     queryKey: ["user", userId],
     queryFn: () => UserService.getUserById(userId),
-    enabled: !!userId, // Exécuter seulement si userId est défini
+    enabled: !!userId,
   });
 };
 
 export const useUpdateUserRole = () => {
-  const queryClient = useQueryClient();
-
   return useMutation({
     mutationFn: ({ userId, role }: { userId: number; role: UserRole }) =>
       UserService.updateUserRole(userId, role),
-    onSuccess: (updatedUser) => {
-      // Mettre à jour le cache de l'utilisateur spécifique
-      queryClient.setQueryData(["user", updatedUser.id], updatedUser);
-
-      // Invalider la liste des utilisateurs
-      queryClient.invalidateQueries({ queryKey: ["user"] });
-    },
   });
 };
 
@@ -40,11 +32,10 @@ export const useDeleteUser = () => {
   return useMutation({
     mutationFn: (userId: number) => UserService.deleteUser(userId),
     onSuccess: (_, userId) => {
-      // Supprimer l'utilisateur du cache
-      queryClient.removeQueries({ queryKey: ["user", userId] });
-
-      // Invalider la liste des utilisateurs
-      queryClient.invalidateQueries({ queryKey: ["user"] });
+      queryClient.setQueryData<User[]>(
+        ["users"],
+        (old) => old?.filter((user) => user.id !== userId) || []
+      );
     },
   });
 };

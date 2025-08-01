@@ -13,7 +13,7 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { useAuth } from "../hooks/useAuth";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Dashboard: React.FC = () => {
   const { user, isAuthenticated, isLoading, logout } = useAuth();
@@ -42,48 +42,11 @@ const Dashboard: React.FC = () => {
   }
 
   if (!isAuthenticated) {
-    return null; // La redirection est déjà gérée par l'effet
+    return null;
   }
 
   return (
     <Box sx={{ minHeight: "100vh", backgroundColor: "#f5f5f5" }}>
-      <AppBar
-        position="static"
-        sx={{
-          backgroundColor: "white",
-          boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
-          color: "black",
-        }}
-      >
-        <Toolbar sx={{ justifyContent: "space-between" }}>
-          <Typography variant="h5" sx={{ color: "#333", fontWeight: "bold" }}>
-            Dashboard
-          </Typography>
-          <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-            <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
-              <Typography sx={{ color: "#666" }}>Bonjour</Typography>
-              <Typography variant="h6" sx={{ color: "#333" }}>
-                {user?.firstName}
-              </Typography>
-            </Box>
-            <Button
-              onClick={logout}
-              sx={{
-                backgroundColor: "#f44336",
-                color: "white",
-                "&:hover": {
-                  backgroundColor: "#da190b",
-                },
-                px: 2,
-                py: 1,
-              }}
-            >
-              Déconnexion
-            </Button>
-          </Box>
-        </Toolbar>
-      </AppBar>
-
       <Stack alignItems="center" sx={{ p: 3 }}>
         <Card
           sx={{
