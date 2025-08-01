@@ -2,9 +2,6 @@ import React from "react";
 import {
   Box,
   Typography,
-  Button,
-  AppBar,
-  Toolbar,
   Card,
   CardContent,
   Grid,
@@ -13,10 +10,10 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { useAuth } from "../hooks/useAuth";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Dashboard: React.FC = () => {
-  const { user, isAuthenticated, isLoading, logout } = useAuth();
+  const { user, isAuthenticated, isLoading } = useAuth();
   const navigate = useNavigate();
 
   // Redirection si non authentifié

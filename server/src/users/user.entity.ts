@@ -4,8 +4,10 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
 } from "typeorm";
 import { Exclude } from "class-transformer";
+import { Image } from "../images/image.entity";
 
 @Entity("users")
 export class User {
@@ -27,6 +29,10 @@ export class User {
 
   @Column({ default: "user" })
   role: string;
+
+  @OneToMany(() => Image, (image) => image.user, { cascade: true })
+  @Exclude({ toPlainOnly: true })
+  images: Image[];
 
   @CreateDateColumn()
   createdAt: Date;

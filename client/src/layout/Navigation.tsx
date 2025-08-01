@@ -13,7 +13,6 @@ import {
   Menu,
   MenuItem,
   Divider,
-  Chip,
   Tooltip,
   useTheme,
   useMediaQuery,
@@ -21,18 +20,14 @@ import {
 import {
   Dashboard as DashboardIcon,
   Person as PersonIcon,
-  Settings as SettingsIcon,
   Logout as LogoutIcon,
-  Notifications as NotificationsIcon,
   AdminPanelSettings as AdminIcon,
-  Home as HomeIcon,
   Menu as MenuIcon,
   ChevronLeft as ChevronLeftIcon,
   MoreVert as MoreVertIcon,
-  ChevronRightOutlined,
   MoreHorizOutlined,
 } from "@mui/icons-material";
-import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
+import { Link, Outlet, useLocation } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 
 const DRAWER_WIDTH = 280;
@@ -76,7 +71,7 @@ const Navigation = () => {
 
   const menuItems = [
     {
-      text: "Dashboard",
+      text: "Home",
       icon: <DashboardIcon />,
       path: "/home",
       color: "#667eea",
@@ -121,15 +116,7 @@ const Navigation = () => {
         }}
       >
         {isCollapsed ? (
-          <Box sx={{ display: "flex", justifyContent: "center" }}>
-            <img
-              src="./../public/assets/PickU_logo_color.png"
-              alt="Pict'U"
-              style={{ maxWidth: "100%", height: "40px" }}
-            />
-          </Box>
-        ) : (
-          <Box display="flex" alignItems="center" gap={1}>
+          <Link to="/home" style={{ textDecoration: "none", color: "white" }}>
             <Box
               sx={{
                 display: "flex",
@@ -144,6 +131,25 @@ const Navigation = () => {
                 style={{ maxWidth: "100%", height: "40px" }}
               />
             </Box>
+          </Link>
+        ) : (
+          <Box display="flex" alignItems="center" gap={1}>
+            <Link to="/home" style={{ textDecoration: "none", color: "white" }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  width: 40,
+                  height: 40,
+                }}
+              >
+                <img
+                  src="./../public/assets/PickU_logo_color.png"
+                  alt="Pict'U"
+                  style={{ maxWidth: "100%", height: "40px" }}
+                />
+              </Box>
+            </Link>
             <Typography
               variant="h6"
               sx={{

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "../hooks/useAuth";
 import { useNavigate, Link } from "react-router-dom";
 import {
@@ -21,6 +21,13 @@ export const Register = () => {
   const [error, setError] = useState<string | null>(null);
   const { register, isRegistering } = useAuth();
   const navigate = useNavigate();
+  const from = "/home";
+
+  useEffect(() => {
+    if (isRegistering) {
+      navigate(from, { replace: true });
+    }
+  }, [isRegistering, navigate, from]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -36,8 +43,6 @@ export const Register = () => {
 
     try {
       await register(formData);
-      // Redirection après inscription réussie
-      navigate("/login", { replace: true });
     } catch (err) {
       setError(
         err instanceof Error
@@ -143,7 +148,7 @@ export const Register = () => {
                 color: "#64748b",
               }}
             >
-              Already have an account?{" "}
+              Already have an account ?{" "}
               <Typography
                 component={Link}
                 to="/login"

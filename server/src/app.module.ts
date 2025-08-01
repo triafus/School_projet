@@ -6,6 +6,8 @@ import { PassportModule } from "@nestjs/passport";
 import { AuthModule } from "./auth/auth.module";
 import { UsersModule } from "./users/users.module";
 import { User } from "./users/user.entity";
+import { Image } from "./images/image.entity";
+import { ImagesModule } from "./images/images.module";
 
 @Module({
   imports: [
@@ -24,8 +26,10 @@ import { User } from "./users/user.entity";
           rejectUnauthorized: false,
         },
       },
-      entities: [User],
+      entities: [User, Image],
       synchronize: true,
+      logging: true,
+      logger: "advanced-console",
     }),
     PassportModule.register({ defaultStrategy: "jwt" }),
     JwtModule.register({
@@ -36,6 +40,7 @@ import { User } from "./users/user.entity";
     }),
     AuthModule,
     UsersModule,
+    ImagesModule,
   ],
 })
 export class AppModule {}
