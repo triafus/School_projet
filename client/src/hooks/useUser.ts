@@ -20,9 +20,15 @@ export const useUser = (userId: number) => {
 };
 
 export const useUpdateUserRole = () => {
+  const queryClient = useQueryClient();
+
   return useMutation({
+    mutationKey: ["users"],
     mutationFn: ({ userId, role }: { userId: number; role: UserRole }) =>
       UserService.updateUserRole(userId, role),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["users"] });
+    },
   });
 };
 

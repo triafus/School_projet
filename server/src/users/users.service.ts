@@ -28,32 +28,31 @@ export class UsersService {
   }
 
   async create(createUserDto: CreateUserDto): Promise<User> {
-    const {
-      email,
-      password,
-      firstName,
-      lastName,
-      role = UserRole.USER,
-    } = createUserDto;
+    console.log("DTO reçu :", createUserDto);
 
     const existingUser = await this.usersRepository.findOne({
-      where: { email },
+      where: { email: createUserDto.email },
     });
+    console.log("existingUser :", existingUser);
+
     if (existingUser) {
       throw new ConflictException("Un utilisateur avec cet email existe déjà");
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
+    console.log("Password hashé :", hashedPassword);
 
     const user = this.usersRepository.create({
-      email,
+      ...createUserDto,
       password: hashedPassword,
-      firstName,
-      lastName,
-      role,
     });
 
-    return this.usersRepository.save(user);
+    console.log("Entité construite :", user);
+
+    const savedUser = await this.usersRepository.save(user);
+    console.log("User sauvegardé :", savedUser);
+
+    return savedUser;
   }
 
   async updateRole(id: number, role: UserRole): Promise<User> {
