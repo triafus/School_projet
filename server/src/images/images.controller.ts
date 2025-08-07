@@ -23,7 +23,6 @@ import { UserRole } from "../users/user-role.enum";
 import { Request } from "express";
 import { User } from "../users/user.entity";
 import { FileTypeValidator } from "src/decorators/file-type.decorator";
-import { UploadLimitMiddleware } from "./middleware/upload-limite.middleware";
 
 @Controller("images")
 export class ImagesController {

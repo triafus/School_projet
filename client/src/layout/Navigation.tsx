@@ -8,27 +8,22 @@ import {
   ListItemIcon,
   ListItemText,
   Typography,
-  Avatar,
   IconButton,
-  Menu,
-  MenuItem,
-  Divider,
   Tooltip,
   useTheme,
   useMediaQuery,
 } from "@mui/material";
 import {
   Dashboard as DashboardIcon,
-  Person as PersonIcon,
-  Logout as LogoutIcon,
   AdminPanelSettings as AdminIcon,
   Menu as MenuIcon,
   ChevronLeft as ChevronLeftIcon,
-  MoreVert as MoreVertIcon,
   MoreHorizOutlined,
 } from "@mui/icons-material";
 import { Link, Outlet, useLocation } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
+import { MenuProfile } from "../components/MenuProfile";
+import { Profile } from "../components/Profile";
 
 const DRAWER_WIDTH = 280;
 const COLLAPSED_WIDTH = 72;
@@ -38,25 +33,10 @@ const Navigation = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
   const location = useLocation();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-
-  const handleProfileMenuOpen = (
-    event: React.MouseEvent<HTMLButtonElement>
-  ) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleProfileMenuClose = () => {
-    setAnchorEl(null);
-  };
-
-  const handleLogout = () => {
-    handleProfileMenuClose();
-    logout();
-  };
 
   const handleDrawerToggle = () => {
     if (isMobile) {
@@ -185,7 +165,6 @@ const Navigation = () => {
           </IconButton>
         )}
       </Box>
-
       {/* Navigation principale */}
       <Box
         display="flex"
@@ -269,147 +248,10 @@ const Navigation = () => {
           ))}
         </List>
       </Box>
-
       {/* Section utilisateur en bas */}
-      <Box
-        sx={{
-          p: 2,
-          borderTop: "1px solid rgba(255, 255, 255, 0.1)",
-          backgroundColor: "rgba(0, 0, 0, 0.1)",
-        }}
-      >
-        {!isCollapsed ? (
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              gap: 2,
-              p: 2,
-              borderRadius: "12px",
-              backgroundColor: "rgba(255, 255, 255, 0.05)",
-              backdropFilter: "blur(10px)",
-              border: "1px solid rgba(255, 255, 255, 0.1)",
-            }}
-          >
-            <Avatar
-              sx={{
-                width: 44,
-                height: 44,
-                backgroundColor: "rgba(255, 255, 255, 0.05)",
-                color: "white",
-                fontWeight: "bold",
-                border: "2px solid rgba(255, 255, 255, 0.1)",
-                fontSize: "1.1rem",
-              }}
-            >
-              {user?.firstName?.charAt(0)?.toUpperCase()}
-            </Avatar>
-
-            <Box sx={{ flex: 1, minWidth: 0 }}>
-              <Typography
-                sx={{
-                  color: "white",
-                  fontWeight: 600,
-                  fontSize: "0.9rem",
-                  lineHeight: 1.2,
-                  whiteSpace: "nowrap",
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                }}
-              >
-                {user?.firstName} {user?.lastName}
-              </Typography>
-              <Typography
-                sx={{
-                  color: "rgba(255, 255, 255, 0.7)",
-                  fontSize: "0.75rem",
-                  lineHeight: 1,
-                  mt: 0.5,
-                }}
-              >
-                {user?.role === "admin" ? "Administrateur" : "Utilisateur"}
-              </Typography>
-            </Box>
-
-            <IconButton
-              onClick={handleProfileMenuOpen}
-              sx={{
-                color: "white",
-                "&:hover": {
-                  backgroundColor: "rgba(255, 255, 255, 0.1)",
-                },
-              }}
-            >
-              <MoreVertIcon fontSize="small" />
-            </IconButton>
-          </Box>
-        ) : (
-          <Box sx={{ display: "flex", justifyContent: "center" }}>
-            <Tooltip
-              title={`${user?.firstName} ${user?.lastName}`}
-              placement="right"
-            >
-              <IconButton onClick={handleProfileMenuOpen}>
-                <Avatar
-                  sx={{
-                    width: 40,
-                    height: 40,
-                    backgroundColor: "rgba(255, 255, 255, 0.2)",
-                    color: "white",
-                    fontWeight: "bold",
-                    border: "2px solid rgba(255, 255, 255, 0.3)",
-                  }}
-                >
-                  {user?.firstName?.charAt(0)?.toUpperCase()}
-                </Avatar>
-              </IconButton>
-            </Tooltip>
-          </Box>
-        )}
-      </Box>
-
-      {/* Menu profil */}
-      <Menu
-        anchorEl={anchorEl}
-        open={Boolean(anchorEl)}
-        onClose={handleProfileMenuClose}
-        PaperProps={{
-          sx: {
-            mt: -1,
-            minWidth: 200,
-            borderRadius: "12px",
-            background: "rgba(255, 255, 255, 0.95)",
-            backdropFilter: "blur(20px)",
-            border: "1px solid rgba(255, 255, 255, 0.2)",
-            boxShadow: "0 8px 32px rgba(0, 0, 0, 0.1)",
-          },
-        }}
-        transformOrigin={{ horizontal: "left", vertical: "bottom" }}
-        anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
-      >
-        <MenuItem onClick={handleProfileMenuClose}>
-          <ListItemIcon>
-            <PersonIcon fontSize="small" />
-          </ListItemIcon>
-          <ListItemText>Mon Profil</ListItemText>
-        </MenuItem>
-
-        <Divider />
-        <MenuItem
-          onClick={handleLogout}
-          sx={{
-            color: "#f44336",
-            "&:hover": {
-              backgroundColor: "rgba(244, 67, 54, 0.08)",
-            },
-          }}
-        >
-          <ListItemIcon>
-            <LogoutIcon fontSize="small" sx={{ color: "#f44336" }} />
-          </ListItemIcon>
-          <ListItemText>Déconnexion</ListItemText>
-        </MenuItem>
-      </Menu>
+      <Profile isCollapsed={isCollapsed} setAnchorEl={setAnchorEl} />
+      {/* Menu de profil */}
+      <MenuProfile anchorEl={anchorEl} setAnchorEl={setAnchorEl} />
     </Box>
   );
 
