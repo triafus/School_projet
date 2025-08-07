@@ -21,7 +21,7 @@ export const Register = () => {
   const [error, setError] = useState<string | null>(null);
   const { register, isRegistering } = useAuth();
   const navigate = useNavigate();
-  const from = "/home";
+  const from = "/";
 
   useEffect(() => {
     if (isRegistering) {

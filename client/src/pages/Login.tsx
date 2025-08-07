@@ -14,7 +14,7 @@ export const Login = () => {
   const [password, setPassword] = useState("");
   const { login, isLoggingIn, isAuthenticated } = useAuth();
   const navigate = useNavigate();
-  const from = "/home";
+  const from = "/";
 
   useEffect(() => {
     if (isAuthenticated) {

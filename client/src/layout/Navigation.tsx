@@ -53,7 +53,7 @@ const Navigation = () => {
     {
       text: "Home",
       icon: <DashboardIcon />,
-      path: "/home",
+      path: "/",
       color: "#667eea",
     },
     ...(user?.role === "admin"
@@ -96,7 +96,7 @@ const Navigation = () => {
         }}
       >
         {isCollapsed ? (
-          <Link to="/home" style={{ textDecoration: "none", color: "white" }}>
+          <Link to="/" style={{ textDecoration: "none", color: "white" }}>
             <Box
               sx={{
                 display: "flex",
@@ -114,7 +114,7 @@ const Navigation = () => {
           </Link>
         ) : (
           <Box display="flex" alignItems="center" gap={1}>
-            <Link to="/home" style={{ textDecoration: "none", color: "white" }}>
+            <Link to="/" style={{ textDecoration: "none", color: "white" }}>
               <Box
                 sx={{
                   display: "flex",
