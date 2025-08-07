@@ -30,7 +30,7 @@ async function bootstrap() {
     })
   ); */
 
-  await app.listen(process.env.PORT);
+  await app.listen(4000, 0.0.0.0);
   console.log("🚀 Server running on http://localhost:3001");
 }
 
