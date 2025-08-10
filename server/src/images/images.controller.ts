@@ -53,7 +53,6 @@ export class ImagesController {
       })
     )
     file: MulterFile,
-
     @Body() createImageDto: CreateImageDto,
     @Req() req: Request
   ) {
