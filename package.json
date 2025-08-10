@@ -10,7 +10,7 @@
     "start:client": "cd client && npm start",
     "start:server": "cd server && npm run start:dev",
     "start:prod": "cd server && npm run start:prod",
-    "install:all": "npm install && cd client && npm install && cd ../server && npm install",
+    "install:all": "npm install && cd client && pnpm install && cd ../server && npm install",
     "dev": "concurrently \"npm run start:server\" \"npm run start:client\""
   },
   "devDependencies": {
