@@ -22,7 +22,7 @@ import { Roles } from "../auth/roles.decorator";
 import { UserRole } from "../users/user-role.enum";
 import { Request } from "express";
 import { User } from "../users/user.entity";
-import { FileTypeValidator } from "src/decorators/file-type.decorator";
+import { FileTypeValidator } from "../decorators/file-type.decorator";
 
 @Controller("images")
 export class ImagesController {
@@ -50,7 +50,7 @@ export class ImagesController {
         validators: [new FileTypeValidator(["image/jpeg", "image/png"])],
       })
     )
-    file: Express.Multer.File, // Utilisez Express.Multer.File au lieu de MulterFile
+    file: Express.Multer.File,
     @Body() createImageDto: CreateImageDto,
     @Req() req: Request
   ) {
