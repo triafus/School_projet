@@ -9,10 +9,6 @@ logs
 *.log
 logs/*
 
-# Build output
-dist/
-build/
-
 # Dependency directories
 .pnp/
 .pnp.js

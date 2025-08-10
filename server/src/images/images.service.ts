@@ -10,6 +10,7 @@ import { CreateImageDto } from "./dto/create-image.dto";
 import { UpdateImageDto } from "./dto/update-image.dto";
 import { SupabaseService } from "../supabase/supabase.service";
 import { User } from "../users/user.entity";
+import { Express } from 'express';
 
 @Injectable()
 export class ImagesService {
