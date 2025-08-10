@@ -2,6 +2,7 @@ import {
   Injectable,
   NotFoundException,
   ForbiddenException,
+  BadRequestException,
 } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
@@ -10,11 +11,17 @@ import { CreateImageDto } from "./dto/create-image.dto";
 import { UpdateImageDto } from "./dto/update-image.dto";
 import { SupabaseService } from "../supabase/supabase.service";
 import { User } from "../users/user.entity";
-import { Express } from 'express';
+import { Multer } from "multer";
 
 @Injectable()
 export class ImagesService {
   private readonly BUCKET_NAME = "images";
+  private readonly MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+  private readonly ALLOWED_MIME_TYPES = [
+    "image/jpeg",
+    "image/png",
+    "image/gif",
+  ];
 
   constructor(
     @InjectRepository(Image)
@@ -129,16 +136,20 @@ export class ImagesService {
   }
 
   private validateFile(file: Express.Multer.File) {
-    if (!file) throw new Error("No file uploaded");
-
-    const allowedMimes = ["image/jpeg", "image/png"];
-    if (!allowedMimes.includes(file.mimetype)) {
-      throw new Error("Invalid file type. Allowed: JPEG, PNG");
+    if (!file) {
+      throw new BadRequestException("No file uploaded");
     }
 
-    const maxSize = 2 * 1024 * 1024;
-    if (file.size > maxSize) {
-      throw new Error("File too large. Max size: 2MB");
+    if (!this.ALLOWED_MIME_TYPES.includes(file.mimetype)) {
+      throw new BadRequestException(
+        `Invalid file type. Allowed types: ${this.ALLOWED_MIME_TYPES.join(", ")}`
+      );
+    }
+
+    if (file.size > this.MAX_FILE_SIZE) {
+      throw new BadRequestException(
+        `File too large. Max size: ${this.MAX_FILE_SIZE / 1024 / 1024}MB`
+      );
     }
   }
 }

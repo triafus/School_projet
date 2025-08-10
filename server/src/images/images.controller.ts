@@ -24,8 +24,6 @@ import { Request } from "express";
 import { User } from "../users/user.entity";
 import { FileTypeValidator } from "src/decorators/file-type.decorator";
 
-type MulterFile = Express.Multer.File;
-
 @Controller("images")
 export class ImagesController {
   constructor(private readonly imagesService: ImagesService) {}
@@ -52,7 +50,7 @@ export class ImagesController {
         validators: [new FileTypeValidator(["image/jpeg", "image/png"])],
       })
     )
-    file: MulterFile,
+    file: Express.Multer.File, // Utilisez Express.Multer.File au lieu de MulterFile
     @Body() createImageDto: CreateImageDto,
     @Req() req: Request
   ) {

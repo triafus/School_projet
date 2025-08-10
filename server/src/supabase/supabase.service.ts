@@ -1,5 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { createClient, SupabaseClient } from "@supabase/supabase-js";
+import { Multer } from "multer";
 
 @Injectable()
 export class SupabaseService {

@@ -1,13 +1,15 @@
 import { Injectable, NestMiddleware, ForbiddenException } from "@nestjs/common";
 import { Request, Response, NextFunction } from "express";
 import { ImagesService } from "../images.service";
+import { User } from "src/users/user.entity";
 
 @Injectable()
 export class UploadLimitMiddleware implements NestMiddleware {
   constructor(private readonly imagesService: ImagesService) {}
 
   async use(req: Request, res: Response, next: NextFunction) {
-    const userId = req.user.id;
+    const user = req.user as User;
+    const userId = user.id;
     const count = await this.imagesService.getUserImageCount(userId);
 
     if (count >= 50) {
