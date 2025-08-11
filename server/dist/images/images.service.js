@@ -23,6 +23,12 @@ let ImagesService = class ImagesService {
         this.imagesRepository = imagesRepository;
         this.supabaseService = supabaseService;
         this.BUCKET_NAME = "images";
+        this.MAX_FILE_SIZE = 5 * 1024 * 1024;
+        this.ALLOWED_MIME_TYPES = [
+            "image/jpeg",
+            "image/png",
+            "image/gif",
+        ];
     }
     async findAll(includePrivate = false) {
         const query = this.imagesRepository
@@ -97,15 +103,14 @@ let ImagesService = class ImagesService {
         return image;
     }
     validateFile(file) {
-        if (!file)
-            throw new Error("No file uploaded");
-        const allowedMimes = ["image/jpeg", "image/png"];
-        if (!allowedMimes.includes(file.mimetype)) {
-            throw new Error("Invalid file type. Allowed: JPEG, PNG");
+        if (!file) {
+            throw new common_1.BadRequestException("No file uploaded");
         }
-        const maxSize = 2 * 1024 * 1024;
-        if (file.size > maxSize) {
-            throw new Error("File too large. Max size: 2MB");
+        if (!this.ALLOWED_MIME_TYPES.includes(file.mimetype)) {
+            throw new common_1.BadRequestException(`Invalid file type. Allowed types: ${this.ALLOWED_MIME_TYPES.join(", ")}`);
+        }
+        if (file.size > this.MAX_FILE_SIZE) {
+            throw new common_1.BadRequestException(`File too large. Max size: ${this.MAX_FILE_SIZE / 1024 / 1024}MB`);
         }
     }
 };

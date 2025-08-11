@@ -17,7 +17,8 @@ let UploadLimitMiddleware = class UploadLimitMiddleware {
         this.imagesService = imagesService;
     }
     async use(req, res, next) {
-        const userId = req.user.id;
+        const user = req.user;
+        const userId = user.id;
         const count = await this.imagesService.getUserImageCount(userId);
         if (count >= 50) {
             throw new common_1.ForbiddenException("Image upload limit reached");

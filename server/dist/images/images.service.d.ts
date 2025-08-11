@@ -8,6 +8,8 @@ export declare class ImagesService {
     private imagesRepository;
     private supabaseService;
     private readonly BUCKET_NAME;
+    private readonly MAX_FILE_SIZE;
+    private readonly ALLOWED_MIME_TYPES;
     constructor(imagesRepository: Repository<Image>, supabaseService: SupabaseService);
     findAll(includePrivate?: boolean): Promise<Image[]>;
     findOne(id: number, userId?: number): Promise<Image>;

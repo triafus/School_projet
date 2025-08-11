@@ -8,30 +8,16 @@ async function bootstrap() {
 
   console.log("App démarrée");
 
-  // Enable CORS pour le frontend React
   app.enableCors({
-    origin: "http://localhost:3000",
+    origin: process.env.VITE_FRONT_URL || "http://localhost:3000",
     credentials: true,
   });
 
-  // Intercepteur pour supprimer les champs sensibles
-  /*   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector))); */
-
-  // Validation globale
   app.useGlobalPipes(new ValidationPipe());
 
-  // Préfixe API
   app.setGlobalPrefix("api");
 
-  /*  app.useGlobalInterceptors(
-    new ClassSerializerInterceptor(app.get(Reflector), {
-      enableCircularCheck: true,
-      excludeExtraneousValues: true,
-    })
-  ); */
-
-  await app.listen(process.env.PORT || 3001, '0.0.0.0');
-  console.log("🚀 Server running on http://localhost:3001");
+  await app.listen(process.env.PORT || 3001, "0.0.0.0");
 }
 
 bootstrap();
