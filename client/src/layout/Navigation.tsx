@@ -125,7 +125,7 @@ const Navigation = () => {
                 }}
               >
                 <img
-                  src="./../public/assets/PickU_logo_color.png"
+                  src={Logo}
                   alt="Pict'U"
                   style={{ maxWidth: "100%", height: "40px" }}
                 />
