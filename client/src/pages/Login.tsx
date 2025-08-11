@@ -8,6 +8,7 @@ import {
   Button,
   CircularProgress,
 } from "@mui/material";
+import DeathNature from "/assets/DeathNature.jpg";
 
 export const Login = () => {
   const [email, setEmail] = useState("");
@@ -46,7 +47,7 @@ export const Login = () => {
             bgcolor: "white",
             borderRadius: 8,
             border: "4px solid white",
-            backgroundImage: `url('../../public/assets/DeathNature.jpg')`,
+            backgroundImage: `url(${DeathNature})`,
           }}
         >
           <Box>
