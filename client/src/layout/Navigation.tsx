@@ -24,6 +24,7 @@ import { Link, Outlet, useLocation } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 import { MenuProfile } from "../components/MenuProfile";
 import { Profile } from "../components/Profile";
+import Logo from "/assets/PickU_logo_color.png";
 
 const DRAWER_WIDTH = 280;
 const COLLAPSED_WIDTH = 72;
@@ -106,7 +107,7 @@ const Navigation = () => {
               }}
             >
               <img
-                src="./../public/assets/PickU_logo_color.png"
+                src={Logo}
                 alt="Pict'U"
                 style={{ maxWidth: "100%", height: "40px" }}
               />

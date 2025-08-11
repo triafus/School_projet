@@ -10,6 +10,7 @@ import {
   Alert,
   Grid,
 } from "@mui/material";
+import SpainCastle from "/assets/SpainCastle.jpg";
 
 export const Register = () => {
   const [formData, setFormData] = useState({
@@ -72,7 +73,7 @@ export const Register = () => {
           bgcolor: "white",
           borderRadius: 8,
           border: "4px solid white",
-          backgroundImage: `url('../../public/assets/spainCastle.jpg')`,
+          backgroundImage: `url(${SpainCastle})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
