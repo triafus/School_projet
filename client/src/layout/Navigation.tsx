@@ -48,7 +48,7 @@ const Navigation = () => {
     }
   };
 
-  console.log(isMobile, isCollapsed);
+  const isAdmin = user?.role === "admin";
 
   const menuItems = [
     {
@@ -57,7 +57,7 @@ const Navigation = () => {
       path: "/",
       color: "#667eea",
     },
-    ...(user?.role === "admin"
+    ...(user?.role && isAdmin
       ? [
           {
             text: "Admin Panel",
