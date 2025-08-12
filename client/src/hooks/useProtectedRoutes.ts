@@ -16,7 +16,7 @@ export const useProtectedRoute = (requiredRole?: "user" | "admin") => {
     }
 
     if (requiredRole && user?.role !== requiredRole) {
-      navigate("/unauthorized", { replace: true });
+      navigate("/", { replace: true });
     }
   }, [isAuthenticated, isLoading, user, requiredRole, navigate, location]);
 
