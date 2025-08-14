@@ -1,0 +1,108 @@
+name: CI (Fullstack Monorepo)
+
+on:
+  pull_request:
+  push:
+    branches: [ main ]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  detect-changes:
+    runs-on: ubuntu-latest
+    outputs:
+      client_changed: ${{ steps.filter.outputs.client }}
+      server_changed: ${{ steps.filter.outputs.server }}
+      root_changed: ${{ steps.filter.outputs.root }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - id: filter
+        uses: dorny/paths-filter@v3
+        with:
+          filters: |
+            client:
+              - 'client/**'
+            server:
+              - 'server/**'
+            root:
+              - 'package.json'
+              - 'pnpm-lock.yaml'
+
+  client-ci:
+    name: Client – lint/test/build
+    needs: detect-changes
+    if: needs.detect-changes.outputs.client_changed == 'true' || needs.detect-changes.outputs.root_changed == 'true'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: client
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+          run_install: true
+
+      - run: pnpm run lint
+      - run: pnpm run test --if-present
+      - run: pnpm run build
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: client-dist
+          path: client/dist
+
+  server-ci:
+    name: Server – lint/test/build
+    needs: detect-changes
+    if: needs.detect-changes.outputs.server_changed == 'true' || needs.detect-changes.outputs.root_changed == 'true'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: server
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: ci_db
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd="pg_isready -U postgres"
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=10
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/ci_db
+      NODE_ENV: test
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+          run_install: true
+
+      - run: pnpm run lint
+      - run: pnpm run test --if-present
+      - run: pnpm run build
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: server-dist
+          path: server/dist
