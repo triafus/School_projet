@@ -3,7 +3,7 @@ name: CI (Fullstack Monorepo)
 on:
   pull_request:
   push:
-    branches: [ main ]
+    branches: [main]
 
 concurrency:
   group: ci-${{ github.ref }}
@@ -45,7 +45,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'pnpm'
+          cache: "pnpm"
 
       - uses: pnpm/action-setup@v4
         with:
@@ -61,7 +61,7 @@ jobs:
           name: client-dist
           path: client/dist
 
-  server-ci:
+    server-ci:
     name: Server – lint/test/build
     needs: detect-changes
     if: needs.detect-changes.outputs.server_changed == 'true' || needs.detect-changes.outputs.root_changed == 'true'
@@ -69,21 +69,10 @@ jobs:
     defaults:
       run:
         working-directory: server
-    services:
-      postgres:
-        image: postgres:16
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: ci_db
-        ports: ["5432:5432"]
-        options: >-
-          --health-cmd="pg_isready -U postgres"
-          --health-interval=5s
-          --health-timeout=5s
-          --health-retries=10
     env:
-      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/ci_db
+      SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+      SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+      DATABASE_URL: ${{ secrets.SUPABASE_URL }}/postgresql
       NODE_ENV: test
     steps:
       - uses: actions/checkout@v4
