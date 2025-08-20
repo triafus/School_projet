@@ -7,6 +7,7 @@ import AdminDashboard from "./pages/AdminDashboard";
 import Navigation from "./layout/Navigation";
 import { AdminRoute } from "./components/AdminRoute";
 import NotFound from "./pages/NotFound";
+import Collection from "./pages/Collection";
 
 const queryClient = new QueryClient();
 
@@ -25,6 +26,15 @@ const router = createBrowserRouter([
         element: (
           <AdminRoute>
             <AdminDashboard />
+          </AdminRoute>
+        ),
+        errorElement: <NotFound />,
+      },
+      {
+        path: "admin/collection",
+        element: (
+          <AdminRoute>
+            <Collection />
           </AdminRoute>
         ),
         errorElement: <NotFound />,

@@ -14,6 +14,7 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import {
+  CollectionsOutlined as CollectionIcon,
   Dashboard as DashboardIcon,
   AdminPanelSettings as AdminIcon,
   Menu as MenuIcon,
@@ -63,6 +64,12 @@ const Navigation = () => {
             text: "Admin Panel",
             icon: <AdminIcon />,
             path: "/admin/dashboard",
+            color: "#f093fb",
+          },
+          {
+            text: "Collection",
+            icon: <CollectionIcon />,
+            path: "/admin/collection",
             color: "#f093fb",
           },
         ]
