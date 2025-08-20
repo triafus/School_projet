@@ -18,6 +18,7 @@ export const Register = () => {
     lastName: "",
     email: "",
     password: "",
+    images: [],
   });
   const [error, setError] = useState<string | null>(null);
   const { register, isRegistering } = useAuth();
