@@ -24,6 +24,7 @@ let UsersService = class UsersService {
     }
     async findAll() {
         return this.usersRepository.find({
+            relations: ["images"],
             select: ["id", "email", "firstName", "lastName", "role", "createdAt"],
             order: { createdAt: "DESC" },
         });
@@ -89,12 +90,14 @@ let UsersService = class UsersService {
         }
         return this.usersRepository.findOne({
             where: { email },
+            relations: ["images"],
             select,
         });
     }
     async findById(id) {
         const user = await this.usersRepository.findOne({
             where: { id },
+            relations: ["images"],
             select: ["id", "email", "firstName", "lastName", "role", "createdAt"],
         });
         if (!user) {

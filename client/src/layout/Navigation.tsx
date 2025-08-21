@@ -14,6 +14,7 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import {
+  AutoAwesomeMosaicOutlined as HomeIcon,
   Dashboard as DashboardIcon,
   AdminPanelSettings as AdminIcon,
   Menu as MenuIcon,
@@ -53,7 +54,7 @@ const Navigation = () => {
   const menuItems = [
     {
       text: "Home",
-      icon: <DashboardIcon />,
+      icon: <HomeIcon />,
       path: "/",
       color: "#667eea",
     },
@@ -63,6 +64,12 @@ const Navigation = () => {
             text: "Admin Panel",
             icon: <AdminIcon />,
             path: "/admin/dashboard",
+            color: "#f093fb",
+          },
+          {
+            text: "Mon dashboard",
+            icon: <DashboardIcon />,
+            path: "/dashboard",
             color: "#f093fb",
           },
         ]

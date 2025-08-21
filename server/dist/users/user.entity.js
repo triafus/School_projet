@@ -46,7 +46,6 @@ __decorate([
 ], User.prototype, "role", void 0);
 __decorate([
     (0, typeorm_1.OneToMany)(() => image_entity_1.Image, (image) => image.user, { cascade: true }),
-    (0, class_transformer_1.Exclude)({ toPlainOnly: true }),
     __metadata("design:type", Array)
 ], User.prototype, "images", void 0);
 __decorate([
