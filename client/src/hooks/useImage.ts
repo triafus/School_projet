@@ -7,6 +7,7 @@ export const useImages = () => {
     queryKey: ["Image"],
     queryFn: imageService.getAllImages,
     staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
     retry: 1,
   });
 };

@@ -5,7 +5,6 @@ import {
   Typography,
   IconButton,
   Chip,
-  Fab,
   styled,
   Button,
 } from "@mui/material";
@@ -18,14 +17,15 @@ import {
 } from "@mui/icons-material";
 import { useImages, usePostImage } from "../hooks/useImage";
 import { Image } from "../types/image";
-import { useUsers } from "../hooks/useUser";
+import AddImageModal from "../components/AddImageModal";
+import { CustomButton } from "../components/CustomButton";
 
 const Gallery = () => {
   const [selectedImage, setSelectedImage] = useState<Image | null>(null);
   const [favorites, setFavorites] = useState<Set<number>>(new Set());
+  const [open, setOpen] = useState<boolean>(false);
 
   const { data: images = [] } = useImages();
-  const { mutate: postImage } = usePostImage();
 
   const toggleFavorite = (id: number) => {
     setFavorites((prev) => {
@@ -35,27 +35,7 @@ const Gallery = () => {
     });
   };
 
-  const inputRef = useRef<HTMLInputElement | null>(null);
-  const handleAddImage = () => {
-    inputRef.current?.click();
-  };
-
-  const handleFileSelected = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files;
-    if (!files || files.length === 0) return;
-
-    const file = files[0];
-    postImage({
-      file,
-      imageData: {
-        title: "New Image",
-        description: "Description of the new image",
-        is_approved: true,
-        is_private: false,
-        userId: 1,
-      },
-    });
-  };
+  const handleOpen = () => setOpen(true);
 
   const ArtworkCard = styled(Box)({
     position: "relative",
@@ -95,8 +75,7 @@ const Gallery = () => {
     <Box
       sx={{
         minHeight: "100vh",
-        background:
-          "linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #000000 100%)",
+        backgroundColor: "#fafafa",
         fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
         position: "relative",
         overflow: "hidden",
@@ -213,28 +192,14 @@ const Gallery = () => {
         </Box>
       </Box>
 
-      {/* Bouton flottant */}
-      <input
-        type="file"
-        ref={inputRef}
-        accept="image/*"
-        style={{ display: "none" }}
-        onChange={handleFileSelected}
-      />
-
       {/* bouton visible */}
-      <Button
-        color="error"
-        sx={{
-          position: "fixed",
-          bottom: 32,
-          right: 32,
-          boxShadow: "0 4px 20px rgba(231, 76, 60, 0.4)",
-        }}
-        onClick={handleAddImage}
-      >
-        Ajouter une image
-      </Button>
+      <Box sx={{ position: "fixed", bottom: 32, right: 32 }}>
+        <CustomButton startIcon={<Add />} onClick={handleOpen}>
+          Ajouter une image
+        </CustomButton>
+      </Box>
+      {/* Add Image Modal*/}
+      <AddImageModal open={open} onClose={() => setOpen(false)} />
 
       {/* Modal */}
       <Modal open={!!selectedImage} onClose={() => setSelectedImage(null)}>

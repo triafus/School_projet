@@ -17,16 +17,15 @@ import {
   InputAdornment,
 } from "@mui/material";
 import { Add, Search as SearchIcon } from "@mui/icons-material";
-import { useImages } from "../hooks/useImage";
-import { useUsers } from "../hooks/useUser";
 import { ImageCard } from "../components/ImageCard";
 import { useAuth } from "../hooks/useAuth";
 import { Image } from "../types/image";
+import AddImageModal from "../components/AddImageModal";
 
 const Dashboard = () => {
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const [sortBy, setSortBy] = useState<string>("recent");
   const [activeFilter, setActiveFilter] = useState<string>("Toutes");
+  const [open, setOpen] = useState<boolean>(false);
 
   const { user } = useAuth();
 
@@ -35,6 +34,8 @@ const Dashboard = () => {
   );
 
   const filters = ["Toutes", "Publiques", "Privées"];
+
+  const handleOpen = () => setOpen(true);
 
   const handleFilterChange = (filter: string) => {
     setActiveFilter(filter);
@@ -49,10 +50,6 @@ const Dashboard = () => {
         (user?.images || []).filter((image) => image.is_private)
       );
     }
-  };
-
-  const handleSortChange = (event: any) => {
-    setSortBy(event.target.value);
   };
 
   return (
@@ -103,6 +100,7 @@ const Dashboard = () => {
           <Button
             variant="contained"
             startIcon={<Add />}
+            onClick={handleOpen}
             sx={{
               backgroundColor: "#2c3e50",
               "&:hover": {
@@ -153,7 +151,6 @@ const Dashboard = () => {
           ))}
         </Box>
       </Box>
-
       {/* Image Grid */}
       <Grid container spacing={3}>
         {filteredImages.map((image) => (
@@ -177,6 +174,7 @@ const Dashboard = () => {
           </Grid>
         ))}
       </Grid>
+      {open && <AddImageModal open={open} onClose={() => setOpen(false)} />}
     </Container>
   );
 };
