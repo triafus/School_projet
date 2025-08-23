@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   Box,
   Drawer,
@@ -26,6 +26,7 @@ import { useAuth } from "../hooks/useAuth";
 import { MenuProfile } from "../components/MenuProfile";
 import { Profile } from "../components/Profile";
 import Logo from "/assets/PickU_logo_color.png";
+import { navigationItem } from "./NavItems";
 
 const DRAWER_WIDTH = 280;
 const COLLAPSED_WIDTH = 72;
@@ -35,10 +36,36 @@ const Navigation = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  const { user } = useAuth();
+  const { user, isAuthenticated } = useAuth();
   const location = useLocation();
   const theme = useTheme();
+
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+  const isAdmin = user?.role === "admin";
+  const isActive = (path: string) => location.pathname === path;
+
+  const MenuItems = () => {
+    const navAuth =
+      isAuthenticated &&
+      navigationItem({
+        text: "Dashboard",
+        icon: <DashboardIcon />,
+        path: "/dashboard",
+      });
+    const navAdmin =
+      isAdmin &&
+      navigationItem({
+        text: "Administration",
+        icon: <AdminIcon />,
+        path: "/administration",
+      });
+    const navdefault = navigationItem({
+      text: "Home",
+      icon: <HomeIcon />,
+      path: "/",
+    });
+    return [...navdefault, ...(navAuth || []), ...(navAdmin || [])];
+  };
 
   const handleDrawerToggle = () => {
     if (isMobile) {
@@ -48,35 +75,6 @@ const Navigation = () => {
       setIsCollapsed(!isCollapsed);
     }
   };
-
-  const isAdmin = user?.role === "admin";
-
-  const menuItems = [
-    {
-      text: "Home",
-      icon: <HomeIcon />,
-      path: "/",
-      color: "#667eea",
-    },
-    ...(user?.role && isAdmin
-      ? [
-          {
-            text: "Admin Panel",
-            icon: <AdminIcon />,
-            path: "/admin/dashboard",
-            color: "#f093fb",
-          },
-          {
-            text: "Mon dashboard",
-            icon: <DashboardIcon />,
-            path: "/dashboard",
-            color: "#f093fb",
-          },
-        ]
-      : []),
-  ];
-
-  const isActive = (path: string) => location.pathname === path;
 
   const drawerContent = (
     <Box
@@ -200,7 +198,7 @@ const Navigation = () => {
           </IconButton>
         )}
         <List sx={{ p: 0, "& .MuiListItem-root": { px: 0 } }}>
-          {menuItems.map((item) => (
+          {MenuItems().map((item) => (
             <ListItem key={item.text} sx={{ mb: 0.5 }}>
               <Tooltip title={isCollapsed ? item.text : ""} placement="right">
                 <ListItemButton
@@ -211,13 +209,15 @@ const Navigation = () => {
                     py: 1.2,
                     px: isCollapsed ? 1.5 : 2,
                     minHeight: 48,
-                    backgroundColor: isActive(item.path)
+                    backgroundColor: isActive(item.path!)
                       ? "rgba(255, 255, 255, 0.08)"
                       : "transparent",
-                    border: isActive(item.path)
+                    border: isActive(item.path!)
                       ? "1px solid rgba(255, 255, 255, 0.1)"
                       : "1px solid transparent",
-                    backdropFilter: isActive(item.path) ? "blur(10px)" : "none",
+                    backdropFilter: isActive(item.path!)
+                      ? "blur(10px)"
+                      : "none",
                     "&:hover": {
                       backgroundColor: "rgba(255, 255, 255, 0.05)",
                       transform: "translateX(2px)",
@@ -244,7 +244,7 @@ const Navigation = () => {
                         m: 0,
                         "& .MuiListItemText-primary": {
                           color: "white",
-                          fontWeight: isActive(item.path) ? 600 : 500,
+                          fontWeight: isActive(item.path!) ? 600 : 500,
                           fontSize: "0.95rem",
                         },
                       }}
@@ -256,9 +256,7 @@ const Navigation = () => {
           ))}
         </List>
       </Box>
-      {/* Section utilisateur en bas */}
       <Profile isCollapsed={isCollapsed} setAnchorEl={setAnchorEl} />
-      {/* Menu de profil */}
       <MenuProfile anchorEl={anchorEl} setAnchorEl={setAnchorEl} />
     </Box>
   );

@@ -57,7 +57,7 @@ export class SupabaseService {
   async getSignedUrl(bucket: string, key: string) {
     const { data, error } = await this.supabase.storage
       .from(bucket)
-      .createSignedUrl(key, 60); // 60 secondes
+      .createSignedUrl(key, 60);
 
     if (error) throw new Error("Signed URL failed: " + error.message);
     return data.signedUrl;

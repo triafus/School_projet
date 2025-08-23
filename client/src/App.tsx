@@ -5,7 +5,8 @@ import Register from "./pages/Register";
 import Home from "./pages/Home";
 import AdminDashboard from "./pages/AdminDashboard";
 import Navigation from "./layout/Navigation";
-import { AdminRoute } from "./components/AdminRoute";
+import { AdminRoute } from "./routes/AdminRoute";
+import { AuthenticatedRoute } from "./routes/AuthenticatedRoute";
 import NotFound from "./pages/NotFound";
 import Dashboard from "./pages/Dashboard";
 
@@ -22,7 +23,7 @@ const router = createBrowserRouter([
         errorElement: <NotFound />,
       },
       {
-        path: "admin/dashboard",
+        path: "/administration",
         element: (
           <AdminRoute>
             <AdminDashboard />
@@ -33,9 +34,9 @@ const router = createBrowserRouter([
       {
         path: "/dashboard",
         element: (
-          <AdminRoute>
+          <AuthenticatedRoute>
             <Dashboard />
-          </AdminRoute>
+          </AuthenticatedRoute>
         ),
         errorElement: <NotFound />,
       },
