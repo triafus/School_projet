@@ -1,19 +1,18 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useAuth } from "../hooks/useAuth";
 import { useNavigate, Link } from "react-router-dom";
-import {
-  Box,
-  Typography,
-  TextField,
-  Button,
-  CircularProgress,
-} from "@mui/material";
+import { Box, Typography } from "@mui/material";
+import { useError } from "../hooks/useError";
+import { ErrorAlert } from "../components/ErrorAlert";
+import FormField from "../components/Form/FormField";
+import LoadingButton from "../components/Form/LoadingButton";
 import DeathNature from "/assets/DeathNature.jpg";
 
-export const Login = () => {
+export const Login: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { login, isLoggingIn, isAuthenticated } = useAuth();
+  const { login, isLoggingIn, isAuthenticated, error: authError } = useAuth();
+  const { error, setError, clearError } = useError();
   const navigate = useNavigate();
   const from = "/";
 
@@ -23,10 +22,34 @@ export const Login = () => {
     }
   }, [isAuthenticated, navigate, from]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    login({ email, password });
-  };
+  useEffect(() => {
+    if (authError) {
+      setError(authError as string);
+    }
+  }, [authError, setError]);
+
+  const handleSubmit = useCallback(
+    async (e: React.FormEvent) => {
+      e.preventDefault();
+      clearError();
+      login({ email, password });
+    },
+    [email, password, login, clearError]
+  );
+
+  const handleEmailChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setEmail(e.target.value);
+    },
+    []
+  );
+
+  const handlePasswordChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setPassword(e.target.value);
+    },
+    []
+  );
 
   return (
     <>
@@ -115,119 +138,44 @@ export const Login = () => {
               </Typography>
             </Box>
 
+            <ErrorAlert error={error} onClose={clearError} />
+
             <form onSubmit={handleSubmit}>
-              <Typography
-                variant="body2"
-                sx={{
-                  color: "#374151",
-                  mb: 1,
-                  fontWeight: 500,
-                }}
-              >
-                Email address
-              </Typography>
-              <TextField
-                fullWidth
+              <FormField
+                label="Email address"
+                name="email"
                 type="email"
                 placeholder="hello@walter-miller.co"
                 value={email}
                 autoComplete="email"
                 disabled={isLoggingIn}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={handleEmailChange}
                 required
-                sx={{
-                  mb: 3,
-                  "& .MuiOutlinedInput-root": {
-                    bgcolor: "white",
-                    borderRadius: 2,
-                    "& fieldset": {
-                      borderColor: "#d1d5db",
-                    },
-                    "&:hover fieldset": {
-                      borderColor: "#9ca3af",
-                    },
-                    "&.Mui-focused fieldset": {
-                      borderColor: "#3b82f6",
-                      borderWidth: 2,
-                    },
-                  },
-                  "& .MuiOutlinedInput-input": {
-                    py: 1.5,
-                  },
-                }}
+                sx={{ mb: 3 }}
               />
-              <Typography
-                variant="body2"
-                sx={{
-                  color: "#374151",
-                  mb: 1,
-                  fontWeight: 500,
-                }}
-              >
-                Password
-              </Typography>
-              <TextField
-                fullWidth
+
+              <FormField
+                label="Password"
+                name="password"
                 type="password"
                 placeholder="••••••••••••••••••••"
                 value={password}
                 disabled={isLoggingIn}
                 autoComplete="current-password"
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={handlePasswordChange}
                 required
-                sx={{
-                  mb: 4,
-                  "& .MuiOutlinedInput-root": {
-                    bgcolor: "white",
-                    borderRadius: 2,
-                    "& fieldset": {
-                      borderColor: "#d1d5db",
-                    },
-                    "&:hover fieldset": {
-                      borderColor: "#9ca3af",
-                    },
-                    "&.Mui-focused fieldset": {
-                      borderColor: "#3b82f6",
-                      borderWidth: 2,
-                    },
-                  },
-                  "& .MuiOutlinedInput-input": {
-                    py: 1.5,
-                  },
-                }}
+                sx={{ mb: 4 }}
               />
 
-              <Button
+              <LoadingButton
                 type="submit"
                 fullWidth
-                disabled={isLoggingIn}
-                sx={{
-                  py: 1.5,
-                  bgcolor: "#374151",
-                  color: "white",
-                  fontSize: "1rem",
-                  fontWeight: 500,
-                  borderRadius: 2,
-                  textTransform: "none",
-                  "&:hover": {
-                    bgcolor: "#1f2937",
-                  },
-                  "&:disabled": {
-                    bgcolor: "#d1d5db",
-                    color: "#9ca3af",
-                  },
-                  mb: 4,
-                }}
+                loading={isLoggingIn}
+                loadingText="Connexion..."
+                sx={{ mb: 4 }}
               >
-                {isLoggingIn ? (
-                  <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                    <CircularProgress size={20} color="inherit" />
-                    Connexion...
-                  </Box>
-                ) : (
-                  "Se connecter"
-                )}
-              </Button>
+                Se connecter
+              </LoadingButton>
             </form>
           </Box>
         </Box>

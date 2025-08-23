@@ -1,57 +1,63 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useAuth } from "../hooks/useAuth";
 import { useNavigate, Link } from "react-router-dom";
-import {
-  Box,
-  Typography,
-  TextField,
-  Button,
-  CircularProgress,
-  Alert,
-  Grid,
-} from "@mui/material";
+import { Box, Typography, TextField, Grid } from "@mui/material";
+import { useError } from "../hooks/useError";
+import { ErrorAlert } from "../components/ErrorAlert";
+import FormField from "../components/Form/FormField";
+import LoadingButton from "../components/Form/LoadingButton";
 import SpainCastle from "/assets/SpainCastle.jpg";
 
-export const Register = () => {
-  const [formData, setFormData] = useState({
+interface FormData {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+}
+
+export const Register: React.FC = () => {
+  const [formData, setFormData] = useState<FormData>({
     firstName: "",
     lastName: "",
     email: "",
     password: "",
   });
-  const [error, setError] = useState<string | null>(null);
-  const { register, isRegistering } = useAuth();
+  const { error, setError, clearError } = useError();
+  const { register, isRegistering, isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const from = "/";
 
   useEffect(() => {
-    if (isRegistering) {
+    if (isAuthenticated) {
       navigate(from, { replace: true });
     }
-  }, [isRegistering, navigate, from]);
+  }, [isAuthenticated, navigate, from]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
       [name]: value,
     }));
-  };
+  }, []);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError(null);
+  const handleSubmit = useCallback(
+    async (e: React.FormEvent) => {
+      e.preventDefault();
+      clearError();
 
-    try {
-      await register(formData);
-    } catch (err) {
-      setError(
-        err instanceof Error
-          ? err.message
-          : "Une erreur est survenue lors de l'inscription"
-      );
-    }
-  };
+      try {
+        register(formData);
+      } catch (err) {
+        setError(
+          err instanceof Error
+            ? err.message
+            : "Une erreur est survenue lors de l'inscription"
+        );
+      }
+    },
+    [register, formData, clearError, setError]
+  );
 
   return (
     <Box
@@ -166,6 +172,8 @@ export const Register = () => {
               </Typography>
             </Typography>
           </Box>
+
+          <ErrorAlert error={error} onClose={clearError} />
 
           <Box component="form" onSubmit={handleSubmit}>
             <Grid container spacing={2}>
@@ -341,55 +349,15 @@ export const Register = () => {
               }}
             />
 
-            {error && (
-              <Alert
-                severity="error"
-                sx={{
-                  mb: 3,
-                  borderRadius: 2,
-                  bgcolor: "#fef2f2",
-                  color: "#dc2626",
-                  border: "1px solid #fecaca",
-                  "& .MuiAlert-icon": {
-                    color: "#dc2626",
-                  },
-                }}
-              >
-                {error}
-              </Alert>
-            )}
-
-            <Button
+            <LoadingButton
               type="submit"
               fullWidth
-              disabled={isRegistering}
-              sx={{
-                py: 1.5,
-                bgcolor: "#374151",
-                color: "white",
-                fontSize: "1rem",
-                fontWeight: 500,
-                borderRadius: 2,
-                textTransform: "none",
-                "&:hover": {
-                  bgcolor: "#1f2937",
-                },
-                "&:disabled": {
-                  bgcolor: "#d1d5db",
-                  color: "#9ca3af",
-                },
-                mb: 4,
-              }}
+              loading={isRegistering}
+              loadingText="Inscription..."
+              sx={{ mb: 4 }}
             >
-              {isRegistering ? (
-                <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                  <CircularProgress size={20} color="inherit" />
-                  Inscription...
-                </Box>
-              ) : (
-                "Create account"
-              )}
-            </Button>
+              Create account
+            </LoadingButton>
           </Box>
         </Box>
       </Box>

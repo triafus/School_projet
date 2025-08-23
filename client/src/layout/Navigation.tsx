@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback, useMemo } from "react";
 import {
   Box,
   Drawer,
@@ -29,7 +29,7 @@ import Logo from "/assets/PickU_logo_color.png";
 const DRAWER_WIDTH = 280;
 const COLLAPSED_WIDTH = 72;
 
-const Navigation = () => {
+const Navigation: React.FC = () => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -39,37 +39,43 @@ const Navigation = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
-  const handleDrawerToggle = () => {
+  const handleDrawerToggle = useCallback(() => {
     if (isMobile) {
       setMobileOpen(!mobileOpen);
       setIsCollapsed(!isCollapsed);
     } else {
       setIsCollapsed(!isCollapsed);
     }
-  };
+  }, [isMobile, mobileOpen, isCollapsed]);
 
   const isAdmin = user?.role === "admin";
 
-  const menuItems = [
-    {
-      text: "Home",
-      icon: <DashboardIcon />,
-      path: "/",
-      color: "#667eea",
-    },
-    ...(user?.role && isAdmin
-      ? [
-          {
-            text: "Admin Panel",
-            icon: <AdminIcon />,
-            path: "/admin/dashboard",
-            color: "#f093fb",
-          },
-        ]
-      : []),
-  ];
+  const menuItems = useMemo(
+    () => [
+      {
+        text: "Home",
+        icon: <DashboardIcon />,
+        path: "/",
+        color: "#667eea",
+      },
+      ...(user?.role && isAdmin
+        ? [
+            {
+              text: "Admin Panel",
+              icon: <AdminIcon />,
+              path: "/admin/dashboard",
+              color: "#f093fb",
+            },
+          ]
+        : []),
+    ],
+    [user?.role, isAdmin]
+  );
 
-  const isActive = (path: string) => location.pathname === path;
+  const isActive = useCallback(
+    (path: string) => location.pathname === path,
+    [location.pathname]
+  );
 
   const drawerContent = (
     <Box

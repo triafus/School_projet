@@ -1,4 +1,3 @@
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { Login } from "./pages/Login";
 import Register from "./pages/Register";
@@ -7,8 +6,6 @@ import AdminDashboard from "./pages/AdminDashboard";
 import Navigation from "./layout/Navigation";
 import { AdminRoute } from "./components/AdminRoute";
 import NotFound from "./pages/NotFound";
-
-const queryClient = new QueryClient();
 
 const router = createBrowserRouter([
   {

@@ -56,7 +56,7 @@ const AdminDashboard: React.FC = () => {
 
   return (
     <Container sx={{ p: 4, bgcolor: "#fafafa", minHeight: "100vh" }}>
-      {error && <ErrorAlert error={error} setError={setError} />}
+      {error && <ErrorAlert error={error} onClose={() => setError(null)} />}
       <Box
         sx={{
           display: "flex",
