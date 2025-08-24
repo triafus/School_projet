@@ -1,18 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   Box,
   Typography,
-  Button,
   TextField,
   Chip,
-  Select,
-  MenuItem,
-  FormControl,
-  InputLabel,
   Grid,
-  Card,
-  CardMedia,
-  IconButton,
   Container,
   InputAdornment,
 } from "@mui/material";
@@ -20,37 +12,52 @@ import { Add, Search as SearchIcon } from "@mui/icons-material";
 import { ImageCard } from "../components/ImageCard";
 import { useAuth } from "../hooks/useAuth";
 import { Image } from "../types/image";
-import AddImageModal from "../components/AddImageModal";
+import { AddImageModal } from "../components/ImageModal/AddImageModal";
+import { ImageViewModal } from "../components/ImageModal/ImageViewModal";
+import { CustomButton } from "../components/CustomButton";
+import { useUserImages } from "../hooks/useImage";
 
 const Dashboard = () => {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [activeFilter, setActiveFilter] = useState<string>("Toutes");
   const [open, setOpen] = useState<boolean>(false);
+  const [selectedImage, setSelectedImage] = useState<Image | null>(null);
 
-  const { user } = useAuth();
+  const { data: userImages } = useUserImages();
 
   const [filteredImages, setFilteredImages] = useState<Image[]>(
-    user?.images || []
+    userImages || []
   );
 
   const filters = ["Toutes", "Publiques", "Privées"];
 
+  //faire un filtre pour ne voir que ces images
+
+  useEffect(() => {
+    if (userImages) {
+      handleFilterChange(activeFilter);
+    }
+  }, [userImages]);
+
   const handleOpen = () => setOpen(true);
 
-  const handleFilterChange = (filter: string) => {
-    setActiveFilter(filter);
-    if (filter === "Toutes") {
-      setFilteredImages(user?.images || []);
-    } else if (filter === "Publiques") {
-      setFilteredImages(
-        (user?.images || []).filter((image) => !image.is_private)
-      );
-    } else if (filter === "Privées") {
-      setFilteredImages(
-        (user?.images || []).filter((image) => image.is_private)
-      );
-    }
-  };
+  const handleFilterChange = useMemo(
+    () => (filter: string) => {
+      setActiveFilter(filter);
+      if (filter === "Toutes") {
+        setFilteredImages(userImages || []);
+      } else if (filter === "Publiques") {
+        setFilteredImages(
+          (userImages || []).filter((image) => !image.is_private)
+        );
+      } else if (filter === "Privées") {
+        setFilteredImages(
+          (userImages || []).filter((image) => image.is_private)
+        );
+      }
+    },
+    [userImages]
+  );
 
   return (
     <Container sx={{ p: 4, bgcolor: "#fafafa", minHeight: "100vh" }}>
@@ -72,7 +79,7 @@ const Dashboard = () => {
             Mes Images
           </Typography>
           <Typography variant="body2" sx={{ color: "#6b7280" }}>
-            {user?.images.length} Images
+            {userImages?.length} Images
           </Typography>
         </Box>
         <Box sx={{ display: "flex", gap: 2 }}>
@@ -97,22 +104,9 @@ const Dashboard = () => {
               },
             }}
           />
-          <Button
-            variant="contained"
-            startIcon={<Add />}
-            onClick={handleOpen}
-            sx={{
-              backgroundColor: "#2c3e50",
-              "&:hover": {
-                backgroundColor: "#34495e",
-              },
-              borderRadius: 2,
-              px: 3,
-              py: 1,
-            }}
-          >
+          <CustomButton onClick={handleOpen} startIcon={<Add />}>
             Nouvelle image
-          </Button>
+          </CustomButton>
         </Box>
       </Box>
       <Box
@@ -159,6 +153,7 @@ const Dashboard = () => {
               title={image.title}
               url={image.url}
               isPrivate={image.is_private}
+              onClick={() => setSelectedImage(image)}
             />
 
             <Typography
@@ -174,7 +169,14 @@ const Dashboard = () => {
           </Grid>
         ))}
       </Grid>
-      {open && <AddImageModal open={open} onClose={() => setOpen(false)} />}
+
+      <AddImageModal open={open} onClose={() => setOpen(false)} />
+
+      <ImageViewModal
+        open={!!selectedImage}
+        image={selectedImage}
+        onClose={() => setSelectedImage(null)}
+      />
     </Container>
   );
 };

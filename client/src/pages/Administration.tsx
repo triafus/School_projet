@@ -20,7 +20,7 @@ import { useUsers } from "../hooks/useUser";
 import ErrorAlert from "../components/ErrorAlert";
 import TableAdminDashboard from "../components/TableAdminDashboard";
 
-const AdminDashboard: React.FC = () => {
+const Administration = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [filterRole, setFilterRole] = useState("All");
   const [error, setError] = useState<string | null>(null);
@@ -173,4 +173,4 @@ const AdminDashboard: React.FC = () => {
   );
 };
 
-export default AdminDashboard;
+export default Administration;

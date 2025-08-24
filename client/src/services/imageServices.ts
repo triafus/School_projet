@@ -24,4 +24,32 @@ export const imageService = {
 
     return data;
   },
+
+  patchImage: async (
+    imageId: number,
+    updateData: { title?: string; description?: string; is_private?: boolean }
+  ): Promise<Image> => {
+    const { data } = await apiClient.patch<Image>(
+      `/images/${imageId}`,
+      updateData
+    );
+    return data;
+  },
+
+  deleteImage: async (imageId: number): Promise<void> => {
+    await apiClient.delete(`/images/${imageId}`);
+  },
+
+  approveImage: async (
+    imageId: number,
+    isApproved: boolean
+  ): Promise<Image> => {
+    const { data } = await apiClient.patch<Image>(
+      `/images/${imageId}/approve`,
+      {
+        is_approved: isApproved,
+      }
+    );
+    return data;
+  },
 };

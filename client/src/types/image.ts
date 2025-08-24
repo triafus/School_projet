@@ -8,3 +8,9 @@ export interface Image {
   is_private: boolean;
   userId: number;
 }
+
+export interface ImageFormData {
+  title: string;
+  description?: string;
+  is_private: boolean;
+}

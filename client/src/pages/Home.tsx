@@ -1,23 +1,17 @@
 import React, { useRef, useState } from "react";
 import {
   Box,
-  Modal,
   Typography,
   IconButton,
   Chip,
   styled,
   Button,
 } from "@mui/material";
-import {
-  Favorite,
-  FavoriteBorder,
-  Share,
-  Close,
-  Add,
-} from "@mui/icons-material";
+import { Favorite, FavoriteBorder, Share, Add } from "@mui/icons-material";
 import { useImages, usePostImage } from "../hooks/useImage";
 import { Image } from "../types/image";
-import AddImageModal from "../components/AddImageModal";
+import { AddImageModal } from "../components/ImageModal/AddImageModal";
+import { ImageViewModal } from "../components/ImageModal/ImageViewModal";
 import { CustomButton } from "../components/CustomButton";
 
 const Gallery = () => {
@@ -192,82 +186,19 @@ const Gallery = () => {
         </Box>
       </Box>
 
-      {/* bouton visible */}
       <Box sx={{ position: "fixed", bottom: 32, right: 32 }}>
         <CustomButton startIcon={<Add />} onClick={handleOpen}>
           Ajouter une image
         </CustomButton>
       </Box>
-      {/* Add Image Modal*/}
+
       <AddImageModal open={open} onClose={() => setOpen(false)} />
 
-      {/* Modal */}
-      <Modal open={!!selectedImage} onClose={() => setSelectedImage(null)}>
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            height: "100%",
-            p: 2,
-          }}
-          onClick={() => setSelectedImage(null)}
-        >
-          <Box
-            sx={{
-              position: "relative",
-              maxWidth: "90%",
-              maxHeight: "90%",
-              background: "rgba(20,20,20,0.95)",
-              backdropFilter: "blur(20px)",
-              border: "1px solid rgba(255,255,255,0.1)",
-              borderRadius: "16px",
-              overflow: "hidden",
-              width: { xs: "100%", sm: "auto" },
-            }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <IconButton
-              sx={{
-                position: "absolute",
-                top: 16,
-                right: 16,
-                background: "rgba(255,255,255,0.1)",
-                backdropFilter: "blur(10px)",
-                color: "#ffffff",
-                zIndex: 1,
-              }}
-              onClick={() => setSelectedImage(null)}
-            >
-              <Close />
-            </IconButton>
-
-            <Box
-              component="img"
-              src={selectedImage?.url}
-              alt={selectedImage?.title}
-              sx={{
-                width: "100%",
-                height: "auto",
-                display: "block",
-                maxHeight: "70vh",
-              }}
-            />
-
-            <Box sx={{ p: 4 }}>
-              <Typography
-                variant="h5"
-                sx={{ fontWeight: 600, mb: 2, color: "#ffffff" }}
-              >
-                {selectedImage?.title}
-              </Typography>
-              <Typography sx={{ color: "rgba(255,255,255,0.7)" }}>
-                {selectedImage?.description}
-              </Typography>
-            </Box>
-          </Box>
-        </Box>
-      </Modal>
+      <ImageViewModal
+        open={!!selectedImage}
+        image={selectedImage}
+        onClose={() => setSelectedImage(null)}
+      />
     </Box>
   );
 };

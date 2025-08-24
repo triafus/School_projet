@@ -3,7 +3,7 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { Login } from "./pages/Login";
 import Register from "./pages/Register";
 import Home from "./pages/Home";
-import AdminDashboard from "./pages/AdminDashboard";
+import Administration from "./pages/Administration";
 import Navigation from "./layout/Navigation";
 import { AdminRoute } from "./routes/AdminRoute";
 import { AuthenticatedRoute } from "./routes/AuthenticatedRoute";
@@ -26,7 +26,7 @@ const router = createBrowserRouter([
         path: "/administration",
         element: (
           <AdminRoute>
-            <AdminDashboard />
+            <Administration />
           </AdminRoute>
         ),
         errorElement: <NotFound />,

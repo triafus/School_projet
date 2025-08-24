@@ -5,10 +5,11 @@ interface ImageCardProps {
   url: string;
   title: string;
   isPrivate?: boolean;
+  onClick?: () => void;
 }
 
 export const ImageCard = (props: ImageCardProps) => {
-  const { url, title, isPrivate } = props;
+  const { url, title, isPrivate, onClick } = props;
   return (
     <Box
       sx={{
@@ -44,6 +45,7 @@ export const ImageCard = (props: ImageCardProps) => {
         component="img"
         src={url}
         alt={title}
+        onClick={onClick}
         sx={{
           width: "100%",
           height: "auto",
@@ -53,6 +55,7 @@ export const ImageCard = (props: ImageCardProps) => {
           "&:hover": {
             transform: "scale(1.02)",
             filter: "contrast(110%)",
+            cursor: "pointer",
           },
         }}
       />
