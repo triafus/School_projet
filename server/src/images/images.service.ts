@@ -31,8 +31,8 @@ export class ImagesService {
   async findAll(includePrivate = false) {
     const query = this.imagesRepository
       .createQueryBuilder("image")
-      .leftJoinAndSelect("image.user", "user")
-      .where("image.is_approved = :approved", { approved: true });
+      .leftJoinAndSelect("image.user", "user");
+    /* .where("image.is_approved = :approved", { approved: true }); */
 
     if (!includePrivate) {
       query.andWhere("image.is_private = :private", { private: false });

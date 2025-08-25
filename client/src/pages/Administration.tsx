@@ -1,24 +1,15 @@
-import React, { useEffect, useState } from "react";
-import {
-  Box,
-  Typography,
-  Button,
-  Alert,
-  CircularProgress,
-  TextField,
-  InputAdornment,
-  Select,
-  MenuItem,
-  FormControl,
-  Container,
-} from "@mui/material";
-import {
-  Person as PersonIcon,
-  Search as SearchIcon,
-} from "@mui/icons-material";
+import React, { useState } from "react";
+import { Box, Container, Stack, Tab } from "@mui/material";
 import { useUsers } from "../hooks/useUser";
 import ErrorAlert from "../components/ErrorAlert";
-import TableAdminDashboard from "../components/TableAdminDashboard";
+import TableAdminDashboard from "../components/AdminComponents/TableAdminDashboard";
+import AdminHeader from "../components/AdminComponents/AdminHeader";
+import AdminSearchBar from "../components/AdminComponents/AdminSearchBar";
+import AdminRoleFilter from "../components/AdminComponents/AdminRoleFilter";
+import AdminErrorMessage from "../components/AdminComponents/AdminErrorMessage";
+import AdminLoadingState from "../components/AdminComponents/AdminLoadingState";
+import AdminEmptyState from "../components/AdminComponents/AdminEmptyState";
+import { TableAppove } from "../components/AdminComponents/TableAppove";
 
 const Administration = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -46,17 +37,10 @@ const Administration = () => {
     return matchesSearch && matchesFilter;
   });
 
-  const ErrorMessage = () => (
-    <Box sx={{ textAlign: "center" }}>
-      <Alert severity="error">
-        {queryError instanceof Error ? queryError.message : "Erreur inconnue"}
-      </Alert>
-    </Box>
-  );
-
   return (
     <Container sx={{ p: 4, bgcolor: "#fafafa", minHeight: "100vh" }}>
       {error && <ErrorAlert error={error} setError={setError} />}
+
       <Box
         sx={{
           display: "flex",
@@ -67,108 +51,38 @@ const Administration = () => {
           gap: 2,
         }}
       >
-        <Box>
-          <Typography
-            variant="h5"
-            sx={{ fontWeight: 600, color: "#1f2937", mb: 0.5 }}
-          >
-            Utilisateurs
-          </Typography>
-          <Typography variant="body2" sx={{ color: "#6b7280" }}>
-            {users.length} Utilisateurs
-          </Typography>
-        </Box>
-        {isError && <ErrorMessage />}
+        <AdminHeader userCount={users.length} />
+        {isError && <AdminErrorMessage error={queryError} />}
+        <AdminSearchBar
+          searchQuery={searchQuery}
+          onSearchChange={setSearchQuery}
+        />
+      </Box>
 
-        <TextField
-          size="small"
-          placeholder="Rechercher..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <SearchIcon />
-              </InputAdornment>
-            ),
-          }}
+      <AdminRoleFilter filterRole={filterRole} onFilterChange={setFilterRole} />
+      <Stack gap={3}>
+        <Box
           sx={{
             bgcolor: "white",
             borderRadius: 2,
-            minWidth: 250,
-            "& .MuiOutlinedInput-root": {
-              borderRadius: 2,
-            },
+            border: "1px solid #e5e7eb",
           }}
-        />
-      </Box>
-
-      <Box sx={{ display: "flex", gap: 2, mb: 3, alignItems: "center" }}>
-        <Typography
-          variant="body2"
-          sx={{ color: "#6b7280", minWidth: "fit-content" }}
         >
-          Filtrer par:
-        </Typography>
-        <FormControl size="small" sx={{ minWidth: 120 }}>
-          <Select
-            value={filterRole}
-            onChange={(e) => setFilterRole(e.target.value)}
-            sx={{
-              bgcolor: "white",
-              "& .MuiOutlinedInput-notchedOutline": {
-                border: "1px solid #e5e7eb",
-              },
-              "&:hover .MuiOutlinedInput-notchedOutline": {
-                border: "1px solid #d1d5db",
-              },
-            }}
-          >
-            <MenuItem value="All">Tous</MenuItem>
-            <MenuItem value="Admin">Admin</MenuItem>
-            <MenuItem value="User">Utilisateur</MenuItem>
-          </Select>
-        </FormControl>
-      </Box>
+          <TableAdminDashboard
+            filterRole={filterRole}
+            searchQuery={searchQuery}
+            setError={setError}
+          />
 
-      <Box
-        sx={{ bgcolor: "white", borderRadius: 2, border: "1px solid #e5e7eb" }}
-      >
-        <TableAdminDashboard
-          filterRole={filterRole}
-          searchQuery={searchQuery}
-          setError={setError}
-        />
-        {isLoading && (
-          <Box sx={{ p: 8, textAlign: "center" }}>
-            <CircularProgress color="inherit" size={60} />
-            <Typography variant="h6" sx={{ color: "#6b7280", mb: 1 }}>
-              Chargement...
-            </Typography>
-          </Box>
-        )}
+          {isLoading && <AdminLoadingState />}
 
-        {filteredUsers.length === 0 && !isLoading ? (
-          <Box sx={{ p: 8, textAlign: "center" }}>
-            <PersonIcon sx={{ fontSize: 48, color: "#d1d5db", mb: 2 }} />
-            <Typography variant="h6" sx={{ color: "#6b7280", mb: 1 }}>
-              Aucun utilisateur trouvé
-            </Typography>
-            <Typography variant="body2" sx={{ color: "#9ca3af" }}>
-              Aucun utilisateur ne correspond à vos critères de recherche.
-            </Typography>
-            <Button
-              variant="contained"
-              onClick={() => window.location.reload()}
-              sx={{ mt: 2 }}
-            >
-              Réessayer
-            </Button>
-          </Box>
-        ) : (
-          <></>
-        )}
-      </Box>
+          {filteredUsers.length === 0 && !isLoading && <AdminEmptyState />}
+        </Box>
+
+        <Box>
+          <TableAppove />
+        </Box>
+      </Stack>
     </Container>
   );
 };

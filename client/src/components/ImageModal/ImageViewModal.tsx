@@ -1,13 +1,11 @@
 import React, { useState } from "react";
-import { Box, Modal, Typography, IconButton, Stack } from "@mui/material";
+import { Box, Modal, Typography, IconButton } from "@mui/material";
 import { Close, DeleteOutline, EditOutlined } from "@mui/icons-material";
 import { Image } from "../../types/image";
 import { useAuth } from "../../hooks/useAuth";
-import { useImages } from "../../hooks/useImage";
-import { CustomButton } from "../CustomButton";
 import { EditImageModal } from "./EditImageModal";
 import { DeleteImageModal } from "./DeleteImageModal";
-import { on } from "events";
+import { useUsers } from "../../hooks/useUser";
 
 interface ImageViewModalProps {
   open: boolean;
@@ -21,8 +19,14 @@ export const ImageViewModal = (props: ImageViewModalProps) => {
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
 
   const { user } = useAuth();
+  const { data: users = [] } = useUsers();
 
   const isOwner = user?.id === image?.userId;
+
+  const getImageUploaderUsername = () => {
+    const user = users.find((user) => user.id === image?.userId);
+    return user ? user.firstName : "Utilisateur inconnu";
+  };
 
   const handleOpenEdit = () => {
     setOpenEditModal(true);
@@ -47,14 +51,15 @@ export const ImageViewModal = (props: ImageViewModalProps) => {
         <Box
           sx={{
             position: "relative",
-            maxWidth: "90%",
-            maxHeight: "90%",
-            background: "rgba(20,20,20,0.95)",
-            backdropFilter: "blur(20px)",
-            border: "1px solid rgba(255,255,255,0.1)",
-            borderRadius: "16px",
+            maxWidth: "1000px",
+            minHeight: "450px",
+            background: "#ffffff",
+            borderRadius: "32px",
             overflow: "hidden",
-            width: { xs: "100%", sm: "auto" },
+            width: { xs: "95%", sm: "90%", md: "80%" },
+            display: "flex",
+            flexDirection: { xs: "column", md: "row" },
+            boxShadow: "0 32px 64px rgba(0,0,0,0.12)",
           }}
           onClick={(e) => e.stopPropagation()}
         >
@@ -63,77 +68,149 @@ export const ImageViewModal = (props: ImageViewModalProps) => {
               position: "absolute",
               top: 16,
               right: 16,
-              background: "rgba(255,255,255,0.1)",
-              backdropFilter: "blur(10px)",
-              color: "#ffffff",
-              zIndex: 1,
+              background: "rgba(0,0,0,0.05)",
+              color: "#111111",
+              zIndex: 10,
+              "&:hover": {
+                background: "rgba(0,0,0,0.1)",
+              },
             }}
             onClick={onClose}
           >
             <Close />
           </IconButton>
 
+          {/* Image Section */}
           <Box
-            component="img"
-            src={image?.url}
-            alt={image?.title}
             sx={{
-              width: "100%",
-              height: "auto",
-              display: "block",
-              maxHeight: "70vh",
+              flex: { xs: "none", md: "1" },
+              position: "relative",
+              overflow: "hidden",
             }}
-          />
-
-          <Stack
-            justifyContent="space-between"
-            flexDirection="row"
-            sx={{ p: 4 }}
           >
-            <Box>
+            <Box
+              component="img"
+              src={image?.url}
+              alt={image?.title}
+              sx={{
+                width: "90%",
+                margin: 2,
+                borderRadius: "24px",
+                objectFit: "contain",
+                display: "block",
+              }}
+            />
+          </Box>
+
+          {/* Content Section */}
+          <Box
+            sx={{
+              flex: { xs: "none", md: "0 0 400px" },
+              p: "32px 0px",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+            }}
+          >
+            {/* Main Content */}
+            <Box sx={{ flex: 1 }}>
               <Typography
-                variant="h5"
-                sx={{ fontWeight: 600, mb: 2, color: "#ffffff" }}
+                variant="h4"
+                sx={{
+                  fontWeight: 700,
+                  mb: 2,
+                  color: "#111111",
+                  fontSize: { xs: "1.5rem", md: "2rem" },
+                  lineHeight: 1.2,
+                }}
               >
                 {image?.title}
               </Typography>
-              <Typography sx={{ color: "rgba(255,255,255,0.7)" }}>
-                {image?.description}
-              </Typography>
-            </Box>
-            {isOwner && (
-              <Box display="flex" flexDirection="row" gap={2} mb={2}>
-                <Box>
-                  <IconButton
-                    onClick={handleOpenEdit}
+              {/* User Info */}
+              <Box display="flex" flexDirection="column" gap={2}>
+                <Box sx={{ display: "flex", alignItems: "center", mt: "auto" }}>
+                  <Box
                     sx={{
-                      borderRadius: "8px",
-                      backgroundColor: "#2c3e50",
-                      "&:hover": {
-                        backgroundColor: "#34495e",
-                      },
+                      width: 40,
+                      height: 40,
+                      borderRadius: "50%",
+                      backgroundColor: "#e0e0e0",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      mr: 2,
                     }}
                   >
-                    <EditOutlined sx={{ color: "white" }} />
-                  </IconButton>
+                    <Typography sx={{ fontWeight: 600, color: "#111111" }}>
+                      {getImageUploaderUsername().charAt(0).toUpperCase()}
+                    </Typography>
+                  </Box>
+                  <Box>
+                    <Typography
+                      sx={{
+                        fontWeight: 600,
+                        color: "#111111",
+                        fontSize: "0.9rem",
+                      }}
+                    >
+                      {getImageUploaderUsername()}
+                    </Typography>
+                  </Box>
                 </Box>
-                <Box>
-                  <IconButton
-                    onClick={handleOpenDelete}
+
+                {image?.description && (
+                  <Typography
                     sx={{
-                      borderRadius: "8px",
-                      backgroundColor: "rgb(170, 14, 14)",
-                      "&:hover": {
-                        backgroundColor: "rgb(201, 16, 16)",
-                      },
+                      color: "#767676",
+                      fontSize: "1rem",
+                      lineHeight: 1.5,
                     }}
                   >
-                    <DeleteOutline sx={{ color: "white" }} />
-                  </IconButton>
-                </Box>
+                    {image?.description}
+                  </Typography>
+                )}
+              </Box>{" "}
+              <Box
+                sx={{
+                  display: "flex",
+                  mb: 2,
+                }}
+              >
+                {isOwner && (
+                  <Box display="flex" gap={1} pt={2}>
+                    <IconButton
+                      onClick={handleOpenEdit}
+                      sx={{
+                        borderRadius: "50%",
+                        backgroundColor: "#f1f1f1",
+                        width: 40,
+                        height: 40,
+                        "&:hover": {
+                          backgroundColor: "#e0e0e0",
+                        },
+                      }}
+                    >
+                      <EditOutlined sx={{ color: "#111111", fontSize: 20 }} />
+                    </IconButton>
+                    <IconButton
+                      onClick={handleOpenDelete}
+                      sx={{
+                        borderRadius: "50%",
+                        backgroundColor: "#f1f1f1",
+                        width: 40,
+                        height: 40,
+                        "&:hover": {
+                          backgroundColor: "#ffebee",
+                        },
+                      }}
+                    >
+                      <DeleteOutline sx={{ color: "#d32f2f", fontSize: 20 }} />
+                    </IconButton>
+                  </Box>
+                )}
               </Box>
-            )}
-          </Stack>
+            </Box>
+          </Box>
 
           <EditImageModal
             open={openEditModal}

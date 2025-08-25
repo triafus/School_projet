@@ -1,15 +1,15 @@
 import Box from "@mui/material/Box";
 import Chip from "@mui/material/Chip";
+import { Image } from "../types/image";
 
 interface ImageCardProps {
-  url: string;
-  title: string;
-  isPrivate?: boolean;
+  image: Image;
   onClick?: () => void;
 }
 
 export const ImageCard = (props: ImageCardProps) => {
-  const { url, title, isPrivate, onClick } = props;
+  const { onClick, image } = props;
+  const { title, url, is_private: isPrivate, is_approved: isApproved } = image;
   return (
     <Box
       sx={{
@@ -33,6 +33,23 @@ export const ImageCard = (props: ImageCardProps) => {
             top: 12,
             right: 12,
             backgroundColor: "rgba(0,0,0,0.7)",
+            color: "white",
+            fontSize: "0.75rem",
+            height: 24,
+            zIndex: 1,
+          }}
+        />
+      )}
+
+      {!isApproved && (
+        <Chip
+          label="Unapproved"
+          size="small"
+          sx={{
+            position: "absolute",
+            top: 12,
+            right: 12,
+            backgroundColor: "rgba(255, 0, 0, 0.47)",
             color: "white",
             fontSize: "0.75rem",
             height: 24,

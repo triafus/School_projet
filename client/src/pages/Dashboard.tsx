@@ -31,8 +31,6 @@ const Dashboard = () => {
 
   const filters = ["Toutes", "Publiques", "Privées"];
 
-  //faire un filtre pour ne voir que ces images
-
   useEffect(() => {
     if (userImages) {
       handleFilterChange(activeFilter);
@@ -149,12 +147,7 @@ const Dashboard = () => {
       <Grid container spacing={3}>
         {filteredImages.map((image) => (
           <Grid key={image.id}>
-            <ImageCard
-              title={image.title}
-              url={image.url}
-              isPrivate={image.is_private}
-              onClick={() => setSelectedImage(image)}
-            />
+            <ImageCard image={image} onClick={() => setSelectedImage(image)} />
 
             <Typography
               variant="body1"

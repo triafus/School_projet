@@ -15,9 +15,13 @@ import {
   Tooltip,
   IconButton,
 } from "@mui/material";
-import { useDeleteUser, useUpdateUserRole, useUsers } from "../hooks/useUser";
+import {
+  useDeleteUser,
+  useUpdateUserRole,
+  useUsers,
+} from "../../hooks/useUser";
 import { useEffect, useState } from "react";
-import { useAuth } from "../hooks/useAuth";
+import { useAuth } from "../../hooks/useAuth";
 
 interface TableAdminDashboardProps {
   searchQuery: string;

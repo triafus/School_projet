@@ -13,6 +13,8 @@ import { Image } from "../types/image";
 import { AddImageModal } from "../components/ImageModal/AddImageModal";
 import { ImageViewModal } from "../components/ImageModal/ImageViewModal";
 import { CustomButton } from "../components/CustomButton";
+import { useUsers } from "../hooks/useUser";
+import { useAuth } from "../hooks/useAuth";
 
 const Gallery = () => {
   const [selectedImage, setSelectedImage] = useState<Image | null>(null);
@@ -20,6 +22,9 @@ const Gallery = () => {
   const [open, setOpen] = useState<boolean>(false);
 
   const { data: images = [] } = useImages();
+  const { data: users = [] } = useUsers();
+
+  const approvedImages = images.filter((image) => image.is_approved);
 
   const toggleFavorite = (id: number) => {
     setFavorites((prev) => {
@@ -27,6 +32,11 @@ const Gallery = () => {
       newFavorites.has(id) ? newFavorites.delete(id) : newFavorites.add(id);
       return newFavorites;
     });
+  };
+
+  const getImageUploaderUsername = (image: Image) => {
+    const user = users.find((user) => user.id === image.userId);
+    return user ? user.firstName : "Utilisateur inconnu";
   };
 
   const handleOpen = () => setOpen(true);
@@ -100,7 +110,7 @@ const Gallery = () => {
             mb: "4rem",
           }}
         >
-          {images.map((image, index) => (
+          {approvedImages.map((image, index) => (
             <ArtworkCard
               key={image.id}
               sx={{
@@ -122,6 +132,19 @@ const Gallery = () => {
               />
 
               <Overlay>
+                <Typography
+                  variant="body2"
+                  sx={{
+                    color: "white",
+                    fontWeight: 600,
+                    mb: 0.5,
+                    position: "absolute",
+                    top: 12,
+                    left: 12,
+                  }}
+                >
+                  Publié par {getImageUploaderUsername(image)}
+                </Typography>
                 <Chip
                   label={/* image.tag */ "tag"}
                   sx={{
@@ -136,12 +159,6 @@ const Gallery = () => {
                   sx={{ color: "white", fontWeight: 600, mb: 0.5 }}
                 >
                   {image.title}
-                </Typography>
-                <Typography
-                  variant="body2"
-                  sx={{ color: "rgba(255,255,255,0.8)" }}
-                >
-                  {image.description}
                 </Typography>
               </Overlay>
 

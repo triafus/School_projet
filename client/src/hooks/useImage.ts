@@ -5,7 +5,7 @@ import { AuthService } from "../services/authServices";
 
 export const useUserImages = () => {
   return useQuery({
-    queryKey: ["Image"],
+    queryKey: ["userImages"],
     queryFn: async () => {
       const token = localStorage.getItem("token");
       if (!token) return null;
@@ -19,7 +19,7 @@ export const useUserImages = () => {
 
 export const useImages = () => {
   return useQuery({
-    queryKey: ["Image"],
+    queryKey: ["allImages"],
     queryFn: imageService.getAllImages,
     staleTime: 5 * 60 * 1000,
     refetchOnWindowFocus: false,
@@ -36,12 +36,14 @@ export const usePostImage = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationKey: ["Image"],
+    mutationKey: ["postImage"],
     mutationFn: async ({ file, imageData }: PostImagePayload) => {
       return await imageService.postImage(file, imageData);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["Image"] });
+      // Invalider les images de l'utilisateur et toutes les images
+      queryClient.invalidateQueries({ queryKey: ["userImages"] });
+      queryClient.invalidateQueries({ queryKey: ["allImages"] });
     },
   });
 };
@@ -55,12 +57,14 @@ export const usePatchImage = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationKey: ["Image"],
+    mutationKey: ["patchImage"],
     mutationFn: async ({ imageId, updateData }: UpdateImagePayload) => {
       return await imageService.patchImage(imageId, updateData);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["Image"] });
+      // Invalider les images de l'utilisateur et toutes les images
+      queryClient.invalidateQueries({ queryKey: ["userImages"] });
+      queryClient.invalidateQueries({ queryKey: ["allImages"] });
     },
   });
 };
@@ -72,12 +76,14 @@ type DeleteImagePayload = {
 export const useDeleteImage = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationKey: ["Image"],
+    mutationKey: ["deleteImage"],
     mutationFn: async ({ imageId }: DeleteImagePayload) => {
       return await imageService.deleteImage(imageId);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["Image"] });
+      // Invalider les images de l'utilisateur et toutes les images
+      queryClient.invalidateQueries({ queryKey: ["userImages"] });
+      queryClient.invalidateQueries({ queryKey: ["allImages"] });
     },
   });
 };
@@ -91,12 +97,14 @@ export const useApproveImage = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationKey: ["ApproveImage"],
+    mutationKey: ["approveImage"],
     mutationFn: async ({ imageId, isApproved }: ApproveImagePayload) => {
       return await imageService.approveImage(imageId, isApproved);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["Image"] });
+      // Invalider les images de l'utilisateur et toutes les images
+      queryClient.invalidateQueries({ queryKey: ["userImages"] });
+      queryClient.invalidateQueries({ queryKey: ["allImages"] });
     },
   });
 };
