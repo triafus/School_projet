@@ -89,7 +89,7 @@ export const Login = () => {
                   letterSpacing: "-0.025em",
                 }}
               >
-                Sign up
+                Connexion
               </Typography>
               <Typography
                 variant="body2"
@@ -97,7 +97,7 @@ export const Login = () => {
                   color: "#64748b",
                 }}
               >
-                Already have an account ?{" "}
+                Je n'ai pas de compte ?{" "}
                 <Typography
                   component={Link}
                   to="/register"
@@ -110,7 +110,7 @@ export const Login = () => {
                     },
                   }}
                 >
-                  Register
+                  Créer un compte
                 </Typography>
               </Typography>
             </Box>

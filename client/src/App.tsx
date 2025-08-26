@@ -10,8 +10,6 @@ import { AuthenticatedRoute } from "./routes/AuthenticatedRoute";
 import NotFound from "./pages/NotFound";
 import Dashboard from "./pages/Dashboard";
 
-const queryClient = new QueryClient();
-
 const router = createBrowserRouter([
   {
     element: <Navigation />,

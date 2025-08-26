@@ -21,15 +21,15 @@ export const Register = () => {
     images: [],
   });
   const [error, setError] = useState<string | null>(null);
-  const { register, isRegistering } = useAuth();
+  const { register, isRegistering, isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const from = "/";
 
   useEffect(() => {
-    if (isRegistering) {
+    if (isAuthenticated) {
       navigate(from, { replace: true });
     }
-  }, [isRegistering, navigate, from]);
+  }, [isAuthenticated, navigate, from]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -142,7 +142,7 @@ export const Register = () => {
                 letterSpacing: "-0.025em",
               }}
             >
-              Create account
+              Créer un compte
             </Typography>
             <Typography
               variant="body2"
@@ -150,7 +150,7 @@ export const Register = () => {
                 color: "#64748b",
               }}
             >
-              Already have an account ?{" "}
+              J'ai déjà un compte ?{" "}
               <Typography
                 component={Link}
                 to="/login"
@@ -163,7 +163,7 @@ export const Register = () => {
                   },
                 }}
               >
-                Login
+                Se connecter
               </Typography>
             </Typography>
           </Box>
