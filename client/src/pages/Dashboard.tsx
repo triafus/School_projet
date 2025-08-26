@@ -22,6 +22,7 @@ const Dashboard = () => {
   const [activeFilter, setActiveFilter] = useState<string>("Toutes");
   const [open, setOpen] = useState<boolean>(false);
   const [selectedImage, setSelectedImage] = useState<Image | null>(null);
+  const [imageUrl, setImageUrl] = useState<string>("");
 
   const { data: userImages } = useUserImages();
 

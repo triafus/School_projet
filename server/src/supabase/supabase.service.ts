@@ -57,9 +57,42 @@ export class SupabaseService {
   async getSignedUrl(bucket: string, key: string) {
     const { data, error } = await this.supabase.storage
       .from(bucket)
-      .createSignedUrl(key, 60);
+      .createSignedUrl(key, 180);
 
     if (error) throw new Error("Signed URL failed: " + error.message);
     return data.signedUrl;
+  }
+
+  async transferFile(
+    sourceBucket: string,
+    destinationBucket: string,
+    key: string
+  ) {
+    const { data: fileData, error: downloadError } = await this.supabase.storage
+      .from(sourceBucket)
+      .download(key);
+
+    if (downloadError)
+      throw new Error("Download failed: " + downloadError.message);
+
+    const { data: uploadData, error: uploadError } = await this.supabase.storage
+      .from(destinationBucket)
+      .upload(key, fileData, {
+        upsert: true,
+      });
+
+    if (uploadError) throw new Error("Upload failed: " + uploadError.message);
+
+    const { error: deleteError } = await this.supabase.storage
+      .from(sourceBucket)
+      .remove([key]);
+
+    if (deleteError) throw new Error("Delete failed: " + deleteError.message);
+
+    return {
+      url: this.supabase.storage.from(destinationBucket).getPublicUrl(key).data
+        .publicUrl,
+      key: key,
+    };
   }
 }

@@ -6,6 +6,7 @@ import { useAuth } from "../../hooks/useAuth";
 import { EditImageModal } from "./EditImageModal";
 import { DeleteImageModal } from "./DeleteImageModal";
 import { useUsers } from "../../hooks/useUser";
+import { useSignedUrl } from "../../hooks/useImage";
 
 interface ImageViewModalProps {
   open: boolean;
@@ -22,6 +23,11 @@ export const ImageViewModal = (props: ImageViewModalProps) => {
   const { data: users = [] } = useUsers();
 
   const isOwner = user?.id === image?.userId;
+
+  const { data: signedUrlData } = useSignedUrl(
+    image?.id || 0,
+    image?.is_private || false
+  );
 
   const getImageUploaderUsername = () => {
     const user = users.find((user) => user.id === image?.userId);
@@ -90,7 +96,7 @@ export const ImageViewModal = (props: ImageViewModalProps) => {
           >
             <Box
               component="img"
-              src={image?.url}
+              src={image?.is_private ? signedUrlData?.url : image?.url}
               alt={image?.title}
               sx={{
                 width: "90%",

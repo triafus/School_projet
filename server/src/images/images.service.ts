@@ -15,6 +15,7 @@ import { User } from "../users/user.entity";
 @Injectable()
 export class ImagesService {
   private readonly BUCKET_NAME = "images";
+  private readonly PRIV_BUCKET_NAME = "private_images";
   private readonly MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
   private readonly ALLOWED_MIME_TYPES = [
     "image/jpeg",
@@ -80,9 +81,42 @@ export class ImagesService {
     return this.imagesRepository.save(image);
   }
 
-  async update(id: number, updateImageDto: UpdateImageDto, user: User) {
+  /* async update(id: number, updateImageDto: UpdateImageDto, user: User) {
     const image = await this.verifyOwnership(id, user);
 
+    Object.assign(image, updateImageDto);
+    return this.imagesRepository.save(image);
+  } */
+
+  async update(id: number, updateImageDto: UpdateImageDto, user: User) {
+    const image = await this.verifyOwnership(id, user);
+    const oldIsPrivate = image.is_private;
+
+    // Si le statut de confidentialité a changé
+    if (
+      updateImageDto.is_private !== undefined &&
+      updateImageDto.is_private !== oldIsPrivate
+    ) {
+      const sourceBucket = oldIsPrivate
+        ? this.PRIV_BUCKET_NAME
+        : this.BUCKET_NAME;
+      const destBucket = oldIsPrivate
+        ? this.BUCKET_NAME
+        : this.PRIV_BUCKET_NAME;
+
+      // Transférer le fichier entre les buckets
+      const { url, key } = await this.supabaseService.transferFile(
+        sourceBucket,
+        destBucket,
+        image.key
+      );
+
+      // Mettre à jour l'URL et la clé
+      image.url = url;
+      image.key = key;
+    }
+
+    // Mettre à jour les autres propriétés
     Object.assign(image, updateImageDto);
     return this.imagesRepository.save(image);
   }
@@ -115,7 +149,10 @@ export class ImagesService {
     }
 
     return {
-      url: await this.supabaseService.getSignedUrl(this.BUCKET_NAME, image.key),
+      url: await this.supabaseService.getSignedUrl(
+        this.PRIV_BUCKET_NAME,
+        image.key
+      ),
     };
   }
 

@@ -52,4 +52,11 @@ export const imageService = {
     );
     return data;
   },
+
+  getSignedUrl: async (imageId: number): Promise<{ url: string }> => {
+    const { data } = await apiClient.get<{ url: string }>(
+      `/images/${imageId}/signed-url`
+    );
+    return data;
+  },
 };

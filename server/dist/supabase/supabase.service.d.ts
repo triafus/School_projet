@@ -9,4 +9,8 @@ export declare class SupabaseService {
     }>;
     deleteFile(bucket: string, key: string): Promise<void>;
     getSignedUrl(bucket: string, key: string): Promise<string>;
+    transferFile(sourceBucket: string, destinationBucket: string, key: string): Promise<{
+        url: string;
+        key: string;
+    }>;
 }

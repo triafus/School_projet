@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useCallback } from "react";
 import {
   Box,
   Typography,
@@ -15,71 +15,74 @@ import { ImageViewModal } from "../components/ImageModal/ImageViewModal";
 import { CustomButton } from "../components/CustomButton";
 import { useUsers } from "../hooks/useUser";
 import { useAuth } from "../hooks/useAuth";
+import { GalleryImageCard } from "../components/GalleryImageCard";
 
 const Gallery = () => {
   const [selectedImage, setSelectedImage] = useState<Image | null>(null);
   const [favorites, setFavorites] = useState<Set<number>>(new Set());
   const [open, setOpen] = useState<boolean>(false);
+  const [imageOrientations, setImageOrientations] = useState<
+    Record<number, "portrait" | "landscape">
+  >({});
 
   const { data: images = [] } = useImages();
   const { data: users = [] } = useUsers();
 
   const approvedImages = images.filter((image) => image.is_approved);
 
-  const toggleFavorite = (id: number) => {
+  const handleImageLoad = useCallback(
+    (imageId: number, naturalWidth: number, naturalHeight: number) => {
+      // Vérifier si l'orientation est déjà connue pour éviter les re-renders inutiles
+      setImageOrientations((prev) => {
+        if (prev[imageId]) {
+          return prev; // Ne pas mettre à jour si déjà défini
+        }
+        const orientation =
+          naturalHeight > naturalWidth ? "portrait" : "landscape";
+        return {
+          ...prev,
+          [imageId]: orientation,
+        };
+      });
+    },
+    []
+  );
+
+  const toggleFavorite = useCallback((id: number) => {
     setFavorites((prev) => {
       const newFavorites = new Set(prev);
       newFavorites.has(id) ? newFavorites.delete(id) : newFavorites.add(id);
       return newFavorites;
     });
-  };
+  }, []);
 
-  const getImageUploaderUsername = (image: Image) => {
-    const user = users.find((user) => user.id === image.userId);
-    return user ? user.firstName : "Utilisateur inconnu";
-  };
+  const getImageUploaderUsername = useCallback(
+    (image: Image) => {
+      const user = users.find((user) => user.id === image.userId);
+      return user ? user.firstName : "Utilisateur inconnu";
+    },
+    [users]
+  );
+
+  const handleImageClick = useCallback((image: Image) => {
+    setSelectedImage(image);
+  }, []);
+
+  const handleToggleFavorite = useCallback(
+    (id: number) => (e: React.MouseEvent) => {
+      e.stopPropagation();
+      toggleFavorite(id);
+    },
+    [toggleFavorite]
+  );
 
   const handleOpen = () => setOpen(true);
-
-  const ArtworkCard = styled(Box)({
-    position: "relative",
-    borderRadius: "16px",
-    overflow: "hidden",
-    cursor: "pointer",
-    transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-    background: "rgba(255,255,255,0.05)",
-    backdropFilter: "blur(10px)",
-    border: "1px solid rgba(255,255,255,0.1)",
-    boxShadow: "0 8px 32px rgba(0,0,0,0.3)",
-    "&:hover": {
-      transform: "translateY(-8px)",
-      boxShadow: "0 20px 50px rgba(0,0,0,0.5)",
-      "& img": { transform: "scale(1.05)" },
-      "& .MuiBox-root": { opacity: 1 },
-    },
-  });
-
-  const Overlay = styled(Box)({
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    background:
-      "linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.2) 50%, transparent 100%)",
-    opacity: 0,
-    transition: "opacity 0.3s ease",
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "flex-end",
-    padding: 12,
-  });
 
   return (
     <Box
       sx={{
         minHeight: "100vh",
-        backgroundColor: "#fafafa",
+        backgroundColor: "#ffffff",
         fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
         position: "relative",
         overflow: "hidden",
@@ -94,8 +97,7 @@ const Gallery = () => {
           left: 0,
           width: "100%",
           height: "100%",
-          background:
-            "linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #000000 100%)",
+          background: "#ffffff",
           zIndex: -1,
         }}
       />
@@ -105,100 +107,23 @@ const Gallery = () => {
         <Box
           sx={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-            gap: "2rem",
+            gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
+            gridAutoRows: "200px",
+            gap: "1.5rem",
             mb: "4rem",
           }}
         >
-          {approvedImages.map((image, index) => (
-            <ArtworkCard
+          {approvedImages.map((image) => (
+            <GalleryImageCard
               key={image.id}
-              sx={{
-                gridColumn: index === 0 ? "span 2" : "span 1",
-                height: index === 0 ? 500 : 350,
-              }}
-              onClick={() => setSelectedImage(image)}
-            >
-              <Box
-                component="img"
-                src={image.url}
-                alt={image.title}
-                sx={{
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "cover",
-                  transition: "transform 0.3s ease",
-                }}
-              />
-
-              <Overlay>
-                <Typography
-                  variant="body2"
-                  sx={{
-                    color: "white",
-                    fontWeight: 600,
-                    mb: 0.5,
-                    position: "absolute",
-                    top: 12,
-                    left: 12,
-                  }}
-                >
-                  Publié par {getImageUploaderUsername(image)}
-                </Typography>
-                <Chip
-                  label={/* image.tag */ "tag"}
-                  sx={{
-                    alignSelf: "flex-start",
-                    mb: 2,
-                    color: "white",
-                    fontWeight: 600,
-                  }}
-                />
-                <Typography
-                  variant="h6"
-                  sx={{ color: "white", fontWeight: 600, mb: 0.5 }}
-                >
-                  {image.title}
-                </Typography>
-              </Overlay>
-
-              <Box
-                sx={{
-                  position: "absolute",
-                  top: 16,
-                  right: 16,
-                  display: "flex",
-                  gap: 1,
-                }}
-              >
-                <IconButton
-                  sx={{
-                    background: "rgba(255,255,255,0.1)",
-                    backdropFilter: "blur(10px)",
-                    color: favorites.has(image.id) ? "#E74C3C" : "#ffffff",
-                    "&:hover": { background: "rgba(255,255,255,0.2)" },
-                  }}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    toggleFavorite(image.id);
-                  }}
-                >
-                  {favorites.has(image.id) ? <Favorite /> : <FavoriteBorder />}
-                </IconButton>
-
-                <IconButton
-                  sx={{
-                    background: "rgba(255,255,255,0.1)",
-                    backdropFilter: "blur(10px)",
-                    color: "#ffffff",
-                    "&:hover": { background: "rgba(255,255,255,0.2)" },
-                  }}
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <Share />
-                </IconButton>
-              </Box>
-            </ArtworkCard>
+              image={image}
+              orientation={imageOrientations[image.id]}
+              isFavorite={favorites.has(image.id)}
+              uploaderUsername={getImageUploaderUsername(image)}
+              onImageClick={() => handleImageClick(image)}
+              onToggleFavorite={handleToggleFavorite(image.id)}
+              onImageLoad={handleImageLoad}
+            />
           ))}
         </Box>
       </Box>

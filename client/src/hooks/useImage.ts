@@ -108,3 +108,16 @@ export const useApproveImage = () => {
     },
   });
 };
+
+export const useSignedUrl = (imageId: number, isPrivate: boolean) => {
+  return useQuery({
+    queryKey: ["signedUrl", imageId],
+    queryFn: async () => {
+      if (!isPrivate) return null;
+      return imageService.getSignedUrl(imageId);
+    },
+    staleTime: 50 * 1000, // Un peu moins que la durée de validité de l'URL (60s)
+    refetchOnWindowFocus: true,
+    enabled: isPrivate, // N'exécute la requête que si l'image est privée
+  });
+};

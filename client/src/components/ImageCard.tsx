@@ -1,6 +1,9 @@
 import Box from "@mui/material/Box";
 import Chip from "@mui/material/Chip";
 import { Image } from "../types/image";
+import { useSignedUrl } from "../hooks/useImage";
+import { useEffect, useState } from "react";
+import { ImageViewModal } from "./ImageModal/ImageViewModal";
 
 interface ImageCardProps {
   image: Image;
@@ -9,7 +12,25 @@ interface ImageCardProps {
 
 export const ImageCard = (props: ImageCardProps) => {
   const { onClick, image } = props;
-  const { title, url, is_private: isPrivate, is_approved: isApproved } = image;
+  const {
+    id,
+    title,
+    url,
+    is_private: isPrivate,
+    is_approved: isApproved,
+  } = image;
+  const [imageUrl, setImageUrl] = useState(url);
+
+  const { data: signedUrlData, isSuccess } = useSignedUrl(id, isPrivate);
+
+  useEffect(() => {
+    if (isPrivate && isSuccess && signedUrlData) {
+      setImageUrl(signedUrlData.url);
+    } else {
+      setImageUrl(url);
+    }
+  }, [isPrivate, isSuccess, signedUrlData, url]);
+
   return (
     <Box
       sx={{
@@ -43,14 +64,14 @@ export const ImageCard = (props: ImageCardProps) => {
 
       {!isApproved && (
         <Chip
-          label="Unapproved"
+          label="En attente"
           size="small"
           sx={{
             position: "absolute",
             top: 12,
             right: 12,
-            backgroundColor: "rgba(255, 0, 0, 0.47)",
-            color: "white",
+            bgcolor: "#fef3c7",
+            color: "#92400e",
             fontSize: "0.75rem",
             height: 24,
             zIndex: 1,
@@ -60,7 +81,7 @@ export const ImageCard = (props: ImageCardProps) => {
 
       <Box
         component="img"
-        src={url}
+        src={imageUrl}
         alt={title}
         onClick={onClick}
         sx={{

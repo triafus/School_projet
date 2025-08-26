@@ -23,6 +23,7 @@ let ImagesService = class ImagesService {
         this.imagesRepository = imagesRepository;
         this.supabaseService = supabaseService;
         this.BUCKET_NAME = "images";
+        this.PRIV_BUCKET_NAME = "private_images";
         this.MAX_FILE_SIZE = 5 * 1024 * 1024;
         this.ALLOWED_MIME_TYPES = [
             "image/jpeg",
@@ -61,6 +62,19 @@ let ImagesService = class ImagesService {
     }
     async update(id, updateImageDto, user) {
         const image = await this.verifyOwnership(id, user);
+        const oldIsPrivate = image.is_private;
+        if (updateImageDto.is_private !== undefined &&
+            updateImageDto.is_private !== oldIsPrivate) {
+            const sourceBucket = oldIsPrivate
+                ? this.PRIV_BUCKET_NAME
+                : this.BUCKET_NAME;
+            const destBucket = oldIsPrivate
+                ? this.BUCKET_NAME
+                : this.PRIV_BUCKET_NAME;
+            const { url, key } = await this.supabaseService.transferFile(sourceBucket, destBucket, image.key);
+            image.url = url;
+            image.key = key;
+        }
         Object.assign(image, updateImageDto);
         return this.imagesRepository.save(image);
     }
@@ -86,7 +100,7 @@ let ImagesService = class ImagesService {
             return { url: image.url };
         }
         return {
-            url: await this.supabaseService.getSignedUrl(this.BUCKET_NAME, image.key),
+            url: await this.supabaseService.getSignedUrl(this.PRIV_BUCKET_NAME, image.key),
         };
     }
     async verifyOwnership(id, user) {
