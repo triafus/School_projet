@@ -15,7 +15,7 @@ interface GalleryImageCardProps {
 
 const ArtworkCard = styled(Box)({
   position: "relative",
-  borderRadius: "16px",
+  borderRadius: `16px`,
   overflow: "hidden",
   cursor: "pointer",
   transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",

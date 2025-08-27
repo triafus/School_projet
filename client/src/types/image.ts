@@ -1,3 +1,5 @@
+import { User } from "./user";
+
 export interface Image {
   id: number;
   title: string;
@@ -7,6 +9,7 @@ export interface Image {
   is_approved: boolean;
   is_private: boolean;
   userId: number;
+  user?: User;
 }
 
 export interface ImageFormData {

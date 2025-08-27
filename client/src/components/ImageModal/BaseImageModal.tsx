@@ -43,7 +43,7 @@ export const BaseImageModal = (props: BaseImageModalProps) => {
       maxWidth="md"
       fullWidth
       PaperProps={{
-        sx: { borderRadius: 2 },
+        sx: { borderRadius: 3 },
       }}
     >
       <DialogTitle sx={{ pb: 1 }}>

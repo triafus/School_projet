@@ -7,8 +7,8 @@ import {
   styled,
   Button,
 } from "@mui/material";
-import { Favorite, FavoriteBorder, Share, Add } from "@mui/icons-material";
-import { useImages, usePostImage } from "../hooks/useImage";
+import { Add } from "@mui/icons-material";
+import { useImages } from "../hooks/useImage";
 import { Image } from "../types/image";
 import { AddImageModal } from "../components/ImageModal/AddImageModal";
 import { ImageViewModal } from "../components/ImageModal/ImageViewModal";
@@ -26,16 +26,15 @@ const Gallery = () => {
   >({});
 
   const { data: images = [] } = useImages();
-  const { data: users = [] } = useUsers();
+  const { user } = useAuth();
 
   const approvedImages = images.filter((image) => image.is_approved);
 
   const handleImageLoad = useCallback(
     (imageId: number, naturalWidth: number, naturalHeight: number) => {
-      // Vérifier si l'orientation est déjà connue pour éviter les re-renders inutiles
       setImageOrientations((prev) => {
         if (prev[imageId]) {
-          return prev; // Ne pas mettre à jour si déjà défini
+          return prev;
         }
         const orientation =
           naturalHeight > naturalWidth ? "portrait" : "landscape";
@@ -56,13 +55,9 @@ const Gallery = () => {
     });
   }, []);
 
-  const getImageUploaderUsername = useCallback(
-    (image: Image) => {
-      const user = users.find((user) => user.id === image.userId);
-      return user ? user.firstName : "Utilisateur inconnu";
-    },
-    [users]
-  );
+  const getImageUploaderUsername = useCallback((image: Image) => {
+    return image.user ? image.user.firstName : "Utilisateur inconnu";
+  }, []);
 
   const handleImageClick = useCallback((image: Image) => {
     setSelectedImage(image);
@@ -127,12 +122,13 @@ const Gallery = () => {
           ))}
         </Box>
       </Box>
-
-      <Box sx={{ position: "fixed", bottom: 32, right: 32 }}>
-        <CustomButton startIcon={<Add />} onClick={handleOpen}>
-          Ajouter une image
-        </CustomButton>
-      </Box>
+      {user && (
+        <Box sx={{ position: "fixed", bottom: 32, right: 32 }}>
+          <CustomButton startIcon={<Add />} onClick={handleOpen}>
+            Ajouter une image
+          </CustomButton>
+        </Box>
+      )}
 
       <AddImageModal open={open} onClose={() => setOpen(false)} />
 
