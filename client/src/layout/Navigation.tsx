@@ -184,7 +184,7 @@ const Navigation = () => {
             onClick={handleDrawerToggle}
             size="large"
             sx={{
-              borderRadius: 20,
+              borderRadius: 2,
               color: "white",
               width: 48,
               height: 0,
@@ -205,7 +205,7 @@ const Navigation = () => {
                   component={Link}
                   to={item.path}
                   sx={{
-                    borderRadius: "12px",
+                    borderRadius: 2,
                     py: 1.2,
                     px: isCollapsed ? 1.5 : 2,
                     minHeight: 48,

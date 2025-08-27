@@ -13,6 +13,7 @@ export const CustomButton = forwardRef<HTMLButtonElement, CustomButtonProps>(
         variant={variant}
         {...rest}
         sx={{
+          maxHeight: "40px",
           "&.MuiButton-root.Mui-disabled": {
             backgroundColor: "rgba(0, 0, 0, 0.12)",
           },
@@ -22,10 +23,17 @@ export const CustomButton = forwardRef<HTMLButtonElement, CustomButtonProps>(
               backgroundColor: "#34495e",
             },
           },
+          "&.MuiButton-outlined": {
+            color: "#2c3e50",
+            borderColor: "#2c3e50",
+            "&:hover": {
+              color: "#34495e",
+              borderColor: "#34495e",
+              backgroundColor: "rgba(0, 0, 0, 0.08)",
+            },
+          },
 
           borderRadius: 2,
-          px: 3,
-          py: 1,
           ...sx,
         }}
       >

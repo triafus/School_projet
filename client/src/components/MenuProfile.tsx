@@ -45,7 +45,7 @@ export const MenuProfile = (props: MenuProfileProps) => {
         sx: {
           mt: 1,
           minWidth: 220,
-          borderRadius: 3,
+          borderRadius: 2,
           background: "#ffffff",
           border: "1px solid rgba(0, 0, 0, 0.1)",
           boxShadow: "0 12px 40px rgba(0, 0, 0, 0.15)",
@@ -53,7 +53,7 @@ export const MenuProfile = (props: MenuProfileProps) => {
             color: "#000000",
             py: 1.5,
             px: 2,
-            borderRadius: 2,
+            borderRadius: 1,
             mx: 1,
             my: 0.5,
             transition: "all 0.2s ease",
@@ -120,7 +120,7 @@ export const MenuProfile = (props: MenuProfileProps) => {
             variant="contained"
             startIcon={<PersonAddAlt1Outlined />}
             sx={{
-              borderRadius: 2.5,
+              borderRadius: 1,
               textTransform: "none",
               fontWeight: 600,
               height: 44,
@@ -142,7 +142,7 @@ export const MenuProfile = (props: MenuProfileProps) => {
             variant="outlined"
             startIcon={<LoginOutlined />}
             sx={{
-              borderRadius: 2.5,
+              borderRadius: 1,
               textTransform: "none",
               fontWeight: 600,
               height: 44,

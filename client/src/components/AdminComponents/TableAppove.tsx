@@ -9,18 +9,19 @@ import {
   TableHead,
   TableRow,
   Paper,
-  Switch,
   Avatar,
   Chip,
   IconButton,
   CircularProgress,
   Alert,
+  Button,
 } from "@mui/material";
 import { Visibility as VisibilityIcon } from "@mui/icons-material";
 import { useImages, useApproveImage } from "../../hooks/useImage";
 import { useUsers } from "../../hooks/useUser";
 import { Image } from "../../types/image";
 import { ImageViewModal } from "../ImageModal/ImageViewModal";
+import { CustomButton } from "../CustomButton";
 
 export const TableAppove = () => {
   const [selectedImage, setSelectedImage] = useState<Image | null>(null);
@@ -117,7 +118,10 @@ export const TableAppove = () => {
       ) : (
         <TableContainer
           component={Paper}
-          sx={{ borderRadius: 2, border: "1px solid #e5e7eb" }}
+          sx={{
+            borderRadius: 2,
+            border: "1px solid #e5e7eb",
+          }}
         >
           <Table>
             <TableHead sx={{ bgcolor: "#f9fafb" }}>
@@ -126,7 +130,6 @@ export const TableAppove = () => {
                 <TableCell sx={{ fontWeight: 600 }}>Titre</TableCell>
                 <TableCell sx={{ fontWeight: 600 }}>Utilisateur</TableCell>
                 <TableCell sx={{ fontWeight: 600 }}>Statut</TableCell>
-                <TableCell sx={{ fontWeight: 600 }}>Approbation</TableCell>
                 <TableCell sx={{ fontWeight: 600 }}>Actions</TableCell>
               </TableRow>
             </TableHead>
@@ -174,30 +177,16 @@ export const TableAppove = () => {
                     />
                   </TableCell>
                   <TableCell>
-                    <Switch
-                      checked={image.is_approved}
-                      onChange={() =>
-                        handleApprovalToggle(image.id, image.is_approved)
-                      }
-                      disabled={approveImageMutation.isPending}
-                      color="success"
-                      size="small"
-                    />
-                  </TableCell>
-                  <TableCell>
-                    <IconButton
-                      onClick={() => handleViewImage(image)}
-                      size="small"
-                      sx={{
-                        color: "#6b7280",
-                        "&:hover": {
-                          color: "#374151",
-                          bgcolor: "#f3f4f6",
-                        },
-                      }}
-                    >
-                      <VisibilityIcon fontSize="small" />
-                    </IconButton>
+                    <Box sx={{ display: "flex", gap: 1 }}>
+                      <CustomButton
+                        variant="outlined"
+                        size="small"
+                        onClick={() => handleViewImage(image)}
+                        disabled={approveImageMutation.isPending}
+                      >
+                        Approuver
+                      </CustomButton>
+                    </Box>
                   </TableCell>
                 </TableRow>
               ))}
@@ -206,12 +195,14 @@ export const TableAppove = () => {
         </TableContainer>
       )}
 
-      {/* Modal pour voir l'image */}
       {selectedImage && (
         <ImageViewModal
           open={isModalOpen}
           onClose={handleCloseModal}
           image={selectedImage}
+          onApprove={handleApprovalToggle}
+          isApproving={approveImageMutation.isPending}
+          showApprovalButton={true}
         />
       )}
     </Box>

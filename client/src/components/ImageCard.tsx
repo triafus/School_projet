@@ -34,7 +34,7 @@ export const ImageCard = (props: ImageCardProps) => {
   return (
     <Box
       sx={{
-        borderRadius: 2,
+        borderRadius: 3,
         position: "relative",
         width: "100%",
         maxHeight: 200,

@@ -32,7 +32,6 @@ export class Image {
   is_private: boolean;
 
   @ManyToOne(() => User, (user) => user.images)
-  @Expose({ groups: ["admin"] })
   user: User;
 
   @Column()

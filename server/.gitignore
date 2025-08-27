@@ -29,6 +29,10 @@ pnpm-lock.yaml
 .env.local
 .env.*.local
 
+# Build output
+dist/
+build/
+
 # Divers
 .DS_Store
 .cache/

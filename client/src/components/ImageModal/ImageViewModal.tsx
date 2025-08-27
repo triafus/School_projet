@@ -1,26 +1,49 @@
 import React, { useState } from "react";
-import { Box, Modal, Typography, IconButton } from "@mui/material";
-import { Close, DeleteOutline, EditOutlined } from "@mui/icons-material";
+import {
+  Box,
+  Modal,
+  Typography,
+  IconButton,
+  Button,
+  Stack,
+} from "@mui/material";
+import {
+  Close,
+  DeleteOutline,
+  EditOutlined,
+  CheckCircle,
+} from "@mui/icons-material";
 import { Image } from "../../types/image";
 import { useAuth } from "../../hooks/useAuth";
 import { EditImageModal } from "./EditImageModal";
 import { DeleteImageModal } from "./DeleteImageModal";
 import { useUsers } from "../../hooks/useUser";
 import { useSignedUrl } from "../../hooks/useImage";
+import { CustomButton } from "../CustomButton";
+import { BaseImageModal } from "./BaseImageModal";
 
 interface ImageViewModalProps {
   open: boolean;
   image: Image | null;
   onClose: () => void;
+  onApprove?: (imageId: number, currentStatus: boolean) => void;
+  isApproving?: boolean;
+  showApprovalButton?: boolean;
 }
 
 export const ImageViewModal = (props: ImageViewModalProps) => {
-  const { open, image, onClose } = props;
+  const {
+    open,
+    image,
+    onClose,
+    onApprove,
+    isApproving = false,
+    showApprovalButton = false,
+  } = props;
   const [openEditModal, setOpenEditModal] = useState<boolean>(false);
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
 
   const { user } = useAuth();
-  const { data: users = [] } = useUsers();
 
   const isOwner = user?.id === image?.userId;
 
@@ -30,8 +53,7 @@ export const ImageViewModal = (props: ImageViewModalProps) => {
   );
 
   const getImageUploaderUsername = () => {
-    const user = users.find((user) => user.id === image?.userId);
-    return user ? user.firstName : "Utilisateur inconnu";
+    return image ? image.user?.firstName : "Utilisateur inconnu";
   };
 
   const handleOpenEdit = () => {
@@ -40,6 +62,12 @@ export const ImageViewModal = (props: ImageViewModalProps) => {
 
   const handleOpenDelete = () => {
     setOpenDeleteModal(true);
+  };
+
+  const handleApprove = () => {
+    if (onApprove && image) {
+      onApprove(image.id, image.is_approved);
+    }
   };
 
   return (
@@ -60,7 +88,7 @@ export const ImageViewModal = (props: ImageViewModalProps) => {
             maxWidth: "1000px",
             minHeight: "450px",
             background: "#ffffff",
-            borderRadius: "32px",
+            borderRadius: "12px",
             overflow: "hidden",
             width: { xs: "95%", sm: "90%", md: "80%" },
             display: "flex",
@@ -101,7 +129,7 @@ export const ImageViewModal = (props: ImageViewModalProps) => {
               sx={{
                 width: "90%",
                 margin: 2,
-                borderRadius: "24px",
+                borderRadius: "12px",
                 objectFit: "contain",
                 display: "block",
               }}
@@ -112,22 +140,26 @@ export const ImageViewModal = (props: ImageViewModalProps) => {
           <Box
             sx={{
               flex: { xs: "none", md: "0 0 400px" },
-              p: "32px 0px",
+              pt: "32px",
               display: "flex",
               flexDirection: "column",
               justifyContent: "space-between",
             }}
           >
             {/* Main Content */}
-            <Box sx={{ flex: 1 }}>
+            <Stack>
               <Typography
-                variant="h4"
+                variant="h6"
                 sx={{
-                  fontWeight: 700,
+                  maxWidth: "85%",
+                  pr: 2,
+                  fontWeight: 600,
                   mb: 2,
                   color: "#111111",
-                  fontSize: { xs: "1.5rem", md: "2rem" },
-                  lineHeight: 1.2,
+                  wordWrap: "break-word",
+                  overflowWrap: "break-word",
+                  whiteSpace: "normal",
+                  lineHeight: 1.3,
                 }}
               >
                 {image?.title}
@@ -148,7 +180,8 @@ export const ImageViewModal = (props: ImageViewModalProps) => {
                     }}
                   >
                     <Typography sx={{ fontWeight: 600, color: "#111111" }}>
-                      {getImageUploaderUsername().charAt(0).toUpperCase()}
+                      {getImageUploaderUsername()?.charAt(0).toUpperCase() ||
+                        "U"}
                     </Typography>
                   </Box>
                   <Box>
@@ -175,47 +208,81 @@ export const ImageViewModal = (props: ImageViewModalProps) => {
                     {image?.description}
                   </Typography>
                 )}
-              </Box>{" "}
-              <Box
-                sx={{
-                  display: "flex",
-                  mb: 2,
-                }}
-              >
-                {isOwner && (
-                  <Box display="flex" gap={1} pt={2}>
-                    <IconButton
-                      onClick={handleOpenEdit}
-                      sx={{
-                        borderRadius: "50%",
-                        backgroundColor: "#f1f1f1",
-                        width: 40,
-                        height: 40,
-                        "&:hover": {
-                          backgroundColor: "#e0e0e0",
-                        },
-                      }}
-                    >
-                      <EditOutlined sx={{ color: "#111111", fontSize: 20 }} />
-                    </IconButton>
-                    <IconButton
-                      onClick={handleOpenDelete}
-                      sx={{
-                        borderRadius: "50%",
-                        backgroundColor: "#f1f1f1",
-                        width: 40,
-                        height: 40,
-                        "&:hover": {
-                          backgroundColor: "#ffebee",
-                        },
-                      }}
-                    >
-                      <DeleteOutline sx={{ color: "#d32f2f", fontSize: 20 }} />
-                    </IconButton>
-                  </Box>
+                {showApprovalButton && (
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      color: "#6b7280",
+                      mb: 2,
+                      fontSize: "0.875rem",
+                      lineHeight: 1.5,
+                      p: 2,
+                      bgcolor: "#f9fafb",
+                      borderRadius: 1,
+                      border: "1px solid #e5e7eb",
+                    }}
+                  >
+                    L'approbation de cette image la rendra visible publiquement
+                    dans la galerie. Une fois approuvée, l'image sera accessible
+                    à tous les utilisateurs de la plateforme.
+                  </Typography>
                 )}
               </Box>
-            </Box>
+            </Stack>
+
+            <Stack>
+              {isOwner && !showApprovalButton && (
+                <Box display="flex" gap={1} justifyContent="end" p={2}>
+                  <Button
+                    onClick={handleOpenDelete}
+                    color="error"
+                    sx={{ borderRadius: "8px" }}
+                    startIcon={
+                      <DeleteOutline sx={{ color: "#d32f2f", fontSize: 20 }} />
+                    }
+                  >
+                    Supprimer
+                  </Button>
+                  <CustomButton
+                    onClick={handleOpenEdit}
+                    variant="outlined"
+                    startIcon={
+                      <EditOutlined sx={{ color: "#111111", fontSize: 20 }} />
+                    }
+                  >
+                    Modifier
+                  </CustomButton>
+                </Box>
+              )}
+
+              {showApprovalButton && !image?.is_approved && (
+                <Box display="flex" gap={1} justifyContent="end" p={2}>
+                  <CustomButton variant="outlined" onClick={onClose}>
+                    Annuler
+                  </CustomButton>
+                  <Button
+                    variant="contained"
+                    startIcon={<CheckCircle />}
+                    onClick={handleApprove}
+                    disabled={isApproving}
+                    sx={{
+                      borderRadius: "8px",
+                      maxHeight: "40px",
+                      bgcolor: "#10b981",
+                      color: "white",
+                      "&:hover": {
+                        bgcolor: "#059669",
+                      },
+                      "&:disabled": {
+                        bgcolor: "#d1d5db",
+                      },
+                    }}
+                  >
+                    {isApproving ? "Approbation..." : "Approuver"}
+                  </Button>
+                </Box>
+              )}
+            </Stack>
           </Box>
 
           <EditImageModal
