@@ -20,7 +20,7 @@ import {
   useUpdateUserRole,
   useUsers,
 } from "../../hooks/useUser";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useAuth } from "../../hooks/useAuth";
 
 interface TableAdminDashboardProps {
@@ -36,7 +36,7 @@ export const TableAdminDashboard = (props: TableAdminDashboardProps) => {
   const [roleToggles, setRoleToggles] = useState<Record<number, boolean>>({});
   const [userToDelete, setUserToDelete] = useState<number | null>(null);
 
-  const { data: users = [], isLoading } = useUsers();
+  const { data: users = [] } = useUsers();
   const updateUserRoleMutation = useUpdateUserRole();
   const { user: currentUser } = useAuth();
   const deleteUserMutation = useDeleteUser();
@@ -91,8 +91,13 @@ export const TableAdminDashboard = (props: TableAdminDashboardProps) => {
     }
   };
 
+  const memoizedUsers = useMemo(
+    () => users,
+    [users.map((u) => u.id + u.role).join()]
+  );
+
   useEffect(() => {
-    const initialToggles = users.reduce(
+    const initialToggles = memoizedUsers.reduce(
       (acc, user) => {
         acc[user.id] = user.role === "admin";
         return acc;
@@ -100,7 +105,7 @@ export const TableAdminDashboard = (props: TableAdminDashboardProps) => {
       {} as Record<number, boolean>
     );
     setRoleToggles(initialToggles);
-  }, [users]);
+  }, [memoizedUsers]);
 
   return (
     <TableContainer>

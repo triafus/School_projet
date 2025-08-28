@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import {
   Box,
   Modal,
@@ -44,17 +44,12 @@ export const ImageViewModal = (props: ImageViewModalProps) => {
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
 
   const { user } = useAuth();
-
-  const isOwner = user?.id === image?.userId;
-
   const { data: signedUrlData } = useSignedUrl(
     image?.id || 0,
     image?.is_private || false
   );
 
-  const getImageUploaderUsername = () => {
-    return image ? image.user?.firstName : "Utilisateur inconnu";
-  };
+  const isOwner = user?.id === image?.userId;
 
   const handleOpenEdit = () => {
     setOpenEditModal(true);
@@ -114,7 +109,6 @@ export const ImageViewModal = (props: ImageViewModalProps) => {
             <Close />
           </IconButton>
 
-          {/* Image Section */}
           <Box
             sx={{
               flex: { xs: "none", md: "1" },
@@ -136,7 +130,6 @@ export const ImageViewModal = (props: ImageViewModalProps) => {
             />
           </Box>
 
-          {/* Content Section */}
           <Box
             sx={{
               flex: { xs: "none", md: "0 0 400px" },
@@ -146,7 +139,6 @@ export const ImageViewModal = (props: ImageViewModalProps) => {
               justifyContent: "space-between",
             }}
           >
-            {/* Main Content */}
             <Stack>
               <Typography
                 variant="h6"
@@ -164,7 +156,7 @@ export const ImageViewModal = (props: ImageViewModalProps) => {
               >
                 {image?.title}
               </Typography>
-              {/* User Info */}
+
               <Box display="flex" flexDirection="column" gap={2}>
                 <Box sx={{ display: "flex", alignItems: "center", mt: "auto" }}>
                   <Box
@@ -180,8 +172,7 @@ export const ImageViewModal = (props: ImageViewModalProps) => {
                     }}
                   >
                     <Typography sx={{ fontWeight: 600, color: "#111111" }}>
-                      {getImageUploaderUsername()?.charAt(0).toUpperCase() ||
-                        "U"}
+                      {image?.user?.firstName.charAt(0).toUpperCase() || "U"}
                     </Typography>
                   </Box>
                   <Box>
@@ -192,7 +183,7 @@ export const ImageViewModal = (props: ImageViewModalProps) => {
                         fontSize: "0.9rem",
                       }}
                     >
-                      {getImageUploaderUsername()}
+                      {image?.user?.firstName || "Utilisateur"}
                     </Typography>
                   </Box>
                 </Box>

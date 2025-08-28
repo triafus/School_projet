@@ -62,7 +62,7 @@ export const ImageCard = (props: ImageCardProps) => {
         />
       )}
 
-      {!isApproved && (
+      {!isApproved && !isPrivate && (
         <Chip
           label="En attente"
           size="small"
