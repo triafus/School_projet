@@ -13,7 +13,6 @@ import { Image } from "../types/image";
 import { AddImageModal } from "../components/ImageModal/AddImageModal";
 import { ImageViewModal } from "../components/ImageModal/ImageViewModal";
 import { CustomButton } from "../components/CustomButton";
-import { useUsers } from "../hooks/useUser";
 import { useAuth } from "../hooks/useAuth";
 import { GalleryImageCard } from "../components/GalleryImageCard";
 
@@ -97,14 +96,13 @@ const Gallery = () => {
         }}
       />
 
-      {/* Galerie */}
       <Box sx={{ maxWidth: 1400, mx: "auto", px: "2rem" }}>
         <Box
           sx={{
             display: "grid",
             gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
             gridAutoRows: "200px",
-            gap: "1.5rem",
+            gap: "1rem",
             mb: "4rem",
           }}
         >

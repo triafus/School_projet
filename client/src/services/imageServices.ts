@@ -1,5 +1,5 @@
 import { apiClient } from "../apiClient";
-import { Image } from "../types/image";
+import { Image, ImageFormData } from "../types/image";
 
 export const imageService = {
   getAllImages: async (): Promise<Image[]> => {
@@ -7,10 +7,7 @@ export const imageService = {
     return data;
   },
 
-  postImage: async (
-    file: File,
-    imageData: Omit<Image, "id" | "url" | "key">
-  ): Promise<Image> => {
+  postImage: async (file: File, imageData: ImageFormData): Promise<Image> => {
     const formData = new FormData();
 
     formData.append("file", file);

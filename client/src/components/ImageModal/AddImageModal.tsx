@@ -36,11 +36,7 @@ export const AddImageModal = (props: AddImageModalProps) => {
     await postImage({
       file: imagePreview?.compressed || imagePreview?.file,
       imageData: {
-        title: data.title.trim(),
-        description: data.description?.trim(),
-        is_private: data.is_private,
-        is_approved: true,
-        userId: user?.id || 0,
+        ...data,
       },
     }).then(() => {
       handleClose();

@@ -16,4 +16,5 @@ export interface ImageFormData {
   title: string;
   description?: string;
   is_private: boolean;
+  userId: number;
 }

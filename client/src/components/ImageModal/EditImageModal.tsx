@@ -7,7 +7,7 @@ import { BaseImageModal } from "./BaseImageModal";
 import { ImageUploadArea } from "./ImageUploadArea";
 import { ImageFormFields } from "./ImageFormFields";
 import { Image, ImageFormData } from "../../types/image";
-import { usePatchImage } from "../../hooks/useImage";
+import { usePatchImage, useSignedUrl } from "../../hooks/useImage";
 
 interface EditImageModalProps {
   open: boolean;
@@ -20,8 +20,11 @@ export const EditImageModal = (props: EditImageModalProps) => {
   const { open, onClose, image, onUpdate } = props;
 
   const { form, resetForm, imagePreview } = useImageForm();
-
   const { mutateAsync: patchImageMutation, isPending } = usePatchImage();
+  const { data: signedUrlData } = useSignedUrl(
+    image?.id || 0,
+    image?.is_private || false
+  );
 
   useEffect(() => {
     if (image && open) {
@@ -37,11 +40,7 @@ export const EditImageModal = (props: EditImageModalProps) => {
 
     patchImageMutation({
       imageId: image.id,
-      updateData: {
-        title: data.title,
-        description: data.description,
-        is_private: data.is_private,
-      },
+      updateData: { ...data },
     }).then(() => {
       handleClose();
       onUpdate && onUpdate();
@@ -74,12 +73,11 @@ export const EditImageModal = (props: EditImageModalProps) => {
       title="Modifier l'image"
       actions={actions}
     >
-      {/* Current Image Display */}
       {image && !imagePreview && (
         <Box sx={{ mb: 3 }}>
           <Box
             component="img"
-            src={image.url}
+            src={image?.is_private ? signedUrlData?.url : image?.url}
             alt={image.title}
             sx={{
               maxWidth: "100%",

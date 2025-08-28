@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { imageService } from "../services/imageServices";
-import { Image } from "../types/image";
+import { Image, ImageFormData } from "../types/image";
 import { AuthService } from "../services/authServices";
 
 export const useUserImages = () => {
@@ -29,7 +29,7 @@ export const useImages = () => {
 
 type PostImagePayload = {
   file: File;
-  imageData: Omit<Image, "id" | "url" | "key">;
+  imageData: ImageFormData;
 };
 
 export const usePostImage = () => {
@@ -38,10 +38,10 @@ export const usePostImage = () => {
   return useMutation({
     mutationKey: ["postImage"],
     mutationFn: async ({ file, imageData }: PostImagePayload) => {
+      console.log("imageData avant le return du mutationFn :", imageData);
       return await imageService.postImage(file, imageData);
     },
     onSuccess: () => {
-      // Invalider les images de l'utilisateur et toutes les images
       queryClient.invalidateQueries({ queryKey: ["userImages"] });
       queryClient.invalidateQueries({ queryKey: ["allImages"] });
     },
@@ -50,7 +50,7 @@ export const usePostImage = () => {
 
 type UpdateImagePayload = {
   imageId: number;
-  updateData: { title?: string; description?: string; is_private?: boolean };
+  updateData: ImageFormData;
 };
 
 export const usePatchImage = () => {
@@ -62,7 +62,6 @@ export const usePatchImage = () => {
       return await imageService.patchImage(imageId, updateData);
     },
     onSuccess: () => {
-      // Invalider les images de l'utilisateur et toutes les images
       queryClient.invalidateQueries({ queryKey: ["userImages"] });
       queryClient.invalidateQueries({ queryKey: ["allImages"] });
     },
@@ -81,7 +80,6 @@ export const useDeleteImage = () => {
       return await imageService.deleteImage(imageId);
     },
     onSuccess: () => {
-      // Invalider les images de l'utilisateur et toutes les images
       queryClient.invalidateQueries({ queryKey: ["userImages"] });
       queryClient.invalidateQueries({ queryKey: ["allImages"] });
     },
@@ -102,7 +100,6 @@ export const useApproveImage = () => {
       return await imageService.approveImage(imageId, isApproved);
     },
     onSuccess: () => {
-      // Invalider les images de l'utilisateur et toutes les images
       queryClient.invalidateQueries({ queryKey: ["userImages"] });
       queryClient.invalidateQueries({ queryKey: ["allImages"] });
     },
@@ -116,8 +113,8 @@ export const useSignedUrl = (imageId: number, isPrivate: boolean) => {
       if (!isPrivate) return null;
       return imageService.getSignedUrl(imageId);
     },
-    staleTime: 50 * 1000, // Un peu moins que la durée de validité de l'URL (60s)
+    staleTime: 50 * 1000,
     refetchOnWindowFocus: true,
-    enabled: isPrivate, // N'exécute la requête que si l'image est privée
+    enabled: isPrivate,
   });
 };

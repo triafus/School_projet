@@ -24,8 +24,6 @@ apiClient.interceptors.response.use(
   (error: ApiError) => {
     if (error.response?.status === 401) {
       localStorage.removeItem("token");
-      // Ne pas rediriger automatiquement - laisser les composants gérer la redirection
-      // selon leur contexte (page publique vs protégée)
     }
     return Promise.reject(error);
   }

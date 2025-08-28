@@ -33,7 +33,6 @@ export class ImagesService {
     const query = this.imagesRepository
       .createQueryBuilder("image")
       .leftJoinAndSelect("image.user", "user");
-    /* .where("image.is_approved = :approved", { approved: true }); */
 
     if (!includePrivate) {
       query.andWhere("image.is_private = :private", { private: false });
@@ -64,8 +63,16 @@ export class ImagesService {
   ) {
     this.validateFile(file);
 
+    if (typeof createImageDto.is_private === "string") {
+      createImageDto.is_private = createImageDto.is_private === "true";
+    }
+
+    const bucketName = createImageDto.is_private
+      ? this.PRIV_BUCKET_NAME
+      : this.BUCKET_NAME;
+
     const { url, key } = await this.supabaseService.uploadFile(
-      this.BUCKET_NAME,
+      bucketName,
       file
     );
 
@@ -81,18 +88,10 @@ export class ImagesService {
     return this.imagesRepository.save(image);
   }
 
-  /* async update(id: number, updateImageDto: UpdateImageDto, user: User) {
-    const image = await this.verifyOwnership(id, user);
-
-    Object.assign(image, updateImageDto);
-    return this.imagesRepository.save(image);
-  } */
-
   async update(id: number, updateImageDto: UpdateImageDto, user: User) {
     const image = await this.verifyOwnership(id, user);
     const oldIsPrivate = image.is_private;
 
-    // Si le statut de confidentialité a changé
     if (
       updateImageDto.is_private !== undefined &&
       updateImageDto.is_private !== oldIsPrivate
@@ -104,19 +103,16 @@ export class ImagesService {
         ? this.BUCKET_NAME
         : this.PRIV_BUCKET_NAME;
 
-      // Transférer le fichier entre les buckets
       const { url, key } = await this.supabaseService.transferFile(
         sourceBucket,
         destBucket,
         image.key
       );
 
-      // Mettre à jour l'URL et la clé
       image.url = url;
       image.key = key;
     }
 
-    // Mettre à jour les autres propriétés
     Object.assign(image, updateImageDto);
     return this.imagesRepository.save(image);
   }
