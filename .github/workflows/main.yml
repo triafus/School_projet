@@ -17,19 +17,18 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      # 🔹 Forcer npm registry (global)
-      - name: Force npm registry
-        run: echo "registry=https://registry.npmjs.org/" > ~/.npmrc
-
-      - name: Install Root Dependencies
-        run: npm ci
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "pnpm"
+          registry-url: "https://registry.npmjs.org"
 
       - name: Install pnpm
         uses: pnpm/action-setup@v2
         with:
           version: 8
 
-      # 🔹 Forcer pnpm registry
       - name: Force pnpm registry
         run: pnpm config set registry https://registry.npmjs.org/
 
@@ -41,7 +40,7 @@ jobs:
       - name: Install Server Dependencies
         run: |
           cd server
-          npm ci
+          pnpm install --frozen-lockfile
 
       - name: Build Client
         run: |
@@ -53,34 +52,34 @@ jobs:
       - name: Build Server
         run: |
           cd server
-          npm run build
+          pnpm run build
         env:
           NODE_ENV: production
 
       - name: Run Client Tests (if they exist)
         run: |
           cd client
-          if [ -f "package.json" ] && grep -q "\"test\"" package.json; then
+          if node -e "process.exit(!(require('./package.json').scripts?.test))"; then
             pnpm test
           else
-            echo "No test script found in client package.json"
+            echo 'No test script found in client package.json'
           fi
         continue-on-error: true
 
       - name: Run Server Tests (if they exist)
         run: |
           cd server
-          if [ -f "package.json" ] && grep -q "\"test\"" package.json; then
-            npm test
+          if node -e "process.exit(!(require('./package.json').scripts?.test))"; then
+            pnpm test
           else
-            echo "No test script found in server package.json"
+            echo 'No test script found in server package.json'
           fi
         continue-on-error: true
 
       - name: Security Audit
         run: |
-          cd client && pnpm audit --audit-level moderate || true
-          cd ../server && npm audit --audit-level moderate || true
+          cd client && pnpm audit --audit-level moderate
+          cd ../server && pnpm audit --audit-level moderate
         continue-on-error: true
 
       - name: Upload Client Build Artifacts
@@ -102,7 +101,7 @@ jobs:
     needs: build-and-test
     if: github.ref == 'refs/heads/main'
     environment: production
-    
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -110,15 +109,15 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          registry-url: 'https://registry.npmjs.org'
+          node-version: "20"
+          cache: "pnpm"
+          registry-url: "https://registry.npmjs.org"
 
       - name: Install pnpm
         uses: pnpm/action-setup@v2
         with:
           version: 8
 
-      # 🔹 Forcer pnpm registry
       - name: Force pnpm registry
         run: pnpm config set registry https://registry.npmjs.org/
 
@@ -140,7 +139,7 @@ jobs:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-          vercel-args: '--prod'
+          vercel-args: "--prod"
           working-directory: client
 
   deploy-server:
@@ -148,7 +147,7 @@ jobs:
     needs: build-and-test
     if: github.ref == 'refs/heads/main'
     environment: production
-    
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -156,19 +155,27 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'npm'
-          registry-url: 'https://registry.npmjs.org'
+          node-version: "20"
+          cache: "pnpm"
+          registry-url: "https://registry.npmjs.org"
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - name: Force pnpm registry
+        run: pnpm config set registry https://registry.npmjs.org/
 
       - name: Install Server Dependencies
         run: |
           cd server
-          npm ci
+          pnpm install --frozen-lockfile
 
       - name: Build Server for Production
         run: |
           cd server
-          npm run build
+          pnpm run build
         env:
           NODE_ENV: production
 
@@ -178,5 +185,5 @@ jobs:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID_SERVER }}
-          vercel-args: '--prod'
+          vercel-args: "--prod"
           working-directory: server
