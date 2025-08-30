@@ -24,11 +24,10 @@ jobs:
           cache: 'npm'
           registry-url: 'https://registry.npmjs.org'
 
-      - name: Configure npm registry
+      # 🔹 Forcer npm registry
+      - name: Force npm registry
         run: |
-          npm config set registry https://registry.npmjs.org/
-          npm config delete @scope:registry || true
-          npm cache clean --force
+          echo "registry=https://registry.npmjs.org/" > ~/.npmrc
 
       - name: Install Root Dependencies
         run: npm ci
@@ -38,15 +37,20 @@ jobs:
         with:
           version: 8
 
-      - name: Configure pnpm registry
+      # 🔹 Forcer pnpm registry
+      - name: Force pnpm registry
         run: |
           pnpm config set registry https://registry.npmjs.org/
-          pnpm store prune
 
       - name: Install Client Dependencies
         run: |
           cd client
           pnpm install --frozen-lockfile
+
+      # 🔹 Forcer npm registry avant le server
+      - name: Force npm registry (server)
+        run: |
+          echo "registry=https://registry.npmjs.org/" > ~/.npmrc
 
       - name: Install Server Dependencies
         run: |
@@ -128,7 +132,8 @@ jobs:
         with:
           version: 8
 
-      - name: Configure pnpm registry
+      # 🔹 Forcer pnpm registry
+      - name: Force pnpm registry
         run: |
           pnpm config set registry https://registry.npmjs.org/
 
@@ -170,11 +175,10 @@ jobs:
           cache: 'npm'
           registry-url: 'https://registry.npmjs.org'
 
-      - name: Configure npm registry
+      # 🔹 Forcer npm registry
+      - name: Force npm registry
         run: |
-          npm config set registry https://registry.npmjs.org/
-          npm config delete @scope:registry || true
-          npm cache clean --force
+          echo "registry=https://registry.npmjs.org/" > ~/.npmrc
 
       - name: Install Server Dependencies
         run: |
