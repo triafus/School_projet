@@ -57,7 +57,7 @@
 4. Configurez les variables d'environnement :
    - Créez un fichier `.env` dans le répertoire `server` et ajoutez les variables nécessaires (comme les clés d'API, les configurations de base de données, etc.).
 
-## Utilisation
+## Utilisation 
 
 ### Démarrer le projet
 
