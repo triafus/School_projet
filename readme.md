@@ -60,7 +60,7 @@ Ce projet est une application web de gestion scolaire qui permet aux utilisateur
    JWT_SECRET=your_jwt_secret
    ```
 
-## Utilisation
+## Utilisation 
 
 ### Lancer le projet
 
