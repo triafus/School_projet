@@ -20,11 +20,12 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '20'
           cache: 'npm'
+          registry-url: 'https://registry.npmjs.org'
 
       - name: Install Root Dependencies
-        run: npm ci
+        run: npm ci --registry https://registry.npmjs.org
 
       - name: Install pnpm
         uses: pnpm/action-setup@v2
@@ -34,12 +35,12 @@ jobs:
       - name: Install Client Dependencies
         run: |
           cd client
-          pnpm install --frozen-lockfile
+          pnpm install --frozen-lockfile --registry https://registry.npmjs.org
 
       - name: Install Server Dependencies
         run: |
           cd server
-          npm ci
+          npm ci --registry https://registry.npmjs.org
 
       - name: Build Client
         run: |
@@ -77,8 +78,8 @@ jobs:
 
       - name: Security Audit
         run: |
-          cd client && pnpm audit --audit-level moderate || true
-          cd ../server && npm audit --audit-level moderate || true
+          cd client && pnpm audit --audit-level moderate --registry https://registry.npmjs.org || true
+          cd ../server && npm audit --audit-level moderate --registry https://registry.npmjs.org || true
         continue-on-error: true
 
       - name: Upload Client Build Artifacts
@@ -108,7 +109,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '20'
+          registry-url: 'https://registry.npmjs.org'
 
       - name: Install pnpm
         uses: pnpm/action-setup@v2
@@ -118,7 +120,7 @@ jobs:
       - name: Install Client Dependencies
         run: |
           cd client
-          pnpm install --frozen-lockfile
+          pnpm install --frozen-lockfile --registry https://registry.npmjs.org
 
       - name: Build Client for Production
         run: |
@@ -149,13 +151,14 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '20'
           cache: 'npm'
+          registry-url: 'https://registry.npmjs.org'
 
       - name: Install Server Dependencies
         run: |
           cd server
-          npm ci
+          npm ci --registry https://registry.npmjs.org
 
       - name: Build Server for Production
         run: |
