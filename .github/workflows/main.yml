@@ -17,17 +17,9 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
-          registry-url: 'https://registry.npmjs.org'
-
-      # 🔹 Forcer npm registry
+      # 🔹 Forcer npm registry (global)
       - name: Force npm registry
-        run: |
-          echo "registry=https://registry.npmjs.org/" > ~/.npmrc
+        run: echo "registry=https://registry.npmjs.org/" > ~/.npmrc
 
       - name: Install Root Dependencies
         run: npm ci
@@ -39,18 +31,12 @@ jobs:
 
       # 🔹 Forcer pnpm registry
       - name: Force pnpm registry
-        run: |
-          pnpm config set registry https://registry.npmjs.org/
+        run: pnpm config set registry https://registry.npmjs.org/
 
       - name: Install Client Dependencies
         run: |
           cd client
           pnpm install --frozen-lockfile
-
-      # 🔹 Forcer npm registry avant le server
-      - name: Force npm registry (server)
-        run: |
-          echo "registry=https://registry.npmjs.org/" > ~/.npmrc
 
       - name: Install Server Dependencies
         run: |
@@ -134,8 +120,7 @@ jobs:
 
       # 🔹 Forcer pnpm registry
       - name: Force pnpm registry
-        run: |
-          pnpm config set registry https://registry.npmjs.org/
+        run: pnpm config set registry https://registry.npmjs.org/
 
       - name: Install Client Dependencies
         run: |
@@ -174,11 +159,6 @@ jobs:
           node-version: '20'
           cache: 'npm'
           registry-url: 'https://registry.npmjs.org'
-
-      # 🔹 Forcer npm registry
-      - name: Force npm registry
-        run: |
-          echo "registry=https://registry.npmjs.org/" > ~/.npmrc
 
       - name: Install Server Dependencies
         run: |
