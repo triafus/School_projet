@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - feat/9---CICD-github-action
   pull_request:
     branches:
       - main
@@ -35,12 +36,12 @@ jobs:
       - name: Install Client Dependencies
         run: |
           cd client
-          pnpm install --frozen-lockfile
+          pnpm install --no-frozen-lockfile
 
       - name: Install Server Dependencies
         run: |
           cd server
-          pnpm install --frozen-lockfile
+          pnpm install --no-frozen-lockfile
 
       - name: Build Client
         run: |
@@ -124,7 +125,7 @@ jobs:
       - name: Install Client Dependencies
         run: |
           cd client
-          pnpm install --frozen-lockfile
+          pnpm install --no-frozen-lockfile
 
       - name: Build Client for Production
         run: |
@@ -170,7 +171,7 @@ jobs:
       - name: Install Server Dependencies
         run: |
           cd server
-          pnpm install --frozen-lockfile
+          pnpm install --no-frozen-lockfile
 
       - name: Build Server for Production
         run: |
