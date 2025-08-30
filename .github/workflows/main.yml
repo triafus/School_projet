@@ -21,20 +21,29 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '18'
+          cache: 'npm'
+
+      - name: Install Root Dependencies
+        run: npm ci
 
       - name: Install pnpm
         uses: pnpm/action-setup@v2
         with:
           version: 8
 
-      - name: Install Dependencies
+      - name: Install Client Dependencies
         run: |
+          cd client
           pnpm install --frozen-lockfile
+
+      - name: Install Server Dependencies
+        run: |
+          cd server
+          npm ci
 
       - name: Build Client
         run: |
           cd client
-          pnpm install --frozen-lockfile
           pnpm run build
         env:
           NODE_ENV: production
@@ -42,8 +51,7 @@ jobs:
       - name: Build Server
         run: |
           cd server
-          pnpm install --frozen-lockfile
-          pnpm run build
+          npm run build
         env:
           NODE_ENV: production
 
@@ -61,7 +69,7 @@ jobs:
         run: |
           cd server
           if [ -f "package.json" ] && grep -q "\"test\"" package.json; then
-            pnpm test
+            npm test
           else
             echo "No test script found in server package.json"
           fi
@@ -70,7 +78,7 @@ jobs:
       - name: Security Audit
         run: |
           cd client && pnpm audit --audit-level moderate || true
-          cd ../server && pnpm audit --audit-level moderate || true
+          cd ../server && npm audit --audit-level moderate || true
         continue-on-error: true
 
       - name: Upload Client Build Artifacts
@@ -107,7 +115,7 @@ jobs:
         with:
           version: 8
 
-      - name: Install Dependencies
+      - name: Install Client Dependencies
         run: |
           cd client
           pnpm install --frozen-lockfile
@@ -142,22 +150,17 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '18'
+          cache: 'npm'
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 8
-
-      - name: Install Dependencies
+      - name: Install Server Dependencies
         run: |
-          cd client
-          pnpm install --frozen-lockfile
+          cd server
+          npm ci
 
       - name: Build Server for Production
         run: |
           cd server
-          pnpm install --frozen-lockfile
-          pnpm run build
+          npm run build
         env:
           NODE_ENV: production
 
