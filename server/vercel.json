@@ -1,5 +1,7 @@
 {
   "version": 2,
+  "projectId": "<TON_SERVER_VERCEL_PROJECT_ID>",
+  "orgId": "<TON_VERCEL_ORG_ID>",
   "builds": [
     {
       "src": "src/main.ts",
@@ -9,16 +11,8 @@
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "src/main.ts",      
-      "methods": [
-        "GET",
-        "POST",
-        "PUT",
-        "DELETE",
-        "PATCH",
-        "OPTIONS"
-      ]
+      "dest": "src/main.ts",
+      "methods": ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"]
     }
-    
   ]
 }
