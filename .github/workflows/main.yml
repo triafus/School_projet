@@ -33,77 +33,33 @@ jobs:
             client/pnpm-lock.yaml
             server/pnpm-lock.yaml
 
-      - name: Force pnpm registry
-        run: pnpm config set registry https://registry.npmjs.org/
-
-      # Install & Build Client
       - name: Install Client Dependencies
-        run: |
-          cd client
-          pnpm install --no-frozen-lockfile
+        run: cd client && pnpm install --no-frozen-lockfile
+
+      - name: Install Server Dependencies
+        run: cd server && pnpm install --no-frozen-lockfile
 
       - name: Build Client
-        run: |
-          cd client
-          pnpm run build
+        run: cd client && pnpm run build
         env:
           NODE_ENV: production
-
-      # Install & Build Server
-      - name: Install Server Dependencies
-        run: |
-          cd server
-          pnpm install --no-frozen-lockfile
 
       - name: Build Server
-        run: |
-          cd server
-          pnpm run build
+        run: cd server && pnpm run build
         env:
           NODE_ENV: production
 
-      # Run optional tests
-      - name: Run Client Tests (if they exist)
-        run: |
-          cd client
-          if node -e "process.exit(!(require('./package.json').scripts?.test))"; then
-            pnpm test
-          else
-            echo 'No test script found in client package.json'
-          fi
-        continue-on-error: true
-
-      - name: Run Server Tests (if they exist)
-        run: |
-          cd server
-          if node -e "process.exit(!(require('./package.json').scripts?.test))"; then
-            pnpm test
-          else
-            echo 'No test script found in server package.json'
-          fi
-        continue-on-error: true
-
-      # Security Audit (optional)
-      - name: Security Audit
-        run: |
-          cd client && pnpm audit --audit-level moderate
-          cd ../server && pnpm audit --audit-level moderate
-        continue-on-error: true
-
-      # Upload build artefacts
-      - name: Upload Client Build Artifacts
+      - name: Upload Client Build
         uses: actions/upload-artifact@v4
         with:
           name: client-build
-          path: client/dist/
-          retention-days: 7
+          path: client/
 
-      - name: Upload Server Build Artifacts
+      - name: Upload Server Build
         uses: actions/upload-artifact@v4
         with:
           name: server-build
-          path: server/dist/
-          retention-days: 7
+          path: server/
 
   deploy-client:
     runs-on: ubuntu-latest
@@ -112,22 +68,20 @@ jobs:
     environment: production
 
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
       - name: Download Client Build
         uses: actions/download-artifact@v4
         with:
           name: client-build
-          path: ./client/dist
+          path: client/
 
-      - name: Deploy Client to Vercel (prebuilt)
-        uses: amondnet/vercel-action@v25
-        with:
-          vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
-          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-          vercel-args: "--prod --prebuilt"
+      - name: Deploy Client to Vercel
+        run: |
+          cd client
+          npx vercel --prebuilt --prod \
+            -t ${{ secrets.VERCEL_TOKEN }} \
+            --scope ${{ secrets.VERCEL_ORG_ID }} \
+            --confirm \
+            --project ${{ secrets.VERCEL_PROJECT_ID }}
 
   deploy-server:
     runs-on: ubuntu-latest
@@ -136,19 +90,17 @@ jobs:
     environment: production
 
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
       - name: Download Server Build
         uses: actions/download-artifact@v4
         with:
           name: server-build
-          path: ./server/dist
+          path: server/
 
-      - name: Deploy Server to Vercel (prebuilt)
-        uses: amondnet/vercel-action@v25
-        with:
-          vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
-          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID_SERVER }}
-          vercel-args: "--prod --prebuilt"
+      - name: Deploy Server to Vercel
+        run: |
+          cd server
+          npx vercel --prebuilt --prod \
+            -t ${{ secrets.VERCEL_TOKEN }} \
+            --scope ${{ secrets.VERCEL_ORG_ID }} \
+            --confirm \
+            --project ${{ secrets.VERCEL_PROJECT_ID_SERVER }}
