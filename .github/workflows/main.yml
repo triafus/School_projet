@@ -80,7 +80,7 @@ jobs:
           npx vercel --prebuilt --prod \
             -t ${{ secrets.VERCEL_TOKEN }} \
             --scope ${{ secrets.VERCEL_ORG_ID }} \
-            --confirm
+            --yes
 
   deploy-server:
     runs-on: ubuntu-latest
@@ -101,4 +101,4 @@ jobs:
           npx vercel --prebuilt --prod \
             -t ${{ secrets.VERCEL_TOKEN }} \
             --scope ${{ secrets.VERCEL_ORG_ID }} \
-            --confirm
+            --yes
