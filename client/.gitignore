@@ -10,11 +10,6 @@ logs
 *.log
 logs/*
 
-# Lockfiles (npm, yarn, pnpm)
-package-lock.json
-yarn.lock
-pnpm-lock.yaml
-
 # PnP
 .pnp/
 .pnp.js

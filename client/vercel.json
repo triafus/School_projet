@@ -1,3 +1,5 @@
 {
+  "projectId": "<TON_CLIENT_VERCEL_PROJECT_ID>",
+  "orgId": "<TON_VERCEL_ORG_ID>",
   "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
 }
