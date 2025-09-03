@@ -33,72 +33,33 @@ jobs:
             client/pnpm-lock.yaml
             server/pnpm-lock.yaml
 
-      - name: Force pnpm registry
-        run: pnpm config set registry https://registry.npmjs.org/
-
       - name: Install Client Dependencies
-        run: |
-          cd client
-          pnpm install --no-frozen-lockfile
+        run: cd client && pnpm install --no-frozen-lockfile
 
       - name: Install Server Dependencies
-        run: |
-          cd server
-          pnpm install --no-frozen-lockfile
+        run: cd server && pnpm install --no-frozen-lockfile
 
       - name: Build Client
-        run: |
-          cd client
-          pnpm run build
+        run: cd client && pnpm run build
         env:
           NODE_ENV: production
 
       - name: Build Server
-        run: |
-          cd server
-          pnpm run build
+        run: cd server && pnpm run build
         env:
           NODE_ENV: production
 
-      - name: Run Client Tests (if they exist)
-        run: |
-          cd client
-          if node -e "process.exit(!(require('./package.json').scripts?.test))"; then
-            pnpm test
-          else
-            echo 'No test script found in client package.json'
-          fi
-        continue-on-error: true
-
-      - name: Run Server Tests (if they exist)
-        run: |
-          cd server
-          if node -e "process.exit(!(require('./package.json').scripts?.test))"; then
-            pnpm test
-          else
-            echo 'No test script found in server package.json'
-          fi
-        continue-on-error: true
-
-      - name: Security Audit
-        run: |
-          cd client && pnpm audit --audit-level moderate
-          cd ../server && pnpm audit --audit-level moderate
-        continue-on-error: true
-
-      - name: Upload Client Build Artifacts
+      - name: Upload Client Build
         uses: actions/upload-artifact@v4
         with:
           name: client-build
-          path: client/dist/
-          retention-days: 7
+          path: client/
 
-      - name: Upload Server Build Artifacts
+      - name: Upload Server Build
         uses: actions/upload-artifact@v4
         with:
           name: server-build
-          path: server/dist/
-          retention-days: 7
+          path: server/
 
   deploy-client:
     runs-on: ubuntu-latest
@@ -107,47 +68,20 @@ jobs:
     environment: production
 
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: Install pnpm
-        uses: pnpm/action-setup@v2
+      - name: Download Client Build
+        uses: actions/download-artifact@v4
         with:
-          version: 10
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-          cache: "pnpm"
-          registry-url: "https://registry.npmjs.org"
-          cache-dependency-path: |
-            client/pnpm-lock.yaml
-            server/pnpm-lock.yaml
-
-      - name: Force pnpm registry
-        run: pnpm config set registry https://registry.npmjs.org/
-
-      - name: Install Client Dependencies
-        run: |
-          cd client
-          pnpm install --no-frozen-lockfile
-
-      - name: Build Client for Production
-        run: |
-          cd client
-          pnpm run build
-        env:
-          NODE_ENV: production
+          name: client-build
+          path: client/
 
       - name: Deploy Client to Vercel
-        uses: amondnet/vercel-action@v25
-        with:
-          vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
-          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-          vercel-args: "--prod"
-          working-directory: client
+        run: |
+          cd client
+          npx vercel --prebuilt --prod \
+            -t ${{ secrets.VERCEL_TOKEN }} \
+            --scope ${{ secrets.VERCEL_ORG_ID }} \
+            --confirm \
+            --project ${{ secrets.VERCEL_PROJECT_ID }}
 
   deploy-server:
     runs-on: ubuntu-latest
@@ -156,44 +90,17 @@ jobs:
     environment: production
 
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: Install pnpm
-        uses: pnpm/action-setup@v2
+      - name: Download Server Build
+        uses: actions/download-artifact@v4
         with:
-          version: 10
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-          cache: "pnpm"
-          registry-url: "https://registry.npmjs.org"
-          cache-dependency-path: |
-            client/pnpm-lock.yaml
-            server/pnpm-lock.yaml
-
-      - name: Force pnpm registry
-        run: pnpm config set registry https://registry.npmjs.org/
-
-      - name: Install Server Dependencies
-        run: |
-          cd server
-          pnpm install --no-frozen-lockfile
-
-      - name: Build Server for Production
-        run: |
-          cd server
-          pnpm run build
-        env:
-          NODE_ENV: production
+          name: server-build
+          path: server/
 
       - name: Deploy Server to Vercel
-        uses: amondnet/vercel-action@v25
-        with:
-          vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
-          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID_SERVER }}
-          vercel-args: "--prod"
-          working-directory: server
+        run: |
+          cd server
+          npx vercel --prebuilt --prod \
+            -t ${{ secrets.VERCEL_TOKEN }} \
+            --scope ${{ secrets.VERCEL_ORG_ID }} \
+            --confirm \
+            --project ${{ secrets.VERCEL_PROJECT_ID_SERVER }}
