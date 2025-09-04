@@ -44,6 +44,11 @@ jobs:
 
       - name: Run Server E2E Tests
         run: cd server && pnpm run test:e2e
+        env:
+          SUPABASE_URL: http://localhost/fake
+          SUPABASE_SERVICE_ROLE_KEY: fake-key
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432/fake
+          JWT_SECRET: testsecret
 
       - name: Build Client
         run: cd client && pnpm run build
