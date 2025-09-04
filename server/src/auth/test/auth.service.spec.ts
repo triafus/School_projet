@@ -1,10 +1,10 @@
 import { Test, TestingModule } from "@nestjs/testing";
 import { UnauthorizedException } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
-import { AuthService } from "./auth.service";
-import { UsersService } from "../users/users.service";
-import { User } from "../users/user.entity";
-import { LoginDto } from "./dto/login.dto";
+import { AuthService } from "../auth.service";
+import { UsersService } from "../../users/users.service";
+import { User } from "../../users/user.entity";
+import { LoginDto } from "../dto/login.dto";
 
 describe("AuthService", () => {
   let service: AuthService;
@@ -218,5 +218,3 @@ describe("AuthService", () => {
     });
   });
 });
-
-
