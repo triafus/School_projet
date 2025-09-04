@@ -8,6 +8,7 @@ import { UsersModule } from "./users/users.module";
 import { User } from "./users/user.entity";
 import { Image } from "./images/image.entity";
 import { ImagesModule } from "./images/images.module";
+import { HealthController } from "./health/health.controller";
 
 @Module({
   imports: [
@@ -42,5 +43,6 @@ import { ImagesModule } from "./images/images.module";
     UsersModule,
     ImagesModule,
   ],
+  controllers: [HealthController],
 })
 export class AppModule {}

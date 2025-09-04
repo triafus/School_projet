@@ -39,6 +39,12 @@ jobs:
       - name: Install Server Dependencies
         run: cd server && pnpm install --no-frozen-lockfile
 
+      - name: Run Server Unit Tests
+        run: cd server && pnpm run test
+
+      - name: Run Server E2E Tests
+        run: cd server && pnpm run test:e2e
+
       - name: Build Client
         run: cd client && pnpm run build
         env:

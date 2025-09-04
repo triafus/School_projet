@@ -15,7 +15,7 @@ import { User } from "../users/user.entity";
 @Injectable()
 export class ImagesService {
   private readonly BUCKET_NAME = "images";
-  private readonly MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+  private readonly MAX_FILE_SIZE = 5 * 1024 * 1024;
   private readonly ALLOWED_MIME_TYPES = [
     "image/jpeg",
     "image/png",
