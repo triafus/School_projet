@@ -15,23 +15,30 @@ import { HealthController } from "./health/health.controller";
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-    TypeOrmModule.forRoot({
-      type: "postgres",
-      host: process.env.DB_HOST,
-      port: Number(process.env.DB_PORT),
-      username: process.env.DB_USERNAME,
-      password: process.env.DB_PASSWORD,
-      database: process.env.DB_NAME,
-      extra: {
-        ssl: {
-          rejectUnauthorized: false,
-        },
-      },
-      entities: [User, Image],
-      synchronize: true,
-      logging: true,
-      logger: "advanced-console",
-    }),
+    TypeOrmModule.forRoot(
+      process.env.NODE_ENV === "test"
+        ? {
+            type: "sqlite",
+            database: ":memory:",
+            entities: [User, Image],
+            synchronize: true,
+          }
+        : {
+            type: "postgres",
+            host: process.env.DB_HOST,
+            port: Number(process.env.DB_PORT),
+            username: process.env.DB_USERNAME,
+            password: process.env.DB_PASSWORD,
+            database: process.env.DB_NAME,
+            extra: {
+              ssl: { rejectUnauthorized: false },
+            },
+            entities: [User, Image],
+            synchronize: true,
+            logging: true,
+            logger: "advanced-console",
+          }
+    ),
     PassportModule.register({ defaultStrategy: "jwt" }),
     JwtModule.register({
       secret:
