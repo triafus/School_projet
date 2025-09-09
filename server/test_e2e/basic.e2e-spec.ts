@@ -1,7 +1,6 @@
 import { Test, TestingModule } from "@nestjs/testing";
 import { INestApplication } from "@nestjs/common";
 import * as request from "supertest";
-import { describe, it, beforeAll, afterAll } from "@jest/globals";
 import { AppModule } from "../src/app.module";
 
 describe("Basic checks (e2e)", () => {
