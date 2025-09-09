@@ -4,6 +4,8 @@ import {
   Column,
   ManyToOne,
   JoinColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
 } from "typeorm";
 import { User } from "../users/user.entity";
 import { Expose } from "class-transformer";
@@ -37,13 +39,9 @@ export class Image {
   @Column()
   userId: number;
 
-  @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
+  @CreateDateColumn({ name: "created_at" })
   created_at: Date;
 
-  @Column({
-    type: "timestamp",
-    default: () => "CURRENT_TIMESTAMP",
-    onUpdate: "CURRENT_TIMESTAMP",
-  })
+  @UpdateDateColumn({ name: "updated_at" })
   updated_at: Date;
 }

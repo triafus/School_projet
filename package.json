@@ -14,6 +14,7 @@
     "dev": "concurrently \"pnpm run start:server\" \"pnpm run start:client\""
   },
   "devDependencies": {
+    "@types/jest": "^30.0.0",
     "concurrently": "^8.2.2"
   },
   "workspaces": [
