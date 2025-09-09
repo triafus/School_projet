@@ -33,6 +33,7 @@ export class ImagesService {
     const query = this.imagesRepository
       .createQueryBuilder("image")
       .leftJoinAndSelect("image.user", "user");
+      .where("image.is_approved = :approved", { approved: true });
 
     if (!includePrivate) {
       query.andWhere("image.is_private = :private", { private: false });
