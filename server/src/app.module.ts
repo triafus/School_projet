@@ -16,12 +16,13 @@ import { HealthController } from "./health/health.controller";
       isGlobal: true,
     }),
     TypeOrmModule.forRoot(
-      process.env.NODE_ENV === "test"
+      process.env.NODE_ENV === "test" && process.env.USE_SQLITE !== "false"
         ? {
             type: "sqlite",
             database: ":memory:",
             entities: [User, Image],
             synchronize: true,
+            logging: false,
           }
         : {
             type: "postgres",
@@ -29,13 +30,14 @@ import { HealthController } from "./health/health.controller";
             port: Number(process.env.DB_PORT),
             username: process.env.DB_USERNAME,
             password: process.env.DB_PASSWORD,
-            database: process.env.DB_NAME,
-            extra: {
-              ssl: { rejectUnauthorized: false },
-            },
+            database: process.env.DB_DATABASE || process.env.DB_NAME,
+            ssl:
+              process.env.DB_SSL === "true"
+                ? { rejectUnauthorized: false }
+                : false,
             entities: [User, Image],
             synchronize: true,
-            logging: true,
+            logging: process.env.NODE_ENV !== "test",
             logger: "advanced-console",
           }
     ),
