@@ -1,6 +1,5 @@
 import { Test } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { beforeAll, afterAll } from '@jest/globals';
 import { testDatabaseConfig } from './typeorm-test.config';
 
 beforeAll(async () => {
