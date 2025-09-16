@@ -62,6 +62,7 @@ export const ImageViewModal = (props: ImageViewModalProps) => {
   const handleApprove = () => {
     if (onApprove && image) {
       onApprove(image.id, image.is_approved);
+      onClose();
     }
   };
 

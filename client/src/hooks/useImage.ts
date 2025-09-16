@@ -17,10 +17,10 @@ export const useUserImages = () => {
   });
 };
 
-export const useImages = () => {
+export const useImages = (includePrivate?: boolean, onlyApproved?: boolean) => {
   return useQuery({
-    queryKey: ["allImages"],
-    queryFn: imageService.getAllImages,
+    queryKey: ["allImages", includePrivate, onlyApproved],
+    queryFn: () => imageService.getAllImages(includePrivate, onlyApproved),
     staleTime: 5 * 60 * 1000,
     refetchOnWindowFocus: false,
     retry: 1,

@@ -1,5 +1,3 @@
-import { useAuth } from "../hooks/useAuth";
-
 interface NavItemProps {
   text: string;
   icon: React.ReactNode;

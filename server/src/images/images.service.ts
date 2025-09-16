@@ -29,14 +29,21 @@ export class ImagesService {
     private supabaseService: SupabaseService
   ) {}
 
-  async findAll(includePrivate = false) {
+  async findAll(includePrivate = false, onlyApproved = true) {
     const query = this.imagesRepository
       .createQueryBuilder("image")
       .leftJoinAndSelect("image.user", "user");
-      .where("image.is_approved = :approved", { approved: true });
+
+    if (onlyApproved) {
+      query.where("image.is_approved = :approved", { approved: true });
+    }
 
     if (!includePrivate) {
-      query.andWhere("image.is_private = :private", { private: false });
+      if (onlyApproved) {
+        query.andWhere("image.is_private = :private", { private: false });
+      } else {
+        query.where("image.is_private = :private", { private: false });
+      }
     }
 
     return query.getMany();

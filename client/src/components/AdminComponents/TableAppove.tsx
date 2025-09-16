@@ -31,11 +31,13 @@ export const TableAppove = () => {
     data: images = [],
     isLoading: imagesLoading,
     error: imagesError,
-  } = useImages();
+  } = useImages(false, false);
   const { data: users = [] } = useUsers();
   const approveImageMutation = useApproveImage();
 
   const unapprovedImages = images.filter((image) => !image.is_approved);
+
+  console.log(images);
 
   const getUserName = (userId: number) => {
     const user = users.find((u) => u.id === userId);

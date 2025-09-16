@@ -2,8 +2,16 @@ import { apiClient } from "../apiClient";
 import { Image, ImageFormData } from "../types/image";
 
 export const imageService = {
-  getAllImages: async (): Promise<Image[]> => {
-    const { data } = await apiClient.get<Image[]>("/images");
+  getAllImages: async (
+    includePrivate = false,
+    onlyApproved = true
+  ): Promise<Image[]> => {
+    const { data } = await apiClient.get<Image[]>("/images", {
+      params: {
+        includePrivate,
+        onlyApproved,
+      },
+    });
     return data;
   },
 
