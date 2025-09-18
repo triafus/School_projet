@@ -1,0 +1,67 @@
+import { apiClient } from "../apiClient";
+import { Image, ImageFormData } from "../types/image";
+
+export const imageService = {
+  getAllImages: async (
+    includePrivate = false,
+    onlyApproved = true
+  ): Promise<Image[]> => {
+    const { data } = await apiClient.get<Image[]>("/images", {
+      params: {
+        includePrivate,
+        onlyApproved,
+      },
+    });
+    return data;
+  },
+
+  postImage: async (file: File, imageData: ImageFormData): Promise<Image> => {
+    const formData = new FormData();
+
+    formData.append("file", file);
+    Object.entries(imageData).forEach(([key, value]) => {
+      formData.append(key, String(value));
+    });
+
+    const { data } = await apiClient.post<Image>("/images", formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+
+    return data;
+  },
+
+  patchImage: async (
+    imageId: number,
+    updateData: { title?: string; description?: string; is_private?: boolean }
+  ): Promise<Image> => {
+    const { data } = await apiClient.patch<Image>(
+      `/images/${imageId}`,
+      updateData
+    );
+    return data;
+  },
+
+  deleteImage: async (imageId: number): Promise<void> => {
+    await apiClient.delete(`/images/${imageId}`);
+  },
+
+  approveImage: async (
+    imageId: number,
+    isApproved: boolean
+  ): Promise<Image> => {
+    const { data } = await apiClient.patch<Image>(
+      `/images/${imageId}/approve`,
+      {
+        is_approved: isApproved,
+      }
+    );
+    return data;
+  },
+
+  getSignedUrl: async (imageId: number): Promise<{ url: string }> => {
+    const { data } = await apiClient.get<{ url: string }>(
+      `/images/${imageId}/signed-url`
+    );
+    return data;
+  },
+};

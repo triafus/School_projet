@@ -1,0 +1,92 @@
+name: CI/CD Workflow
+
+on:
+  push:
+    branches:
+      - main
+      - feat/9---CICD-github-action
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    # services: # PostgreSQL désactivé car on utilise SQLite pour les tests
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "pnpm"
+          cache-dependency-path: |
+            client/pnpm-lock.yaml
+            server/pnpm-lock.yaml
+
+      - name: Install Client Dependencies
+        run: cd client && pnpm install --no-frozen-lockfile
+
+      - name: Install Server Dependencies
+        run: cd server && pnpm install --no-frozen-lockfile
+
+      - name: Setup Test Environment
+        run: |
+          cd server
+          echo "USE_SQLITE=true" > .env.test
+          echo "DB_HOST=localhost" >> .env.test
+          echo "DB_PORT=5432" >> .env.test
+          echo "DB_USERNAME=postgres" >> .env.test
+          echo "DB_PASSWORD=postgres" >> .env.test
+          echo "DB_DATABASE=test_db" >> .env.test
+          echo "JWT_SECRET=test-secret-key-for-ci-cd-12345" >> .env.test
+          echo "NODE_ENV=test" >> .env.test
+          echo "SUPABASE_URL=http://localhost/fake" >> .env.test
+          echo "SUPABASE_SERVICE_ROLE_KEY=fake-key-12345" >> .env.test
+
+      # Plus besoin d'attendre Postgres quand on utilise SQLite
+      - name: Skip DB Wait
+        run: echo "Using SQLite for tests"
+
+      - name: Run Server Unit Tests
+        run: cd server && pnpm run test
+        env:
+          CI: true
+
+      - name: Run Server E2E Tests
+        run: cd server && pnpm run test:e2e
+        env:
+          CI: true
+        timeout-minutes: 10
+
+      - name: Build Client
+        run: cd client && pnpm run build
+        env:
+          NODE_ENV: production
+
+      - name: Build Server
+        run: cd server && pnpm run build
+        env:
+          NODE_ENV: production
+
+      - name: Upload Client Build
+        uses: actions/upload-artifact@v4
+        with:
+          name: client-build
+          path: client/dist/
+
+      - name: Upload Server Build
+        uses: actions/upload-artifact@v4
+        with:
+          name: server-build
+          path: server/dist/

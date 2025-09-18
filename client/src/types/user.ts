@@ -1,3 +1,5 @@
+import { Image } from "./image";
+
 export type UserRole = "user" | "admin";
 
 export interface User {
@@ -6,4 +8,5 @@ export interface User {
   firstName: string;
   lastName: string;
   role: UserRole;
+  images: Image[];
 }

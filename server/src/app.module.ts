@@ -8,29 +8,39 @@ import { UsersModule } from "./users/users.module";
 import { User } from "./users/user.entity";
 import { Image } from "./images/image.entity";
 import { ImagesModule } from "./images/images.module";
+import { HealthController } from "./health/health.controller";
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-    TypeOrmModule.forRoot({
-      type: "postgres",
-      host: process.env.DB_HOST,
-      port: Number(process.env.DB_PORT),
-      username: process.env.DB_USERNAME,
-      password: process.env.DB_PASSWORD,
-      database: process.env.DB_NAME,
-      extra: {
-        ssl: {
-          rejectUnauthorized: false,
-        },
-      },
-      entities: [User, Image],
-      synchronize: true,
-      logging: true,
-      logger: "advanced-console",
-    }),
+    TypeOrmModule.forRoot(
+      process.env.NODE_ENV === "test" && process.env.USE_SQLITE !== "false"
+        ? {
+            type: "sqlite",
+            database: ":memory:",
+            entities: [User, Image],
+            synchronize: true,
+            logging: false,
+          }
+        : {
+            type: "postgres",
+            host: process.env.DB_HOST,
+            port: Number(process.env.DB_PORT),
+            username: process.env.DB_USERNAME,
+            password: process.env.DB_PASSWORD,
+            database: process.env.DB_DATABASE || process.env.DB_NAME,
+            ssl:
+              process.env.DB_SSL === "true"
+                ? { rejectUnauthorized: false }
+                : false,
+            entities: [User, Image],
+            synchronize: true,
+            logging: process.env.NODE_ENV !== "test",
+            logger: "advanced-console",
+          }
+    ),
     PassportModule.register({ defaultStrategy: "jwt" }),
     JwtModule.register({
       secret:
@@ -42,5 +52,6 @@ import { ImagesModule } from "./images/images.module";
     UsersModule,
     ImagesModule,
   ],
+  controllers: [HealthController],
 })
 export class AppModule {}

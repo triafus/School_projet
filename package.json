@@ -5,15 +5,16 @@
   "scripts": {
     "build": "npm run build:client && npm run build:server",
     "build:client": "cd client && pnpm run build",
-    "build:server": "cd server && npm run build",
+    "build:server": "cd server && pnpm run build",
     "start": "concurrently \"npm run start:server\" \"npm run start:client\"",
-    "start:client": "cd client && npm start",
-    "start:server": "cd server && npm run start:dev",
-    "start:prod": "cd server && npm run start:prod",
-    "install:all": "npm install && cd client && pnpm install && cd ../server && npm install",
-    "dev": "concurrently \"npm run start:server\" \"npm run start:client\""
+    "start:client": "cd client && pnpm start",
+    "start:server": "cd server && pnpm run start:dev",
+    "start:prod": "cd server && pnpm run start:prod",
+    "install:all": "pnpm install && cd client && pnpm install && cd ../server && pnpm install",
+    "dev": "concurrently \"pnpm run start:server\" \"pnpm run start:client\""
   },
   "devDependencies": {
+    "@types/jest": "^30.0.0",
     "concurrently": "^8.2.2"
   },
   "workspaces": [

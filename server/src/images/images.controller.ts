@@ -11,6 +11,7 @@ import {
   ParseFilePipe,
   UseGuards,
   Req,
+  Query,
 } from "@nestjs/common";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { ImagesService } from "./images.service";
@@ -29,8 +30,15 @@ export class ImagesController {
   constructor(private readonly imagesService: ImagesService) {}
 
   @Get()
-  async findAll() {
-    return this.imagesService.findAll();
+  async findAll(
+    @Query("includePrivate") includePrivate?: string,
+    @Query("onlyApproved") onlyApproved?: string
+  ) {
+    const includePrivateBool = includePrivate === "true";
+    const onlyApprovedBool =
+      typeof onlyApproved === "undefined" ? true : onlyApproved === "true";
+
+    return this.imagesService.findAll(includePrivateBool, onlyApprovedBool);
   }
 
   @Get(":id")

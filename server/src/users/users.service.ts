@@ -22,6 +22,7 @@ export class UsersService {
 
   async findAll(): Promise<User[]> {
     return this.usersRepository.find({
+      relations: ["images"],
       select: ["id", "email", "firstName", "lastName", "role", "createdAt"],
       order: { createdAt: "DESC" },
     });
@@ -113,6 +114,7 @@ export class UsersService {
 
     return this.usersRepository.findOne({
       where: { email },
+      relations: ["images"],
       select,
     });
   }
@@ -120,6 +122,7 @@ export class UsersService {
   async findById(id: number): Promise<User> {
     const user = await this.usersRepository.findOne({
       where: { id },
+      relations: ["images"],
       select: ["id", "email", "firstName", "lastName", "role", "createdAt"],
     });
 

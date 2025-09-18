@@ -31,7 +31,6 @@ export class User {
   role: string;
 
   @OneToMany(() => Image, (image) => image.user, { cascade: true })
-  @Exclude({ toPlainOnly: true })
   images: Image[];
 
   @CreateDateColumn()

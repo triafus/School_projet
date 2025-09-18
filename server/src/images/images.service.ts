@@ -15,6 +15,7 @@ import { User } from "../users/user.entity";
 @Injectable()
 export class ImagesService {
   private readonly BUCKET_NAME = "images";
+  private readonly PRIV_BUCKET_NAME = "private_images";
   private readonly MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
   private readonly ALLOWED_MIME_TYPES = [
     "image/jpeg",
@@ -28,14 +29,21 @@ export class ImagesService {
     private supabaseService: SupabaseService
   ) {}
 
-  async findAll(includePrivate = false) {
+  async findAll(includePrivate = false, onlyApproved = true) {
     const query = this.imagesRepository
       .createQueryBuilder("image")
-      .leftJoinAndSelect("image.user", "user")
-      .where("image.is_approved = :approved", { approved: true });
+      .leftJoinAndSelect("image.user", "user");
+
+    if (onlyApproved) {
+      query.where("image.is_approved = :approved", { approved: true });
+    }
 
     if (!includePrivate) {
-      query.andWhere("image.is_private = :private", { private: false });
+      if (onlyApproved) {
+        query.andWhere("image.is_private = :private", { private: false });
+      } else {
+        query.where("image.is_private = :private", { private: false });
+      }
     }
 
     return query.getMany();
@@ -63,8 +71,16 @@ export class ImagesService {
   ) {
     this.validateFile(file);
 
+    if (typeof createImageDto.is_private === "string") {
+      createImageDto.is_private = createImageDto.is_private === "true";
+    }
+
+    const bucketName = createImageDto.is_private
+      ? this.PRIV_BUCKET_NAME
+      : this.BUCKET_NAME;
+
     const { url, key } = await this.supabaseService.uploadFile(
-      this.BUCKET_NAME,
+      bucketName,
       file
     );
 
@@ -82,6 +98,28 @@ export class ImagesService {
 
   async update(id: number, updateImageDto: UpdateImageDto, user: User) {
     const image = await this.verifyOwnership(id, user);
+    const oldIsPrivate = image.is_private;
+
+    if (
+      updateImageDto.is_private !== undefined &&
+      updateImageDto.is_private !== oldIsPrivate
+    ) {
+      const sourceBucket = oldIsPrivate
+        ? this.PRIV_BUCKET_NAME
+        : this.BUCKET_NAME;
+      const destBucket = oldIsPrivate
+        ? this.BUCKET_NAME
+        : this.PRIV_BUCKET_NAME;
+
+      const { url, key } = await this.supabaseService.transferFile(
+        sourceBucket,
+        destBucket,
+        image.key
+      );
+
+      image.url = url;
+      image.key = key;
+    }
 
     Object.assign(image, updateImageDto);
     return this.imagesRepository.save(image);
@@ -115,7 +153,10 @@ export class ImagesService {
     }
 
     return {
-      url: await this.supabaseService.getSignedUrl(this.BUCKET_NAME, image.key),
+      url: await this.supabaseService.getSignedUrl(
+        this.PRIV_BUCKET_NAME,
+        image.key
+      ),
     };
   }
 

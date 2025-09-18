@@ -7,7 +7,7 @@ export const useAuth = () => {
   const queryClient = useQueryClient();
 
   const userQuery = useQuery<User | null>({
-    queryKey: ["auth", "user"],
+    queryKey: ["auth", "user", "Image"],
     queryFn: async () => {
       try {
         const token = localStorage.getItem("token");
@@ -32,7 +32,6 @@ export const useAuth = () => {
       localStorage.setItem("token", data.access_token);
       await queryClient.refetchQueries({
         queryKey: ["auth", "user"],
-        exact: true,
       });
     },
     onError: (error) => {
@@ -46,7 +45,6 @@ export const useAuth = () => {
       localStorage.setItem("token", data.access_token);
       await queryClient.refetchQueries({
         queryKey: ["auth", "user"],
-        exact: true,
       });
     },
   });

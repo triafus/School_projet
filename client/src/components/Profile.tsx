@@ -33,7 +33,7 @@ export const Profile = (props: ProfileProps) => {
             alignItems: "center",
             gap: 2,
             p: 2,
-            borderRadius: "12px",
+            borderRadius: 3,
             backgroundColor: "rgba(255, 255, 255, 0.05)",
             backdropFilter: "blur(10px)",
             border: "1px solid rgba(255, 255, 255, 0.1)",
