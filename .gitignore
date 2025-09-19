@@ -38,5 +38,11 @@ build/
 .cache/
 coverage/
 
+# Zencoder local metadata (do not commit)
+.zencoder/
+
 # Netlify local
 .netlify
+
+#Doc
+POSTMAN_COLLECTIONS_TEST.md
