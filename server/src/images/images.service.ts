@@ -49,6 +49,27 @@ export class ImagesService {
     return query.getMany();
   }
 
+  // Images selectable pour l'UI: public approuvées OU toutes les images du user
+  async findSelectable(user?: User) {
+    const qb = this.imagesRepository
+      .createQueryBuilder("image")
+      .leftJoinAndSelect("image.user", "user");
+
+    if (user) {
+      qb.where(
+        "(image.is_approved = :appr AND image.is_private = :pub) OR image.userId = :uid",
+        { appr: true, pub: false, uid: user.id }
+      );
+    } else {
+      qb.where("image.is_approved = :appr AND image.is_private = :pub", {
+        appr: true,
+        pub: false,
+      });
+    }
+
+    return qb.getMany();
+  }
+
   async findOne(id: number, userId?: number) {
     const image = await this.imagesRepository.findOne({
       where: { id },

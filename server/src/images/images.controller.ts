@@ -41,6 +41,12 @@ export class ImagesController {
     return this.imagesService.findAll(includePrivateBool, onlyApprovedBool);
   }
 
+  @Get("selectable")
+  @UseGuards(JwtAuthGuard)
+  async findSelectable(@Req() req: Request) {
+    return this.imagesService.findSelectable(req.user as User);
+  }
+
   @Get(":id")
   async findOne(@Param("id") id: string, @Req() req: Request) {
     return this.imagesService.findOne(

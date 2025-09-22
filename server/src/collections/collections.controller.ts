@@ -8,12 +8,12 @@ import {
   Body,
   UseGuards,
   Req,
-  Query,
 } from "@nestjs/common";
 import { JwtAuthGuard } from "../auth/jwt-auth.guard";
 import { CollectionsService } from "./collections.service";
 import { CreateCollectionDto } from "./dto/create-collection.dto";
 import { UpdateCollectionDto } from "./dto/update-collection.dto";
+import { UpdateCollectionImagesDto } from "./dto/update-collection-images.dto";
 import { Request } from "express";
 import { User } from "../users/user.entity";
 
@@ -49,6 +49,20 @@ export class CollectionsController {
     @Req() req: Request
   ) {
     return this.collectionsService.update(parseInt(id), dto, req.user as User);
+  }
+
+  @Patch(":id/images")
+  @UseGuards(JwtAuthGuard)
+  async updateImages(
+    @Param("id") id: string,
+    @Body() dto: UpdateCollectionImagesDto,
+    @Req() req: Request
+  ) {
+    return this.collectionsService.updateImages(
+      parseInt(id),
+      dto,
+      req.user as User
+    );
   }
 
   @Delete(":id")
