@@ -1,4 +1,11 @@
-import { IsNotEmpty, IsOptional, IsString, IsBoolean } from "class-validator";
+import {
+  IsOptional,
+  IsString,
+  IsBoolean,
+  IsArray,
+  IsInt,
+} from "class-validator";
+import { Type } from "class-transformer";
 
 export class UpdateCollectionDto {
   @IsString()
@@ -12,4 +19,11 @@ export class UpdateCollectionDto {
   @IsBoolean()
   @IsOptional()
   is_private?: boolean;
+
+  // Replace full set of image associations (optional)
+  @IsArray()
+  @IsInt({ each: true })
+  @Type(() => Number)
+  @IsOptional()
+  imageIds?: number[];
 }

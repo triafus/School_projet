@@ -6,8 +6,11 @@ import {
   JoinColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  ManyToMany,
+  JoinTable,
 } from "typeorm";
 import { User } from "../users/user.entity";
+import { Image } from "../images/image.entity";
 
 @Entity("collections")
 export class Collection {
@@ -29,6 +32,21 @@ export class Collection {
 
   @Column()
   userId: number;
+
+  // Many-to-many relation with images via explicit join table
+  @ManyToMany(() => Image, (image) => image.collections)
+  @JoinTable({
+    name: "collection_images",
+    joinColumn: {
+      name: "collection_id",
+      referencedColumnName: "id",
+    },
+    inverseJoinColumn: {
+      name: "image_id",
+      referencedColumnName: "id",
+    },
+  })
+  images: Image[];
 
   @CreateDateColumn({ name: "created_at" })
   created_at: Date;

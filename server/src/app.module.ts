@@ -53,7 +53,6 @@ import { HealthController } from "./health/health.controller";
     AuthModule,
     UsersModule,
     ImagesModule,
-    // Register Collections module
     CollectionsModule,
   ],
   controllers: [HealthController],

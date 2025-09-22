@@ -3,12 +3,12 @@ import {
   PrimaryGeneratedColumn,
   Column,
   ManyToOne,
-  JoinColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  ManyToMany,
 } from "typeorm";
 import { User } from "../users/user.entity";
-import { Expose } from "class-transformer";
+import { Collection } from "../collections/collection.entity";
 
 @Entity()
 export class Image {
@@ -33,11 +33,16 @@ export class Image {
   @Column({ default: false })
   is_private: boolean;
 
+  // Owner of the image
   @ManyToOne(() => User, (user) => user.images)
   user: User;
 
   @Column()
   userId: number;
+
+  // Many-to-many relation with collections via join table
+  @ManyToMany(() => Collection, (collection) => collection.images)
+  collections: Collection[];
 
   @CreateDateColumn({ name: "created_at" })
   created_at: Date;
