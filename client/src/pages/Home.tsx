@@ -1,12 +1,5 @@
-import React, { useRef, useState, useCallback } from "react";
-import {
-  Box,
-  Typography,
-  IconButton,
-  Chip,
-  styled,
-  Button,
-} from "@mui/material";
+import React, { useState, useCallback } from "react";
+import { Box } from "@mui/material";
 import { Add } from "@mui/icons-material";
 import { useImages } from "../hooks/useImage";
 import { Image } from "../types/image";
@@ -83,7 +76,6 @@ const Gallery = () => {
         p: "3rem 0",
       }}
     >
-      {/* Fond */}
       <Box
         sx={{
           position: "fixed",

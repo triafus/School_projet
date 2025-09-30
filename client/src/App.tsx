@@ -9,6 +9,8 @@ import { AdminRoute } from "./routes/AdminRoute";
 import { AuthenticatedRoute } from "./routes/AuthenticatedRoute";
 import NotFound from "./pages/NotFound";
 import Dashboard from "./pages/Dashboard";
+import TestCollectionPage from "./pages/TestCollectionPage";
+import Collection from "./pages/Collection";
 
 const router = createBrowserRouter([
   {
@@ -34,6 +36,15 @@ const router = createBrowserRouter([
         element: (
           <AuthenticatedRoute>
             <Dashboard />
+          </AuthenticatedRoute>
+        ),
+        errorElement: <NotFound />,
+      },
+      {
+        path: "/collection",
+        element: (
+          <AuthenticatedRoute>
+            <Collection />
           </AuthenticatedRoute>
         ),
         errorElement: <NotFound />,

@@ -4,38 +4,22 @@ import {
   Typography,
   TextField,
   Button,
-  Card,
-  CardMedia,
-  CardContent,
   Grid,
-  IconButton,
   InputAdornment,
   Container,
 } from "@mui/material";
-import {
-  Add as AddIcon,
-  Search as SearchIcon,
-  MoreVert as MoreVertIcon,
-} from "@mui/icons-material";
-
-export interface Collection {
-  id: number;
-  name: string;
-  photoCount: number;
-  images: string[];
-}
+import { Add as AddIcon, Search as SearchIcon } from "@mui/icons-material";
+import { useCollections } from "../hooks/useCollection";
 
 const Collection = () => {
   const [searchQuery, setSearchQuery] = useState<string>("");
+  const [open, setOpen] = useState<boolean>(false);
 
-  // Données d'exemple pour les collections
-  const collections: Collection[] = [];
+  const { data: collections } = useCollections();
 
-  const filteredCollections = collections.filter((collection) =>
-    collection.name.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredCollections = collections?.filter((collection) =>
+    collection.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
-
-  console.log(filteredCollections.length);
 
   const NewCollectionCard = () => (
     <Button
@@ -99,7 +83,7 @@ const Collection = () => {
             Collections
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            {collections.length} Collections
+            {collections?.length} Collections
           </Typography>
         </Box>
         <Box sx={{ display: "flex", gap: 2 }}>
@@ -126,6 +110,7 @@ const Collection = () => {
           />
 
           <Button
+            onClick={() => {}}
             variant="contained"
             startIcon={<AddIcon />}
             sx={{
@@ -148,12 +133,12 @@ const Collection = () => {
           <NewCollectionCard />
         </Grid>
 
-        {filteredCollections.map((collection) => (
+        {filteredCollections?.map((collection) => (
           <Grid key={collection.id}>{/* collection */}</Grid>
         ))}
       </Grid>
 
-      {filteredCollections.length === 0 && (
+      {filteredCollections?.length === 0 && (
         <Box
           sx={{
             textAlign: "center",

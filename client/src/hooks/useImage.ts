@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { imageService } from "../services/imageServices";
-import { Image, ImageFormData } from "../types/image";
+import { ImageFormData } from "../types/image";
 import { AuthService } from "../services/authServices";
 
 export const useUserImages = () => {
