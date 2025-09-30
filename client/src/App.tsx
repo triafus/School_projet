@@ -8,9 +8,9 @@ import Navigation from "./layout/Navigation";
 import { AdminRoute } from "./routes/AdminRoute";
 import { AuthenticatedRoute } from "./routes/AuthenticatedRoute";
 import NotFound from "./pages/NotFound";
+import Dashboard from "./pages/Dashboard";
+import TestCollectionPage from "./pages/TestCollectionPage";
 import Collection from "./pages/Collection";
-
-const queryClient = new QueryClient();
 
 const router = createBrowserRouter([
   {
@@ -32,11 +32,20 @@ const router = createBrowserRouter([
         errorElement: <NotFound />,
       },
       {
-        path: "admin/collection",
+        path: "/dashboard",
         element: (
-          <AdminRoute>
+          <AuthenticatedRoute>
+            <Dashboard />
+          </AuthenticatedRoute>
+        ),
+        errorElement: <NotFound />,
+      },
+      {
+        path: "/collection",
+        element: (
+          <AuthenticatedRoute>
             <Collection />
-          </AdminRoute>
+          </AuthenticatedRoute>
         ),
         errorElement: <NotFound />,
       },
