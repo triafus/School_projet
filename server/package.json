@@ -38,7 +38,11 @@
     "postgres": "^3.4.7",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.1",
+<<<<<<< Updated upstream
     "sqlite3": "^5.1.6",
+=======
+    "sqlite3": "^5.1.7",
+>>>>>>> Stashed changes
     "typeorm": "^0.3.17"
   },
   "devDependencies": {
