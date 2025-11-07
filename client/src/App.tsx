@@ -11,6 +11,7 @@ import NotFound from "./pages/NotFound";
 import Dashboard from "./pages/Dashboard";
 import TestCollectionPage from "./pages/TestCollectionPage";
 import Collection from "./pages/Collection";
+import CollectionDetail from "./pages/CollectionDetail";
 
 const router = createBrowserRouter([
   {
@@ -45,6 +46,15 @@ const router = createBrowserRouter([
         element: (
           <AuthenticatedRoute>
             <Collection />
+          </AuthenticatedRoute>
+        ),
+        errorElement: <NotFound />,
+      },
+      {
+        path: "/collection/:id",
+        element: (
+          <AuthenticatedRoute>
+            <CollectionDetail />
           </AuthenticatedRoute>
         ),
         errorElement: <NotFound />,

@@ -9,6 +9,8 @@ export interface Collection {
   userId: number;
   user?: User;
   images: Image[];
+  created_at?: string;
+  updated_at?: string;
 }
 
 export interface CollectionFormData {
