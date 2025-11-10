@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useState } from "react";
 import {
   Box,
   Modal,
@@ -12,15 +12,16 @@ import {
   DeleteOutline,
   EditOutlined,
   CheckCircle,
+  Collections,
 } from "@mui/icons-material";
 import { Image } from "../../types/image";
 import { useAuth } from "../../hooks/useAuth";
 import { EditImageModal } from "./EditImageModal";
 import { DeleteImageModal } from "./DeleteImageModal";
-import { useUsers } from "../../hooks/useUser";
 import { useSignedUrl } from "../../hooks/useImage";
 import { CustomButton } from "../CustomButton";
 import { BaseImageModal } from "./BaseImageModal";
+import { AddToCollectionModal } from "../collections/AddToCollectionModal";
 
 interface ImageViewModalProps {
   open: boolean;
@@ -42,6 +43,7 @@ export const ImageViewModal = (props: ImageViewModalProps) => {
   } = props;
   const [openEditModal, setOpenEditModal] = useState<boolean>(false);
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
+  const [openAddToCollectionModal, setOpenAddToCollectionModal] = useState<boolean>(false);
 
   const { user } = useAuth();
   const { data: signedUrlData } = useSignedUrl(
@@ -214,9 +216,6 @@ export const ImageViewModal = (props: ImageViewModalProps) => {
                       border: "1px solid #e5e7eb",
                     }}
                   >
-                    L'approbation de cette image la rendra visible publiquement
-                    dans la galerie. Une fois approuvée, l'image sera accessible
-                    à tous les utilisateurs de la plateforme.
                   </Typography>
                 )}
               </Box>
@@ -224,26 +223,39 @@ export const ImageViewModal = (props: ImageViewModalProps) => {
 
             <Stack>
               {isOwner && !showApprovalButton && (
-                <Box display="flex" gap={1} justifyContent="end" p={2}>
-                  <Button
-                    onClick={handleOpenDelete}
-                    color="error"
-                    sx={{ borderRadius: "8px" }}
-                    startIcon={
-                      <DeleteOutline sx={{ color: "#d32f2f", fontSize: 20 }} />
-                    }
-                  >
-                    Supprimer
-                  </Button>
-                  <CustomButton
-                    onClick={handleOpenEdit}
-                    variant="outlined"
-                    startIcon={
-                      <EditOutlined sx={{ color: "#111111", fontSize: 20 }} />
-                    }
-                  >
-                    Modifier
-                  </CustomButton>
+                <Box display="flex" flexDirection="column" gap={1} p={2}>
+                  <Box display="flex" gap={1} justifyContent="end">
+                    <Button
+                      onClick={handleOpenDelete}
+                      color="error"
+                      sx={{ borderRadius: "8px" }}
+                      startIcon={
+                        <DeleteOutline sx={{ color: "#d32f2f", fontSize: 20 }} />
+                      }
+                    >
+                      Supprimer
+                    </Button>
+                    <CustomButton
+                      onClick={handleOpenEdit}
+                      variant="outlined"
+                      startIcon={
+                        <EditOutlined sx={{ color: "#111111", fontSize: 20 }} />
+                      }
+                    >
+                      Modifier
+                    </CustomButton>
+                  </Box>
+                  <Box display="flex" gap={1} justifyContent="end">
+                    <CustomButton
+                      onClick={() => setOpenAddToCollectionModal(true)}
+                      variant="outlined"
+                      startIcon={
+                        <Collections sx={{ color: "#111111", fontSize: 20 }} />
+                      }
+                    >
+                      Ajouter à une collection
+                    </CustomButton>
+                  </Box>
                 </Box>
               )}
 
@@ -293,6 +305,12 @@ export const ImageViewModal = (props: ImageViewModalProps) => {
             onDelete={() => {
               onClose();
             }}
+          />
+
+          <AddToCollectionModal
+            open={openAddToCollectionModal}
+            onClose={() => setOpenAddToCollectionModal(false)}
+            image={image}
           />
         </Box>
       </Box>

@@ -38,4 +38,19 @@ export const collectionService = {
   remove: async (id: number): Promise<void> => {
     await apiClient.delete(`/collections/${id}`);
   },
+
+  updateImages: async (
+    id: number,
+    addImageIds?: number[],
+    removeImageIds?: number[]
+  ): Promise<Collection> => {
+    const { data } = await apiClient.patch<Collection>(
+      `/collections/${id}/images`,
+      {
+        addImageIds,
+        removeImageIds,
+      }
+    );
+    return data;
+  },
 };

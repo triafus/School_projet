@@ -65,3 +65,24 @@ export const useDeleteCollection = () => {
     },
   });
 };
+
+export const useUpdateCollectionImages = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationKey: ["updateCollectionImages"],
+    mutationFn: ({
+      id,
+      addImageIds,
+      removeImageIds,
+    }: {
+      id: number;
+      addImageIds?: number[];
+      removeImageIds?: number[];
+    }) => collectionService.updateImages(id, addImageIds, removeImageIds),
+    onSuccess: (_, data) => {
+      queryClient.invalidateQueries({ queryKey: ["collections"] });
+      queryClient.invalidateQueries({ queryKey: ["collection", data.id] });
+      queryClient.invalidateQueries({ queryKey: ["images"] });
+    },
+  });
+};
