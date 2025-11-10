@@ -16,7 +16,7 @@ import {
   Delete as DeleteIcon,
   Person as PersonIcon,
 } from "@mui/icons-material";
-import { useCollection } from "../hooks/useCollection";
+import { useCollection, useUpdateCollectionImages } from "../hooks/useCollection";
 import { useAuth } from "../hooks/useAuth";
 import { ImageCard } from "../components/ImageCard";
 import { ImageViewModal } from "../components/ImageModal/ImageViewModal";
@@ -31,6 +31,7 @@ const CollectionDetail = () => {
 
   const { data: collection, isLoading, error } = useCollection(collectionId);
   const { user } = useAuth();
+  const { mutateAsync: updateCollectionImages } = useUpdateCollectionImages();
 
   const [selectedImage, setSelectedImage] = useState<Image | null>(null);
   const [openEditModal, setOpenEditModal] = useState(false);
@@ -41,6 +42,22 @@ const CollectionDetail = () => {
 
   const canEdit = isOwner || isAdmin;
   const canDelete = isOwner || isAdmin;
+
+  const handleRemoveFromCollection = async () => {
+    if (!selectedImage || !collection) return;
+    
+    try {
+      await updateCollectionImages({
+        id: collection.id,
+        removeImageIds: [selectedImage.id],
+      });
+      // Les queries sont automatiquement invalidées par le hook, ce qui rafraîchit les données
+      setSelectedImage(null);
+    } catch (error) {
+      console.error("Erreur lors du retrait de l'image de la collection:", error);
+      throw error;
+    }
+  };
 
   const formatDate = (dateString?: string) => {
     if (!dateString) return "";
@@ -222,11 +239,16 @@ const CollectionDetail = () => {
       )}
 
       {/* Modals */}
-      <ImageViewModal
-        open={!!selectedImage}
-        image={selectedImage!}
-        onClose={() => setSelectedImage(null)}
-      />
+      {collection && (
+        <ImageViewModal
+          open={!!selectedImage}
+          image={selectedImage!}
+          onClose={() => setSelectedImage(null)}
+          collectionId={collection.id}
+          canEditCollection={canEdit}
+          onRemoveFromCollection={handleRemoveFromCollection}
+        />
+      )}
 
       <CollectionFormModal
         open={openEditModal}

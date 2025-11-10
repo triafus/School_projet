@@ -13,6 +13,7 @@ import {
   EditOutlined,
   CheckCircle,
   Collections,
+  RemoveCircleOutline,
 } from "@mui/icons-material";
 import { Image } from "../../types/image";
 import { useAuth } from "../../hooks/useAuth";
@@ -30,6 +31,10 @@ interface ImageViewModalProps {
   onApprove?: (imageId: number, currentStatus: boolean) => void;
   isApproving?: boolean;
   showApprovalButton?: boolean;
+  // Props pour le contexte de collection
+  collectionId?: number;
+  canEditCollection?: boolean;
+  onRemoveFromCollection?: () => void;
 }
 
 export const ImageViewModal = (props: ImageViewModalProps) => {
@@ -40,10 +45,14 @@ export const ImageViewModal = (props: ImageViewModalProps) => {
     onApprove,
     isApproving = false,
     showApprovalButton = false,
+    collectionId,
+    canEditCollection = false,
+    onRemoveFromCollection,
   } = props;
   const [openEditModal, setOpenEditModal] = useState<boolean>(false);
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
   const [openAddToCollectionModal, setOpenAddToCollectionModal] = useState<boolean>(false);
+  const [isRemoving, setIsRemoving] = useState<boolean>(false);
 
   const { user } = useAuth();
   const { data: signedUrlData } = useSignedUrl(
@@ -52,6 +61,7 @@ export const ImageViewModal = (props: ImageViewModalProps) => {
   );
 
   const isOwner = user?.id === image?.userId;
+  const isInCollectionContext = collectionId !== undefined;
 
   const handleOpenEdit = () => {
     setOpenEditModal(true);
@@ -65,6 +75,20 @@ export const ImageViewModal = (props: ImageViewModalProps) => {
     if (onApprove && image) {
       onApprove(image.id, image.is_approved);
       onClose();
+    }
+  };
+
+  const handleRemoveFromCollection = async () => {
+    if (!image || !collectionId || !onRemoveFromCollection) return;
+    
+    setIsRemoving(true);
+    try {
+      await onRemoveFromCollection();
+      onClose();
+    } catch (error) {
+      console.error("Erreur lors du retrait de l'image de la collection:", error);
+    } finally {
+      setIsRemoving(false);
     }
   };
 
@@ -222,7 +246,26 @@ export const ImageViewModal = (props: ImageViewModalProps) => {
             </Stack>
 
             <Stack>
-              {isOwner && !showApprovalButton && (
+              {/* Contexte de collection : afficher uniquement le bouton de retrait */}
+              {isInCollectionContext && canEditCollection && !showApprovalButton && (
+                <Box display="flex" gap={1} justifyContent="end" p={2}>
+                  <Button
+                    onClick={handleRemoveFromCollection}
+                    variant="outlined"
+                    color="error"
+                    disabled={isRemoving}
+                    sx={{ borderRadius: "8px" }}
+                    startIcon={
+                      <RemoveCircleOutline sx={{ fontSize: 20 }} />
+                    }
+                  >
+                    {isRemoving ? "Retrait..." : "Retirer de la collection"}
+                  </Button>
+                </Box>
+              )}
+
+              {/* Contexte normal : afficher les actions standards si propriétaire */}
+              {!isInCollectionContext && isOwner && !showApprovalButton && (
                 <Box display="flex" flexDirection="column" gap={1} p={2}>
                   <Box display="flex" gap={1} justifyContent="end">
                     <Button
@@ -289,29 +332,33 @@ export const ImageViewModal = (props: ImageViewModalProps) => {
             </Stack>
           </Box>
 
-          <EditImageModal
-            open={openEditModal}
-            onClose={() => setOpenEditModal(false)}
-            image={image}
-            onUpdate={() => {
-              onClose();
-            }}
-          />
+          {!isInCollectionContext && (
+            <>
+              <EditImageModal
+                open={openEditModal}
+                onClose={() => setOpenEditModal(false)}
+                image={image}
+                onUpdate={() => {
+                  onClose();
+                }}
+              />
 
-          <DeleteImageModal
-            open={openDeleteModal}
-            onClose={() => setOpenDeleteModal(false)}
-            image={image}
-            onDelete={() => {
-              onClose();
-            }}
-          />
+              <DeleteImageModal
+                open={openDeleteModal}
+                onClose={() => setOpenDeleteModal(false)}
+                image={image}
+                onDelete={() => {
+                  onClose();
+                }}
+              />
 
-          <AddToCollectionModal
-            open={openAddToCollectionModal}
-            onClose={() => setOpenAddToCollectionModal(false)}
-            image={image}
-          />
+              <AddToCollectionModal
+                open={openAddToCollectionModal}
+                onClose={() => setOpenAddToCollectionModal(false)}
+                image={image}
+              />
+            </>
+          )}
         </Box>
       </Box>
     </Modal>
