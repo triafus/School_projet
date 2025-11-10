@@ -33,14 +33,12 @@ export class Image {
   @Column({ default: false })
   is_private: boolean;
 
-  // Owner of the image
   @ManyToOne(() => User, (user) => user.images)
   user: User;
 
   @Column()
   userId: number;
 
-  // Many-to-many relation with collections via join table
   @ManyToMany(() => Collection, (collection) => collection.images)
   collections: Collection[];
 

@@ -86,7 +86,7 @@ export const ImageViewModal = (props: ImageViewModalProps) => {
       await onRemoveFromCollection();
       onClose();
     } catch (error) {
-      console.error("Erreur lors du retrait de l'image de la collection:", error);
+      throw error;
     } finally {
       setIsRemoving(false);
     }
@@ -246,7 +246,6 @@ export const ImageViewModal = (props: ImageViewModalProps) => {
             </Stack>
 
             <Stack>
-              {/* Contexte de collection : afficher uniquement le bouton de retrait */}
               {isInCollectionContext && canEditCollection && !showApprovalButton && (
                 <Box display="flex" gap={1} justifyContent="end" p={2}>
                   <Button
@@ -264,7 +263,6 @@ export const ImageViewModal = (props: ImageViewModalProps) => {
                 </Box>
               )}
 
-              {/* Contexte normal : afficher les actions standards si propriétaire */}
               {!isInCollectionContext && isOwner && !showApprovalButton && (
                 <Box display="flex" flexDirection="column" gap={1} p={2}>
                   <Box display="flex" gap={1} justifyContent="end">

@@ -20,7 +20,6 @@ export class UpdateCollectionDto {
   @IsOptional()
   is_private?: boolean;
 
-  // Replace full set of image associations (optional)
   @IsArray()
   @IsInt({ each: true })
   @Type(() => Number)

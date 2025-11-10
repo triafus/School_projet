@@ -22,7 +22,6 @@ export class CreateCollectionDto {
   @IsOptional()
   is_private?: boolean;
 
-  // Optional list of image IDs to associate at creation
   @IsArray()
   @IsInt({ each: true })
   @Type(() => Number)

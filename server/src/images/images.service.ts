@@ -49,7 +49,6 @@ export class ImagesService {
     return query.getMany();
   }
 
-  // Images selectable pour l'UI: public approuvées OU toutes les images du user
   async findSelectable(user?: User) {
     const qb = this.imagesRepository
       .createQueryBuilder("image")
@@ -203,7 +202,9 @@ export class ImagesService {
 
     if (!this.ALLOWED_MIME_TYPES.includes(file.mimetype)) {
       throw new BadRequestException(
-        `Invalid file type. Allowed types: ${this.ALLOWED_MIME_TYPES.join(", ")}`
+        `Invalid file type. Allowed types: ${this.ALLOWED_MIME_TYPES.join(
+          ", "
+        )}`
       );
     }
 

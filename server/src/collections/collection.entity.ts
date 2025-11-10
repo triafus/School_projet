@@ -33,7 +33,6 @@ export class Collection {
   @Column()
   userId: number;
 
-  // Many-to-many relation with images via explicit join table
   @ManyToMany(() => Image, (image) => image.collections)
   @JoinTable({
     name: "collection_images",

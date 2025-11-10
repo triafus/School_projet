@@ -9,14 +9,14 @@ import {
 } from "@mui/material";
 import { Add as AddIcon, Search as SearchIcon } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth";
 import { useCollections } from "../hooks/useCollection";
+import type { Collection } from "../types/collection";
 import { CollectionFormModal } from "../components/collections/CollectionFormModal";
 import DeleteCollectionModal from "../components/collections/DeleteCollectionModal";
 import CollectionCard from "../components/collections/CollectionCard";
-import type { Collection } from "../types/collection";
-import { useAuth } from "../hooks/useAuth";
 
-const Collection = () => {
+const CollectionPage = () => {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
@@ -116,7 +116,6 @@ const Collection = () => {
 
   return (
     <Container sx={{ p: 4, bgcolor: "#fafafa", minHeight: "100vh" }}>
-      {/* En-tête */}
       <Box
         sx={{
           display: "flex",
@@ -245,22 +244,23 @@ const Collection = () => {
             ))}
           </Box>
 
-          {!searchQuery && (collections?.length === 0 || collections === undefined) && (
-            <Box
-              sx={{
-                textAlign: "center",
-                py: 8,
-                color: "text.secondary",
-              }}
-            >
-              <Typography variant="h6" sx={{ mb: 1 }}>
-                Aucune collection
-              </Typography>
-              <Typography variant="body2">
-                Créez votre première collection pour commencer
-              </Typography>
-            </Box>
-          )}
+          {!searchQuery &&
+            (collections?.length === 0 || collections === undefined) && (
+              <Box
+                sx={{
+                  textAlign: "center",
+                  py: 8,
+                  color: "text.secondary",
+                }}
+              >
+                <Typography variant="h6" sx={{ mb: 1 }}>
+                  Aucune collection
+                </Typography>
+                <Typography variant="body2">
+                  Créez votre première collection pour commencer
+                </Typography>
+              </Box>
+            )}
 
           {searchQuery && filteredCollections?.length === 0 && (
             <Box
@@ -297,4 +297,4 @@ const Collection = () => {
   );
 };
 
-export default Collection;
+export default CollectionPage;

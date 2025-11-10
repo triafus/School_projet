@@ -35,7 +35,6 @@ const DeleteCollectionModal = ({
         onSuccess: () => {
           onClose();
           onSuccess?.();
-          // Could add toast notification here
         },
         onError: (error) => {
           console.error("Erreur lors de la suppression:", error);

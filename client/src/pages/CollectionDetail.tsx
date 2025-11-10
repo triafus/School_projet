@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
 import {
   Box,
   Typography,
@@ -16,13 +15,14 @@ import {
   Delete as DeleteIcon,
   Person as PersonIcon,
 } from "@mui/icons-material";
-import { useCollection, useUpdateCollectionImages } from "../hooks/useCollection";
+import { useParams, useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
+import { useCollection, useUpdateCollectionImages } from "../hooks/useCollection";
+import { Image } from "../types/image";
 import { ImageCard } from "../components/ImageCard";
 import { ImageViewModal } from "../components/ImageModal/ImageViewModal";
 import { CollectionFormModal } from "../components/collections/CollectionFormModal";
 import DeleteCollectionModal from "../components/collections/DeleteCollectionModal";
-import { Image } from "../types/image";
 
 const CollectionDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -51,10 +51,8 @@ const CollectionDetail = () => {
         id: collection.id,
         removeImageIds: [selectedImage.id],
       });
-      // Les queries sont automatiquement invalidées par le hook, ce qui rafraîchit les données
       setSelectedImage(null);
     } catch (error) {
-      console.error("Erreur lors du retrait de l'image de la collection:", error);
       throw error;
     }
   };

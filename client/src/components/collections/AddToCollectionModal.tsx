@@ -30,9 +30,9 @@ export const AddToCollectionModal = ({
   onClose,
   image,
 }: AddToCollectionModalProps) => {
-  const [selectedCollectionId, setSelectedCollectionId] = useState<number | null>(
-    null
-  );
+  const [selectedCollectionId, setSelectedCollectionId] = useState<
+    number | null
+  >(null);
   const { user } = useAuth();
   const { data: collections = [], isLoading } = useCollections();
   const {
@@ -41,13 +41,11 @@ export const AddToCollectionModal = ({
     error,
   } = useUpdateCollectionImages();
 
-  // Filtrer seulement les collections de l'utilisateur
   const userCollections = useMemo(() => {
     if (!user) return [];
     return collections.filter((c) => c.userId === user.id);
   }, [collections, user]);
 
-  // Vérifier si l'image est déjà dans chaque collection
   const collectionsWithImageStatus = useMemo(() => {
     if (!image) return [];
     return userCollections.map((collection) => {
@@ -70,7 +68,6 @@ export const AddToCollectionModal = ({
       (c) => c.id === selectedCollectionId
     );
 
-    // Si l'image est déjà dans la collection, ne rien faire
     if (collection?.hasImage) {
       onClose();
       return;
@@ -84,8 +81,10 @@ export const AddToCollectionModal = ({
       onClose();
       setSelectedCollectionId(null);
     } catch (error) {
-      // L'erreur sera gérée par le hook
-      console.error("Erreur lors de l'ajout de l'image à la collection:", error);
+      console.error(
+        "Erreur lors de l'ajout de l'image à la collection:",
+        error
+      );
     }
   };
 
@@ -182,4 +181,3 @@ export const AddToCollectionModal = ({
 };
 
 export default AddToCollectionModal;
-

@@ -59,17 +59,15 @@ describe("AuthService", () => {
 
   describe("validateUser", () => {
     it("should return user when credentials are valid", async () => {
-      // Arrange
+
       mockUsersService.findByEmail.mockResolvedValue(mockUser);
       mockUsersService.validatePassword.mockResolvedValue(true);
 
-      // Act
       const result = await service.validateUser(
         "test@example.com",
         "password123"
       );
 
-      // Assert
       expect(result).toEqual(mockUser);
       expect(mockUsersService.findByEmail).toHaveBeenCalledWith(
         "test@example.com",
@@ -82,16 +80,15 @@ describe("AuthService", () => {
     });
 
     it("should return null when user is not found", async () => {
-      // Arrange
+ 
       mockUsersService.findByEmail.mockResolvedValue(null);
 
-      // Act
+   
       const result = await service.validateUser(
         "nonexistent@example.com",
         "password123"
       );
 
-      // Assert
       expect(result).toBeNull();
       expect(mockUsersService.findByEmail).toHaveBeenCalledWith(
         "nonexistent@example.com",
@@ -101,17 +98,17 @@ describe("AuthService", () => {
     });
 
     it("should return null when password is invalid", async () => {
-      // Arrange
+
       mockUsersService.findByEmail.mockResolvedValue(mockUser);
       mockUsersService.validatePassword.mockResolvedValue(false);
 
-      // Act
+    
       const result = await service.validateUser(
         "test@example.com",
         "wrongpassword"
       );
 
-      // Assert
+      
       expect(result).toBeNull();
       expect(mockUsersService.validatePassword).toHaveBeenCalledWith(
         "wrongpassword",
@@ -127,16 +124,16 @@ describe("AuthService", () => {
     };
 
     it("✔️ should return access token and user info when credentials are valid", async () => {
-      // Arrange
+      
       const mockToken = "mock.jwt.token";
       mockUsersService.findByEmail.mockResolvedValue(mockUser);
       mockUsersService.validatePassword.mockResolvedValue(true);
       mockJwtService.sign.mockReturnValue(mockToken);
 
-      // Act
+      
       const result = await service.login(loginDto);
 
-      // Assert
+      
       expect(result).toEqual({
         access_token: mockToken,
         user: {
@@ -154,10 +151,10 @@ describe("AuthService", () => {
     });
 
     it("✔️ should throw UnauthorizedException when credentials are invalid", async () => {
-      // Arrange
+      
       mockUsersService.findByEmail.mockResolvedValue(null);
 
-      // Act & Assert
+       & Assert
       await expect(service.login(loginDto)).rejects.toThrow(
         UnauthorizedException
       );
@@ -167,11 +164,11 @@ describe("AuthService", () => {
     });
 
     it("✔️ should throw UnauthorizedException when password is wrong", async () => {
-      // Arrange
+      
       mockUsersService.findByEmail.mockResolvedValue(mockUser);
       mockUsersService.validatePassword.mockResolvedValue(false);
 
-      // Act & Assert
+       & Assert
       await expect(service.login(loginDto)).rejects.toThrow(
         UnauthorizedException
       );
@@ -190,16 +187,16 @@ describe("AuthService", () => {
     };
 
     it("should register new user and return access token", async () => {
-      // Arrange
+      
       const newUser = { ...mockUser, ...createUserDto, id: 2 };
       const mockToken = "mock.jwt.token";
       mockUsersService.create.mockResolvedValue(newUser);
       mockJwtService.sign.mockReturnValue(mockToken);
 
-      // Act
+      
       const result = await service.register(createUserDto);
 
-      // Assert
+      
       expect(result).toEqual({
         access_token: mockToken,
         user: {

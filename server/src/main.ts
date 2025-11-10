@@ -6,8 +6,6 @@ import { RemoveSensitiveFieldsInterceptor } from "./interceptors/remove-sensitiv
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  console.log("App démarrée");
-
   app.enableCors({
     origin: process.env.VITE_FRONT_URL || "http://localhost:3000",
     credentials: true,

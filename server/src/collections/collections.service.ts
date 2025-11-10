@@ -29,13 +29,11 @@ export class CollectionsService {
       .leftJoinAndSelect("collection.images", "images");
 
     if (userId) {
-      // Public collections or private ones owned by the requester
       query.where(
         "collection.is_private = false OR collection.userId = :userId",
         { userId }
       );
     } else {
-      // Only public collections for anonymous users
       query.where("collection.is_private = false");
     }
 
@@ -58,12 +56,10 @@ export class CollectionsService {
   }
 
   async create(dto: CreateCollectionDto, user: User) {
-    // autoriser string "true"/"false" comme pour images
     if (typeof (dto as any).is_private === "string") {
       (dto as any).is_private = (dto as any).is_private === "true";
     }
 
-    // privé par défaut si non fourni
     if (dto.is_private === undefined) {
       dto.is_private = true;
     }
@@ -76,13 +72,11 @@ export class CollectionsService {
       userId: user.id,
     });
 
-    // attach images if provided
     if (dto.imageIds && dto.imageIds.length) {
       const images = await this.imagesRepository.find({
         where: { id: In(dto.imageIds) },
       });
 
-      // Validate ownership or admin rights
       if (user.role !== "admin") {
         const unauthorized = images.filter((img) => img.userId !== user.id);
         if (unauthorized.length) {
@@ -92,7 +86,6 @@ export class CollectionsService {
         }
       }
 
-      // Ensure all provided IDs exist
       const foundIds = new Set(images.map((i) => i.id));
       const missing = dto.imageIds.filter((id) => !foundIds.has(id));
       if (missing.length) {
@@ -110,12 +103,10 @@ export class CollectionsService {
   async update(id: number, dto: UpdateCollectionDto, user: User) {
     const collection = await this.verifyOwnership(id, user);
 
-    // Basic fields
     if (dto.title !== undefined) collection.title = dto.title;
     if (dto.description !== undefined) collection.description = dto.description;
     if (dto.is_private !== undefined) collection.is_private = dto.is_private;
 
-    // Replace associations when imageIds provided (allow empty array to clear)
     if (dto.imageIds !== undefined) {
       const images = dto.imageIds.length
         ? await this.imagesRepository.find({ where: { id: In(dto.imageIds) } })
@@ -123,7 +114,6 @@ export class CollectionsService {
       collection.images = images;
     }
 
-    // Business rule: cannot make public if contains unapproved images
     const nextIsPrivate = dto.is_private ?? collection.is_private;
     if (nextIsPrivate === false) {
       const hasUnapproved = (collection.images || []).some(
@@ -142,7 +132,6 @@ export class CollectionsService {
   async updateImages(id: number, dto: UpdateCollectionImagesDto, user: User) {
     const collection = await this.verifyOwnership(id, user);
 
-    // Load current images set
     const current = await this.collectionsRepository.findOne({
       where: { id: collection.id },
       relations: ["images"],
@@ -152,14 +141,12 @@ export class CollectionsService {
     const addIds = dto.addImageIds ?? [];
     const removeIds = new Set(dto.removeImageIds ?? []);
 
-    // Fetch images to add
     let imagesToAdd: Image[] = [];
     if (addIds.length) {
       imagesToAdd = await this.imagesRepository.find({
         where: { id: In(addIds) },
       });
 
-      // Ownership validation
       if (user.role !== "admin") {
         const unauthorized = imagesToAdd.filter(
           (img) => img.userId !== user.id
@@ -171,7 +158,6 @@ export class CollectionsService {
         }
       }
 
-      // Ensure all add IDs exist
       const foundIds = new Set(imagesToAdd.map((i) => i.id));
       const missing = addIds.filter((id) => !foundIds.has(id));
       if (missing.length) {
@@ -181,17 +167,14 @@ export class CollectionsService {
       }
     }
 
-    // Build next set: (current - remove) + add
     const kept = (current.images || []).filter((img) => !removeIds.has(img.id));
 
-    // Merge by id uniqueness
     const mergedById = new Map<number, Image>();
     for (const img of kept) mergedById.set(img.id, img);
     for (const img of imagesToAdd) mergedById.set(img.id, img);
 
     current.images = Array.from(mergedById.values());
 
-    // Business rule: cannot make public if contains unapproved images
     if (current.is_private === false) {
       const hasUnapproved = (current.images || []).some(
         (img) => !img.is_approved
