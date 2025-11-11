@@ -3,6 +3,7 @@ import { Box, Typography, IconButton, Chip, styled } from "@mui/material";
 import { Favorite, FavoriteBorder, Share, Collections } from "@mui/icons-material";
 import { Image } from "../types/image";
 import { AddToCollectionModal } from "./collections/AddToCollectionModal";
+import { useAuth } from "../hooks/useAuth";
 
 interface GalleryImageCardProps {
   image: Image;
@@ -58,6 +59,7 @@ export const GalleryImageCard = React.memo(
     onToggleFavorite,
     onImageLoad,
   }: GalleryImageCardProps) => {
+    const { isAuthenticated } = useAuth();
     const [openAddToCollection, setOpenAddToCollection] = useState(false);
 
     const handleAddToCollection = (e: React.MouseEvent) => {
@@ -130,7 +132,7 @@ export const GalleryImageCard = React.memo(
             gap: 1,
           }}
         >
-          <IconButton
+         {/*  <IconButton
             sx={{
               background: "rgba(255,255,255,0.1)",
               backdropFilter: "blur(10px)",
@@ -140,9 +142,9 @@ export const GalleryImageCard = React.memo(
             onClick={onToggleFavorite}
           >
             {isFavorite ? <Favorite /> : <FavoriteBorder />}
-          </IconButton>
+          </IconButton> */}
 
-          
+          {isAuthenticated && (
             <IconButton
               sx={{
                 background: "rgba(255,255,255,0.1)",
@@ -154,9 +156,9 @@ export const GalleryImageCard = React.memo(
             >
               <Collections />
             </IconButton>
-          
+          )}
 
-          <IconButton
+          {/* <IconButton
             sx={{
               background: "rgba(255,255,255,0.1)",
               backdropFilter: "blur(10px)",
@@ -166,7 +168,7 @@ export const GalleryImageCard = React.memo(
             onClick={(e) => e.stopPropagation()}
           >
             <Share />
-          </IconButton>
+          </IconButton> */}
         </Box>
       </ArtworkCard>
 
