@@ -3,7 +3,6 @@ import { Box, Typography, IconButton, Chip, styled } from "@mui/material";
 import { Favorite, FavoriteBorder, Share, Collections } from "@mui/icons-material";
 import { Image } from "../types/image";
 import { AddToCollectionModal } from "./collections/AddToCollectionModal";
-import { useAuth } from "../hooks/useAuth";
 
 interface GalleryImageCardProps {
   image: Image;
@@ -59,9 +58,7 @@ export const GalleryImageCard = React.memo(
     onToggleFavorite,
     onImageLoad,
   }: GalleryImageCardProps) => {
-    const { user } = useAuth();
     const [openAddToCollection, setOpenAddToCollection] = useState(false);
-    const isOwner = user?.id === image.userId;
 
     const handleAddToCollection = (e: React.MouseEvent) => {
       e.stopPropagation();
@@ -145,7 +142,7 @@ export const GalleryImageCard = React.memo(
             {isFavorite ? <Favorite /> : <FavoriteBorder />}
           </IconButton>
 
-          {isOwner && (
+          
             <IconButton
               sx={{
                 background: "rgba(255,255,255,0.1)",
@@ -157,7 +154,7 @@ export const GalleryImageCard = React.memo(
             >
               <Collections />
             </IconButton>
-          )}
+          
 
           <IconButton
             sx={{

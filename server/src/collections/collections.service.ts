@@ -78,21 +78,32 @@ export class CollectionsService {
         where: { id: In(dto.imageIds) },
       });
 
-      if (user.role !== "admin") {
-        const unauthorized = images.filter((img) => img.userId !== user.id);
-        if (unauthorized.length) {
-          throw new ForbiddenException(
-            "Vous ne pouvez associer que vos propres images à la collection"
-          );
-        }
-      }
-
       const foundIds = new Set(images.map((i) => i.id));
       const missing = dto.imageIds.filter((id) => !foundIds.has(id));
       if (missing.length) {
         throw new NotFoundException(
           `Images non trouvées: ${missing.join(", ")}`
         );
+      }
+
+      // Vérifier que l'utilisateur peut accéder à toutes les images
+      const inaccessible = images.filter(
+        (img) => !this.canAccessImage(img, user)
+      );
+      if (inaccessible.length) {
+        throw new ForbiddenException(
+          `Vous ne pouvez pas ajouter ces images à votre collection: ${inaccessible.map((i) => i.id).join(", ")}`
+        );
+      }
+
+      // Pour les collections publiques, vérifier que toutes les images sont approuvées
+      if (dto.is_private === false) {
+        const unapproved = images.filter((img) => !img.is_approved);
+        if (unapproved.length) {
+          throw new BadRequestException(
+            "Impossible de créer une collection publique avec des images non approuvées."
+          );
+        }
       }
 
       collection.images = images;
@@ -112,6 +123,19 @@ export class CollectionsService {
       const images = dto.imageIds.length
         ? await this.imagesRepository.find({ where: { id: In(dto.imageIds) } })
         : [];
+
+      // Vérifier que l'utilisateur peut accéder à toutes les images
+      if (images.length > 0) {
+        const inaccessible = images.filter(
+          (img) => !this.canAccessImage(img, user)
+        );
+        if (inaccessible.length) {
+          throw new ForbiddenException(
+            `Vous ne pouvez pas ajouter ces images à votre collection: ${inaccessible.map((i) => i.id).join(", ")}`
+          );
+        }
+      }
+
       collection.images = images;
     }
 
@@ -148,22 +172,21 @@ export class CollectionsService {
         where: { id: In(addIds) },
       });
 
-      if (user.role !== "admin") {
-        const unauthorized = imagesToAdd.filter(
-          (img) => img.userId !== user.id
-        );
-        if (unauthorized.length) {
-          throw new ForbiddenException(
-            "Vous ne pouvez associer que vos propres images à la collection"
-          );
-        }
-      }
-
       const foundIds = new Set(imagesToAdd.map((i) => i.id));
       const missing = addIds.filter((id) => !foundIds.has(id));
       if (missing.length) {
         throw new NotFoundException(
           `Images non trouvées: ${missing.join(", ")}`
+        );
+      }
+
+      // Vérifier que l'utilisateur peut accéder à toutes les images
+      const inaccessible = imagesToAdd.filter(
+        (img) => !this.canAccessImage(img, user)
+      );
+      if (inaccessible.length) {
+        throw new ForbiddenException(
+          `Vous ne pouvez pas ajouter ces images à votre collection: ${inaccessible.map((i) => i.id).join(", ")}`
         );
       }
     }
@@ -210,5 +233,27 @@ export class CollectionsService {
     }
 
     return collection;
+  }
+
+  /**
+   * Vérifie si un utilisateur peut accéder à une image.
+   * Un utilisateur peut accéder à une image si :
+   * - Il est admin
+   * - Il est le propriétaire de l'image
+   * - L'image est publique (is_private = false) ET approuvée (is_approved = true)
+   */
+  private canAccessImage(image: Image, user: User): boolean {
+    // Les admins peuvent accéder à toutes les images
+    if (user.role === "admin") {
+      return true;
+    }
+
+    // Le propriétaire peut accéder à ses propres images
+    if (image.userId === user.id) {
+      return true;
+    }
+
+    // Les autres utilisateurs peuvent accéder aux images publiques et approuvées
+    return !image.is_private && image.is_approved;
   }
 }

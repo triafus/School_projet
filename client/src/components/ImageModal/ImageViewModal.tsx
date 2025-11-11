@@ -62,6 +62,11 @@ export const ImageViewModal = (props: ImageViewModalProps) => {
 
   const isOwner = user?.id === image?.userId;
   const isInCollectionContext = collectionId !== undefined;
+  // Un utilisateur peut ajouter une image à sa collection si :
+  // - Il est connecté
+  // - L'image est accessible (publique et approuvée, ou il est le propriétaire)
+  // Si l'image est visible dans le modal, elle est accessible
+  const canAddToCollection = user && image && !isInCollectionContext && !showApprovalButton;
 
   const handleOpenEdit = () => {
     setOpenEditModal(true);
@@ -263,40 +268,46 @@ export const ImageViewModal = (props: ImageViewModalProps) => {
                 </Box>
               )}
 
-              {!isInCollectionContext && isOwner && !showApprovalButton && (
+              {!isInCollectionContext && !showApprovalButton && (
                 <Box display="flex" flexDirection="column" gap={1} p={2}>
-                  <Box display="flex" gap={1} justifyContent="end">
-                    <Button
-                      onClick={handleOpenDelete}
-                      color="error"
-                      sx={{ borderRadius: "8px" }}
-                      startIcon={
-                        <DeleteOutline sx={{ color: "#d32f2f", fontSize: 20 }} />
-                      }
-                    >
-                      Supprimer
-                    </Button>
-                    <CustomButton
-                      onClick={handleOpenEdit}
-                      variant="outlined"
-                      startIcon={
-                        <EditOutlined sx={{ color: "#111111", fontSize: 20 }} />
-                      }
-                    >
-                      Modifier
-                    </CustomButton>
-                  </Box>
-                  <Box display="flex" gap={1} justifyContent="end">
-                    <CustomButton
-                      onClick={() => setOpenAddToCollectionModal(true)}
-                      variant="outlined"
-                      startIcon={
-                        <Collections sx={{ color: "#111111", fontSize: 20 }} />
-                      }
-                    >
-                      Ajouter à une collection
-                    </CustomButton>
-                  </Box>
+                  {/* Boutons pour le propriétaire uniquement */}
+                  {isOwner && (
+                    <Box display="flex" gap={1} justifyContent="end">
+                      <Button
+                        onClick={handleOpenDelete}
+                        color="error"
+                        sx={{ borderRadius: "8px" }}
+                        startIcon={
+                          <DeleteOutline sx={{ color: "#d32f2f", fontSize: 20 }} />
+                        }
+                      >
+                        Supprimer
+                      </Button>
+                      <CustomButton
+                        onClick={handleOpenEdit}
+                        variant="outlined"
+                        startIcon={
+                          <EditOutlined sx={{ color: "#111111", fontSize: 20 }} />
+                        }
+                      >
+                        Modifier
+                      </CustomButton>
+                    </Box>
+                  )}
+                  {/* Bouton pour ajouter à une collection - disponible pour tous les utilisateurs connectés */}
+                  {canAddToCollection && (
+                    <Box display="flex" gap={1} justifyContent="end">
+                      <CustomButton
+                        onClick={() => setOpenAddToCollectionModal(true)}
+                        variant="outlined"
+                        startIcon={
+                          <Collections sx={{ color: "#111111", fontSize: 20 }} />
+                        }
+                      >
+                        Ajouter à une collection
+                      </CustomButton>
+                    </Box>
+                  )}
                 </Box>
               )}
 
@@ -332,29 +343,37 @@ export const ImageViewModal = (props: ImageViewModalProps) => {
 
           {!isInCollectionContext && (
             <>
-              <EditImageModal
-                open={openEditModal}
-                onClose={() => setOpenEditModal(false)}
-                image={image}
-                onUpdate={() => {
-                  onClose();
-                }}
-              />
+              {/* Modals pour le propriétaire uniquement */}
+              {isOwner && (
+                <>
+                  <EditImageModal
+                    open={openEditModal}
+                    onClose={() => setOpenEditModal(false)}
+                    image={image}
+                    onUpdate={() => {
+                      onClose();
+                    }}
+                  />
 
-              <DeleteImageModal
-                open={openDeleteModal}
-                onClose={() => setOpenDeleteModal(false)}
-                image={image}
-                onDelete={() => {
-                  onClose();
-                }}
-              />
+                  <DeleteImageModal
+                    open={openDeleteModal}
+                    onClose={() => setOpenDeleteModal(false)}
+                    image={image}
+                    onDelete={() => {
+                      onClose();
+                    }}
+                  />
+                </>
+              )}
 
-              <AddToCollectionModal
-                open={openAddToCollectionModal}
-                onClose={() => setOpenAddToCollectionModal(false)}
-                image={image}
-              />
+              {/* Modal pour ajouter à une collection - disponible pour tous les utilisateurs connectés */}
+              {canAddToCollection && (
+                <AddToCollectionModal
+                  open={openAddToCollectionModal}
+                  onClose={() => setOpenAddToCollectionModal(false)}
+                  image={image}
+                />
+              )}
             </>
           )}
         </Box>
