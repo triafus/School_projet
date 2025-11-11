@@ -1,4 +1,3 @@
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { Login } from "./pages/Login";
 import Register from "./pages/Register";
@@ -9,7 +8,6 @@ import { AdminRoute } from "./routes/AdminRoute";
 import { AuthenticatedRoute } from "./routes/AuthenticatedRoute";
 import NotFound from "./pages/NotFound";
 import Dashboard from "./pages/Dashboard";
-import TestCollectionPage from "./pages/TestCollectionPage";
 import Collection from "./pages/Collection";
 import CollectionDetail from "./pages/CollectionDetail";
 
