@@ -37,8 +37,6 @@ export const TableAppove = () => {
 
   const unapprovedImages = images.filter((image) => !image.is_approved);
 
-  console.log(images);
-
   const getUserName = (userId: number) => {
     const user = users.find((u) => u.id === userId);
     return user ? `${user.firstName} ${user.lastName}` : "Utilisateur inconnu";

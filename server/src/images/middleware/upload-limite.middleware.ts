@@ -9,12 +9,11 @@ export class UploadLimitMiddleware implements NestMiddleware {
 
   async use(req: Request, res: Response, next: NextFunction) {
     const user = req.user as User;
-    
-    // Si l'utilisateur n'est pas authentifié, laisser passer (le guard JWT s'en occupera)
+
     if (!user || !user.id) {
       return next();
     }
-    
+
     const userId = user.id;
     const count = await this.imagesService.getUserImageCount(userId);
 

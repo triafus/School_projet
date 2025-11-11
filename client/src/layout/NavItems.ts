@@ -15,3 +15,18 @@ export const navigationItem = (props: NavItemProps) => {
     },
   ];
 };
+
+type NavItem = {
+  text: string;
+  icon: JSX.Element;
+  path: string;
+  condition?: boolean;
+};
+
+export const MenuItems = (navItems: Array<NavItem>) => {
+  const allItems = navItems;
+
+  return allItems
+    .filter((item) => item.condition !== false)
+    .map((item) => navigationItem(item));
+};

@@ -49,6 +49,26 @@ export class ImagesService {
     return query.getMany();
   }
 
+  async findSelectable(user?: User) {
+    const qb = this.imagesRepository
+      .createQueryBuilder("image")
+      .leftJoinAndSelect("image.user", "user");
+
+    if (user) {
+      qb.where(
+        "(image.is_approved = :appr AND image.is_private = :pub) OR image.userId = :uid",
+        { appr: true, pub: false, uid: user.id }
+      );
+    } else {
+      qb.where("image.is_approved = :appr AND image.is_private = :pub", {
+        appr: true,
+        pub: false,
+      });
+    }
+
+    return qb.getMany();
+  }
+
   async findOne(id: number, userId?: number) {
     const image = await this.imagesRepository.findOne({
       where: { id },
@@ -182,7 +202,9 @@ export class ImagesService {
 
     if (!this.ALLOWED_MIME_TYPES.includes(file.mimetype)) {
       throw new BadRequestException(
-        `Invalid file type. Allowed types: ${this.ALLOWED_MIME_TYPES.join(", ")}`
+        `Invalid file type. Allowed types: ${this.ALLOWED_MIME_TYPES.join(
+          ", "
+        )}`
       );
     }
 

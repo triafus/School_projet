@@ -1,19 +1,12 @@
-import React, { useRef, useState, useCallback } from "react";
-import {
-  Box,
-  Typography,
-  IconButton,
-  Chip,
-  styled,
-  Button,
-} from "@mui/material";
+import React, { useState, useCallback } from "react";
+import { Box } from "@mui/material";
 import { Add } from "@mui/icons-material";
+import { useAuth } from "../hooks/useAuth";
 import { useImages } from "../hooks/useImage";
 import { Image } from "../types/image";
 import { AddImageModal } from "../components/ImageModal/AddImageModal";
 import { ImageViewModal } from "../components/ImageModal/ImageViewModal";
 import { CustomButton } from "../components/CustomButton";
-import { useAuth } from "../hooks/useAuth";
 import { GalleryImageCard } from "../components/GalleryImageCard";
 
 const Gallery = () => {
@@ -83,7 +76,6 @@ const Gallery = () => {
         p: "3rem 0",
       }}
     >
-      {/* Fond */}
       <Box
         sx={{
           position: "fixed",

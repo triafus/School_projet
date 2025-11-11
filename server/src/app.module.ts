@@ -7,7 +7,9 @@ import { AuthModule } from "./auth/auth.module";
 import { UsersModule } from "./users/users.module";
 import { User } from "./users/user.entity";
 import { Image } from "./images/image.entity";
+import { Collection } from "./collections/collection.entity";
 import { ImagesModule } from "./images/images.module";
+import { CollectionsModule } from "./collections/collections.module";
 import { HealthController } from "./health/health.controller";
 
 @Module({
@@ -20,7 +22,7 @@ import { HealthController } from "./health/health.controller";
         ? {
             type: "sqlite",
             database: ":memory:",
-            entities: [User, Image],
+            entities: [User, Image, Collection],
             synchronize: true,
             logging: false,
           }
@@ -35,7 +37,7 @@ import { HealthController } from "./health/health.controller";
               process.env.DB_SSL === "true"
                 ? { rejectUnauthorized: false }
                 : false,
-            entities: [User, Image],
+            entities: [User, Image, Collection],
             synchronize: true,
             logging: process.env.NODE_ENV !== "test",
             logger: "advanced-console",
@@ -51,6 +53,7 @@ import { HealthController } from "./health/health.controller";
     AuthModule,
     UsersModule,
     ImagesModule,
+    CollectionsModule,
   ],
   controllers: [HealthController],
 })

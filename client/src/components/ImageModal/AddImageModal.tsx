@@ -1,6 +1,5 @@
 import React from "react";
 import { Divider } from "@mui/material";
-import { useAuth } from "../../hooks/useAuth";
 import { usePostImage } from "../../hooks/useImage";
 import { useImageForm } from "../../hooks/useImageForm";
 import { CustomButton } from "../CustomButton";
@@ -16,7 +15,6 @@ interface AddImageModalProps {
 export const AddImageModal = (props: AddImageModalProps) => {
   const { open, onClose } = props;
 
-  const { user } = useAuth();
   const { mutateAsync: postImage, isPending, error } = usePostImage();
 
   const {

@@ -29,29 +29,22 @@ export class UsersService {
   }
 
   async create(createUserDto: CreateUserDto): Promise<User> {
-    console.log("DTO reçu :", createUserDto);
-
     const existingUser = await this.usersRepository.findOne({
       where: { email: createUserDto.email },
     });
-    console.log("existingUser :", existingUser);
 
     if (existingUser) {
       throw new ConflictException("Un utilisateur avec cet email existe déjà");
     }
 
     const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
-    console.log("Password hashé :", hashedPassword);
 
     const user = this.usersRepository.create({
       ...createUserDto,
       password: hashedPassword,
     });
 
-    console.log("Entité construite :", user);
-
     const savedUser = await this.usersRepository.save(user);
-    console.log("User sauvegardé :", savedUser);
 
     return savedUser;
   }

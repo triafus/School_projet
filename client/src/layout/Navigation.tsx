@@ -20,6 +20,7 @@ import {
   Menu as MenuIcon,
   ChevronLeft as ChevronLeftIcon,
   MoreHorizOutlined,
+  CollectionsBookmarkOutlined as CollectionsIcon,
 } from "@mui/icons-material";
 import { Link, Outlet, useLocation } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
@@ -44,28 +45,32 @@ const Navigation = () => {
   const isAdmin = user?.role === "admin";
   const isActive = (path: string) => location.pathname === path;
 
+
   const MenuItems = () => {
-    const navAuth =
-      isAuthenticated &&
-      navigationItem({
-        text: "Dashboard",
-        icon: <DashboardIcon />,
-        path: "/dashboard",
-      });
-    const navAdmin =
-      isAdmin &&
-      navigationItem({
-        text: "Administration",
-        icon: <AdminIcon />,
-        path: "/administration",
-      });
-    const navdefault = navigationItem({
-      text: "Home",
-      icon: <HomeIcon />,
-      path: "/",
-    });
-    return [...navdefault, ...(navAuth || []), ...(navAdmin || [])];
+    const createNavItem = (text: string, icon: React.ReactNode, path: string) =>
+      navigationItem({ text, icon, path });
+
+
+    const navItems = [
+      createNavItem("Home", <HomeIcon />, "/"),
+      ...(isAuthenticated
+        ? [
+            createNavItem("Dashboard", <DashboardIcon />, "/dashboard"),
+            createNavItem("Collections", <CollectionsIcon />, "/collection"),
+          ]
+        : []),
+      ...(isAdmin
+        ? [createNavItem("Administration", <AdminIcon />, "/administration")]
+        : []),
+    ];
+
+
+    return Object.values(navItems).flat();
+
+
+
   };
+
 
   const handleDrawerToggle = () => {
     if (isMobile) {

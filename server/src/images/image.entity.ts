@@ -3,12 +3,12 @@ import {
   PrimaryGeneratedColumn,
   Column,
   ManyToOne,
-  JoinColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  ManyToMany,
 } from "typeorm";
 import { User } from "../users/user.entity";
-import { Expose } from "class-transformer";
+import { Collection } from "../collections/collection.entity";
 
 @Entity()
 export class Image {
@@ -38,6 +38,9 @@ export class Image {
 
   @Column()
   userId: number;
+
+  @ManyToMany(() => Collection, (collection) => collection.images)
+  collections: Collection[];
 
   @CreateDateColumn({ name: "created_at" })
   created_at: Date;

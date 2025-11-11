@@ -1,7 +1,9 @@
-import React, { useCallback } from "react";
+import React, { useState } from "react";
 import { Box, Typography, IconButton, Chip, styled } from "@mui/material";
-import { Favorite, FavoriteBorder, Share } from "@mui/icons-material";
+import { Favorite, FavoriteBorder, Share, Collections } from "@mui/icons-material";
 import { Image } from "../types/image";
+import { AddToCollectionModal } from "./collections/AddToCollectionModal";
+import { useAuth } from "../hooks/useAuth";
 
 interface GalleryImageCardProps {
   image: Image;
@@ -57,14 +59,24 @@ export const GalleryImageCard = React.memo(
     onToggleFavorite,
     onImageLoad,
   }: GalleryImageCardProps) => {
+    const { user } = useAuth();
+    const [openAddToCollection, setOpenAddToCollection] = useState(false);
+    const isOwner = user?.id === image.userId;
+
+    const handleAddToCollection = (e: React.MouseEvent) => {
+      e.stopPropagation();
+      setOpenAddToCollection(true);
+    };
+
     return (
-      <ArtworkCard
-        sx={{
-          gridRowEnd: orientation === "portrait" ? "span 2" : "span 1",
-          height: orientation === "portrait" ? "420px" : "200px",
-        }}
-        onClick={onImageClick}
-      >
+      <>
+        <ArtworkCard
+          sx={{
+            gridRowEnd: orientation === "portrait" ? "span 2" : "span 1",
+            height: orientation === "portrait" ? "420px" : "200px",
+          }}
+          onClick={onImageClick}
+        >
         <Box
           component="img"
           src={image.url}
@@ -133,6 +145,20 @@ export const GalleryImageCard = React.memo(
             {isFavorite ? <Favorite /> : <FavoriteBorder />}
           </IconButton>
 
+          {isOwner && (
+            <IconButton
+              sx={{
+                background: "rgba(255,255,255,0.1)",
+                backdropFilter: "blur(10px)",
+                color: "#ffffff",
+                "&:hover": { background: "rgba(255,255,255,0.2)" },
+              }}
+              onClick={handleAddToCollection}
+            >
+              <Collections />
+            </IconButton>
+          )}
+
           <IconButton
             sx={{
               background: "rgba(255,255,255,0.1)",
@@ -146,6 +172,13 @@ export const GalleryImageCard = React.memo(
           </IconButton>
         </Box>
       </ArtworkCard>
+
+      <AddToCollectionModal
+        open={openAddToCollection}
+        onClose={() => setOpenAddToCollection(false)}
+        image={image}
+      />
+    </>
     );
   }
 );

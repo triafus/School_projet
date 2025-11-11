@@ -1,4 +1,3 @@
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { Login } from "./pages/Login";
 import Register from "./pages/Register";
@@ -9,6 +8,8 @@ import { AdminRoute } from "./routes/AdminRoute";
 import { AuthenticatedRoute } from "./routes/AuthenticatedRoute";
 import NotFound from "./pages/NotFound";
 import Dashboard from "./pages/Dashboard";
+import Collection from "./pages/Collection";
+import CollectionDetail from "./pages/CollectionDetail";
 
 const router = createBrowserRouter([
   {
@@ -34,6 +35,24 @@ const router = createBrowserRouter([
         element: (
           <AuthenticatedRoute>
             <Dashboard />
+          </AuthenticatedRoute>
+        ),
+        errorElement: <NotFound />,
+      },
+      {
+        path: "/collection",
+        element: (
+          <AuthenticatedRoute>
+            <Collection />
+          </AuthenticatedRoute>
+        ),
+        errorElement: <NotFound />,
+      },
+      {
+        path: "/collection/:id",
+        element: (
+          <AuthenticatedRoute>
+            <CollectionDetail />
           </AuthenticatedRoute>
         ),
         errorElement: <NotFound />,
