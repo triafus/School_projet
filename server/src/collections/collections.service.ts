@@ -22,6 +22,7 @@ export class CollectionsService {
     private imagesRepository: Repository<Image>
   ) {}
 
+  
   async findAll(userId?: number) {
     const query = this.collectionsRepository
       .createQueryBuilder("collection")

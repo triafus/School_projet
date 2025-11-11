@@ -2,16 +2,15 @@ import axios from "axios";
 import { Collection, CollectionFormData } from "../types/collection";
 import { apiClient } from "../apiClient";
 
-const BASE_URL = "/api/collections";
 
 export const collectionService = {
   getAll: async (): Promise<Collection[]> => {
-    const response = await axios.get(BASE_URL);
+    const response = await apiClient.get("/collections");
     return response.data;
   },
 
   getOne: async (id: number): Promise<Collection> => {
-    const response = await axios.get(`${BASE_URL}/${id}`);
+    const response = await apiClient.get(`/collections/${id}`);
     return response.data;
   },
 

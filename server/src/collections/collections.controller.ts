@@ -10,6 +10,7 @@ import {
   Req,
 } from "@nestjs/common";
 import { JwtAuthGuard } from "../auth/jwt-auth.guard";
+import { OptionalJwtAuthGuard } from "../auth/optional-jwt-auth.guard";
 import { CollectionsService } from "./collections.service";
 import { CreateCollectionDto } from "./dto/create-collection.dto";
 import { UpdateCollectionDto } from "./dto/update-collection.dto";
@@ -22,12 +23,14 @@ export class CollectionsController {
   constructor(private readonly collectionsService: CollectionsService) {}
 
   @Get()
+  @UseGuards(OptionalJwtAuthGuard)
   async findAll(@Req() req: Request) {
     const userId = req.user ? (req.user as User).id : undefined;
     return this.collectionsService.findAll(userId);
   }
 
   @Get(":id")
+  @UseGuards(OptionalJwtAuthGuard)
   async findOne(@Param("id") id: string, @Req() req: Request) {
     return this.collectionsService.findOne(
       parseInt(id),

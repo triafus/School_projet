@@ -72,6 +72,7 @@ const CollectionPage = () => {
     collection.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+
   const NewCollectionCard = ({ onClick }: { onClick: () => void }) => (
     <Button
       onClick={onClick}

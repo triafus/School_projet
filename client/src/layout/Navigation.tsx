@@ -14,7 +14,7 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import {
-  CollectionsOutlined as CollectionIcon,
+  AutoAwesomeMosaicOutlined as HomeIcon,
   Dashboard as DashboardIcon,
   AdminPanelSettings as AdminIcon,
   Menu as MenuIcon,
@@ -45,9 +45,11 @@ const Navigation = () => {
   const isAdmin = user?.role === "admin";
   const isActive = (path: string) => location.pathname === path;
 
+
   const MenuItems = () => {
     const createNavItem = (text: string, icon: React.ReactNode, path: string) =>
       navigationItem({ text, icon, path });
+
 
     const navItems = [
       createNavItem("Home", <HomeIcon />, "/"),
@@ -62,8 +64,13 @@ const Navigation = () => {
         : []),
     ];
 
+
     return Object.values(navItems).flat();
+
+
+
   };
+
 
   const handleDrawerToggle = () => {
     if (isMobile) {
@@ -73,35 +80,6 @@ const Navigation = () => {
       setIsCollapsed(!isCollapsed);
     }
   };
-
-  const isAdmin = user?.role === "admin";
-
-  const menuItems = [
-    {
-      text: "Home",
-      icon: <DashboardIcon />,
-      path: "/",
-      color: "#667eea",
-    },
-    ...(user?.role && isAdmin
-      ? [
-          {
-            text: "Admin Panel",
-            icon: <AdminIcon />,
-            path: "/admin/dashboard",
-            color: "#f093fb",
-          },
-          {
-            text: "Collection",
-            icon: <CollectionIcon />,
-            path: "/admin/collection",
-            color: "#f093fb",
-          },
-        ]
-      : []),
-  ];
-
-  const isActive = (path: string) => location.pathname === path;
 
   const drawerContent = (
     <Box
