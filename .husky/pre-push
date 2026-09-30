@@ -1,0 +1,11 @@
+cd client
+pnpm install
+pnpm run lint || true
+pnpm audit --prod || true
+pnpm build
+
+cd ../server
+pnpm install
+pnpm run lint || true
+pnpm audit --prod || true
+pnpm build
