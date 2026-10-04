@@ -120,6 +120,13 @@ export class ImagesService {
     const image = await this.verifyOwnership(id, user);
     const oldIsPrivate = image.is_private;
 
+    if (updateImageDto.title !== undefined) {
+      image.title = updateImageDto.title;
+    }
+    if (updateImageDto.description !== undefined) {
+      image.description = updateImageDto.description;
+    }
+
     if (
       updateImageDto.is_private !== undefined &&
       updateImageDto.is_private !== oldIsPrivate
@@ -139,9 +146,9 @@ export class ImagesService {
 
       image.url = url;
       image.key = key;
+      image.is_private = updateImageDto.is_private;
     }
 
-    Object.assign(image, updateImageDto);
     return this.imagesRepository.save(image);
   }
 

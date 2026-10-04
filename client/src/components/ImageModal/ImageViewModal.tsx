@@ -270,14 +270,25 @@ export const ImageViewModal = (props: ImageViewModalProps) => {
                 )}
 
               {!isInCollectionContext && !showApprovalButton && (
-                <Box display="flex" flexDirection="column" gap={1} p={2}>
+                <Box
+                  display="flex"
+                  flexWrap="wrap"
+                  alignItems="center"
+                  justifyContent="flex-end"
+                  gap={1.5}
+                  p={2}
+                >
                   {/* Boutons pour le propriétaire uniquement */}
                   {isOwner && (
-                    <Box display="flex" gap={1} justifyContent="end">
+                    <>
                       <Button
                         onClick={handleOpenDelete}
                         color="error"
-                        sx={{ borderRadius: '8px' }}
+                        sx={{
+                          borderRadius: '8px',
+                          textTransform: 'none',
+                          fontWeight: 600,
+                        }}
                         startIcon={
                           <DeleteOutline
                             sx={{ color: '#d32f2f', fontSize: 20 }}
@@ -289,31 +300,21 @@ export const ImageViewModal = (props: ImageViewModalProps) => {
                       <CustomButton
                         onClick={handleOpenEdit}
                         variant="outlined"
-                        startIcon={
-                          <EditOutlined
-                            sx={{ color: '#111111', fontSize: 20 }}
-                          />
-                        }
+                        startIcon={<EditOutlined sx={{ fontSize: 20 }} />}
                       >
                         Modifier
                       </CustomButton>
-                    </Box>
+                    </>
                   )}
                   {/* Bouton pour ajouter à une collection - disponible pour tous les utilisateurs connectés */}
                   {canAddToCollection && (
-                    <Box display="flex" gap={1} justifyContent="end">
-                      <CustomButton
-                        onClick={() => setOpenAddToCollectionModal(true)}
-                        variant="outlined"
-                        startIcon={
-                          <Collections
-                            sx={{ color: '#111111', fontSize: 20 }}
-                          />
-                        }
-                      >
-                        Ajouter à une collection
-                      </CustomButton>
-                    </Box>
+                    <CustomButton
+                      onClick={() => setOpenAddToCollectionModal(true)}
+                      variant="outlined"
+                      startIcon={<Collections sx={{ fontSize: 20 }} />}
+                    >
+                      Ajouter à une collection
+                    </CustomButton>
                   )}
                 </Box>
               )}
