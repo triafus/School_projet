@@ -26,6 +26,7 @@ pnpm-lock.yaml
 
 # Variables d'environnement
 .env
+.env.test
 .env.local
 .env.*.local
 
