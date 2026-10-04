@@ -1,10 +1,17 @@
 module.exports = {
+  moduleFileExtensions: ['js', 'json', 'ts'],
+  rootDir: '../',
   testEnvironment: 'node',
-  testMatch: ['**/*.test.ts', '**/*.spec.ts'],
+  testRegex: 'test_integration/.*\\.int-spec\\.ts$',
   transform: {
     '^.+\\.(t|j)s$': 'ts-jest'
   },
-  // IMPORTANT: We use a real Postgres database flow for integration tests, not SQLite.
-  // Ensure that tests connect to a separate test database (e.g., using DB_TEST_DATABASE).
-  // You should run a SQL script to reset the database between tests instead of relying on SQLite's in-memory recreation.
+  moduleNameMapper: {
+    '^typeorm$': '<rootDir>/node_modules/typeorm/index.js',
+    '^uuid$': require.resolve('uuid')
+  },
+  testTimeout: 30000,
+  verbose: true,
+  forceExit: true,
+  setupFiles: ['<rootDir>/test_integration/setup-env.ts']
 };
