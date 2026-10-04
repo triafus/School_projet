@@ -1,9 +1,9 @@
-import Box from "@mui/material/Box";
-import Chip from "@mui/material/Chip";
-import { Image } from "../types/image";
-import { useSignedUrl } from "../hooks/useImage";
-import { useEffect, useState } from "react";
-import { ImageViewModal } from "./ImageModal/ImageViewModal";
+import Box from '@mui/material/Box';
+import Chip from '@mui/material/Chip';
+import { Image } from '../types/image';
+import { useSignedUrl } from '../hooks/useImage';
+import { useEffect, useState } from 'react';
+import { ImageViewModal } from './ImageModal/ImageViewModal';
 
 interface ImageCardProps {
   image: Image;
@@ -35,14 +35,14 @@ export const ImageCard = (props: ImageCardProps) => {
     <Box
       sx={{
         borderRadius: 3,
-        position: "relative",
-        width: "100%",
+        position: 'relative',
+        width: '100%',
         maxHeight: 200,
-        overflow: "hidden",
-        backgroundColor: "#ededed",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
+        overflow: 'hidden',
+        backgroundColor: '#ededed',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
       }}
     >
       {isPrivate && (
@@ -50,12 +50,12 @@ export const ImageCard = (props: ImageCardProps) => {
           label="Privé"
           size="small"
           sx={{
-            position: "absolute",
+            position: 'absolute',
             top: 12,
             right: 12,
-            backgroundColor: "rgba(0,0,0,0.7)",
-            color: "white",
-            fontSize: "0.75rem",
+            backgroundColor: 'rgba(0,0,0,0.7)',
+            color: 'white',
+            fontSize: '0.75rem',
             height: 24,
             zIndex: 1,
           }}
@@ -67,12 +67,12 @@ export const ImageCard = (props: ImageCardProps) => {
           label="En attente"
           size="small"
           sx={{
-            position: "absolute",
+            position: 'absolute',
             top: 12,
             right: 12,
-            bgcolor: "#fef3c7",
-            color: "#92400e",
-            fontSize: "0.75rem",
+            bgcolor: '#fef3c7',
+            color: '#92400e',
+            fontSize: '0.75rem',
             height: 24,
             zIndex: 1,
           }}
@@ -85,15 +85,15 @@ export const ImageCard = (props: ImageCardProps) => {
         alt={title}
         onClick={onClick}
         sx={{
-          width: "100%",
-          height: "auto",
+          width: '100%',
+          height: 'auto',
           maxHeight: 200,
-          objectFit: "cover",
-          transition: "transform 0.3s ease",
-          "&:hover": {
-            transform: "scale(1.02)",
-            filter: "contrast(110%)",
-            cursor: "pointer",
+          objectFit: 'cover',
+          transition: 'transform 0.3s ease',
+          '&:hover': {
+            transform: 'scale(1.02)',
+            filter: 'contrast(110%)',
+            cursor: 'pointer',
           },
         }}
       />

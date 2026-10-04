@@ -29,7 +29,9 @@
     "start": "vite",
     "build": "vite build",
     "test": "vitest run",
-    "eject": "echo \"No eject for vite!\""
+    "eject": "echo \"No eject for vite!\"",
+    "lint": "eslint \"src/**/*.{ts,tsx}\" --fix",
+    "format": "prettier --write \"src/**/*.{ts,tsx}\""
   },
   "browserslist": {
     "production": [
@@ -46,7 +48,12 @@
   "proxy": "http://localhost:3001",
   "devDependencies": {
     "@netlify/vite-plugin": "^2.5.4",
+    "@typescript-eslint/eslint-plugin": "^8.71.0",
+    "@typescript-eslint/parser": "^8.71.0",
     "@vitejs/plugin-react": "^4.7.0",
+    "eslint": "^8.57.1",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.6",
     "vite": "^6.3.5",
     "vitest": "^5.0.3"
   }

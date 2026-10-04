@@ -7,8 +7,9 @@ export class OptionalJwtAuthGuard extends AuthGuard('jwt') {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     // Vérifions d'abord si un token existe dans la requête
     const request = context.switchToHttp().getRequest();
-    const authHeader = request.headers.authorization || request.headers.Authorization;
-    
+    const authHeader =
+      request.headers.authorization || request.headers.Authorization;
+
     // Si aucun token n'est présent, on permet l'accès sans authentification
     // On définit req.user à undefined pour être explicite
     if (!authHeader || !authHeader.startsWith('Bearer ')) {

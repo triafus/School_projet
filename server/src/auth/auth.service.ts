@@ -1,15 +1,15 @@
-import { Injectable, UnauthorizedException } from "@nestjs/common";
-import { JwtService } from "@nestjs/jwt";
-import { UsersService } from "../users/users.service";
-import { User } from "../users/user.entity";
-import { CreateUserDto } from "../users/dto/create-user.dto";
-import { LoginDto } from "./dto/login.dto";
+import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
+import { UsersService } from '../users/users.service';
+import { User } from '../users/user.entity';
+import { CreateUserDto } from '../users/dto/create-user.dto';
+import { LoginDto } from './dto/login.dto';
 
 @Injectable()
 export class AuthService {
   constructor(
     private usersService: UsersService,
-    private jwtService: JwtService
+    private jwtService: JwtService,
   ) {}
 
   async validateUser(email: string, password: string): Promise<User | null> {
@@ -21,7 +21,7 @@ export class AuthService {
 
     const isValid = await this.usersService.validatePassword(
       password,
-      user.password
+      user.password,
     );
     return isValid ? user : null;
   }
@@ -31,12 +31,12 @@ export class AuthService {
     const user = await this.validateUser(email, password);
 
     if (!user) {
-      throw new UnauthorizedException("Identifiants invalides");
+      throw new UnauthorizedException('Identifiants invalides');
     }
 
     const payload = { email: user.email, sub: user.id, role: user.role };
     return {
-      access_token: this.jwtService.sign(payload, { expiresIn: "1h" }),
+      access_token: this.jwtService.sign(payload, { expiresIn: '1h' }),
       user: {
         id: user.id,
         email: user.email,
@@ -52,7 +52,7 @@ export class AuthService {
 
     const payload = { email: user.email, sub: user.id, role: user.role };
     return {
-      access_token: this.jwtService.sign(payload, { expiresIn: "1h" }),
+      access_token: this.jwtService.sign(payload, { expiresIn: '1h' }),
       user: {
         id: user.id,
         email: user.email,

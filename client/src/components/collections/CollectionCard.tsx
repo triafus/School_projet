@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   Card,
   CardContent,
@@ -7,14 +7,14 @@ import {
   IconButton,
   Chip,
   Box,
-} from "@mui/material";
+} from '@mui/material';
 import {
   Visibility as ViewIcon,
   Edit as EditIcon,
   Delete as DeleteIcon,
   Person as PersonIcon,
-} from "@mui/icons-material";
-import { Collection } from "../../types/collection";
+} from '@mui/icons-material';
+import { Collection } from '../../types/collection';
 
 interface CollectionCardProps {
   collection: Collection;
@@ -38,10 +38,10 @@ const CollectionCard = ({
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString("fr-FR", {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric",
+    return date.toLocaleDateString('fr-FR', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
     });
   };
 
@@ -50,24 +50,24 @@ const CollectionCard = ({
       sx={{
         maxWidth: 280,
         minHeight: 280,
-        cursor: "pointer",
-        transition: "all 0.2s ease-in-out",
-        "&:hover": {
-          transform: "translateY(-4px)",
+        cursor: 'pointer',
+        transition: 'all 0.2s ease-in-out',
+        '&:hover': {
+          transform: 'translateY(-4px)',
           boxShadow: 3,
         },
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "space-between",
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
       }}
       onClick={() => onView?.(collection.id)}
     >
       <CardContent sx={{ flexGrow: 1 }}>
-        <Box sx={{ display: "flex", justifyContent: "space-between", mb: 1 }}>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
           <Chip
             size="small"
-            label={collection.is_private ? "Privé" : "Public"}
-            color={collection.is_private ? "secondary" : "primary"}
+            label={collection.is_private ? 'Privé' : 'Public'}
+            color={collection.is_private ? 'secondary' : 'primary'}
             variant="outlined"
           />
           <Typography variant="caption" color="text.secondary">
@@ -89,26 +89,26 @@ const CollectionCard = ({
             color="text.secondary"
             sx={{
               mb: 2,
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              display: "-webkit-box",
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              display: '-webkit-box',
               WebkitLineClamp: 2,
-              WebkitBoxOrient: "vertical",
+              WebkitBoxOrient: 'vertical',
             }}
           >
             {collection.description}
           </Typography>
         )}
 
-        <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
           <Typography variant="body2" color="text.secondary">
             {collection.images?.length || 0} image
-            {collection.images?.length !== 1 ? "s" : ""}
+            {collection.images?.length !== 1 ? 's' : ''}
           </Typography>
         </Box>
 
         {!collection.is_private && collection.user && (
-          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
             <PersonIcon fontSize="small" color="action" />
             <Typography variant="caption" color="text.secondary">
               {collection.user.firstName && collection.user.lastName
@@ -119,7 +119,7 @@ const CollectionCard = ({
         )}
       </CardContent>
 
-      <CardActions sx={{ justifyContent: "space-between", px: 2, pb: 2 }}>
+      <CardActions sx={{ justifyContent: 'space-between', px: 2, pb: 2 }}>
         <Box>
           <IconButton
             size="small"

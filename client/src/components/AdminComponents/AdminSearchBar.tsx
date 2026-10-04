@@ -1,6 +1,6 @@
-import React from "react";
-import { TextField, InputAdornment } from "@mui/material";
-import { Search as SearchIcon } from "@mui/icons-material";
+import React from 'react';
+import { TextField, InputAdornment } from '@mui/material';
+import { Search as SearchIcon } from '@mui/icons-material';
 
 interface AdminSearchBarProps {
   searchQuery: string;
@@ -23,10 +23,10 @@ const AdminSearchBar = (props: AdminSearchBarProps) => {
         ),
       }}
       sx={{
-        bgcolor: "white",
+        bgcolor: 'white',
         borderRadius: 2,
         minWidth: 250,
-        "& .MuiOutlinedInput-root": {
+        '& .MuiOutlinedInput-root': {
           borderRadius: 2,
         },
       }}

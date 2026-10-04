@@ -1,5 +1,5 @@
-import { User } from "./user";
-import { Image } from "./image";
+import { User } from './user';
+import { Image } from './image';
 
 export interface Collection {
   id: number;

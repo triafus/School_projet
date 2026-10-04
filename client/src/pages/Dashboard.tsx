@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   Box,
   Typography,
@@ -7,29 +7,29 @@ import {
   Grid,
   Container,
   InputAdornment,
-} from "@mui/material";
-import { Add, Search as SearchIcon } from "@mui/icons-material";
-import { ImageCard } from "../components/ImageCard";
-import { useAuth } from "../hooks/useAuth";
-import { Image } from "../types/image";
-import { AddImageModal } from "../components/ImageModal/AddImageModal";
-import { ImageViewModal } from "../components/ImageModal/ImageViewModal";
-import { CustomButton } from "../components/CustomButton";
-import { useUserImages } from "../hooks/useImage";
+} from '@mui/material';
+import { Add, Search as SearchIcon } from '@mui/icons-material';
+import { ImageCard } from '../components/ImageCard';
+import { useAuth } from '../hooks/useAuth';
+import { Image } from '../types/image';
+import { AddImageModal } from '../components/ImageModal/AddImageModal';
+import { ImageViewModal } from '../components/ImageModal/ImageViewModal';
+import { CustomButton } from '../components/CustomButton';
+import { useUserImages } from '../hooks/useImage';
 
 const Dashboard = () => {
-  const [searchQuery, setSearchQuery] = useState<string>("");
-  const [activeFilter, setActiveFilter] = useState<string>("Toutes");
+  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [activeFilter, setActiveFilter] = useState<string>('Toutes');
   const [open, setOpen] = useState<boolean>(false);
   const [selectedImage, setSelectedImage] = useState<Image | null>(null);
 
   const { data: userImages } = useUserImages();
 
   const [filteredImages, setFilteredImages] = useState<Image[]>(
-    userImages || []
+    userImages || [],
   );
 
-  const filters = ["Toutes", "Publiques", "Privées"];
+  const filters = ['Toutes', 'Publiques', 'Privées'];
 
   useEffect(() => {
     if (userImages) {
@@ -42,45 +42,45 @@ const Dashboard = () => {
   const handleFilterChange = useMemo(
     () => (filter: string) => {
       setActiveFilter(filter);
-      if (filter === "Toutes") {
+      if (filter === 'Toutes') {
         setFilteredImages(userImages || []);
-      } else if (filter === "Publiques") {
+      } else if (filter === 'Publiques') {
         setFilteredImages(
-          (userImages || []).filter((image) => !image.is_private)
+          (userImages || []).filter((image) => !image.is_private),
         );
-      } else if (filter === "Privées") {
+      } else if (filter === 'Privées') {
         setFilteredImages(
-          (userImages || []).filter((image) => image.is_private)
+          (userImages || []).filter((image) => image.is_private),
         );
       }
     },
-    [userImages]
+    [userImages],
   );
 
   return (
-    <Container sx={{ p: 4, bgcolor: "#fafafa", minHeight: "100vh" }}>
+    <Container sx={{ p: 4, bgcolor: '#fafafa', minHeight: '100vh' }}>
       <Box
         sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
           mb: 3,
-          flexWrap: "wrap",
+          flexWrap: 'wrap',
           gap: 2,
         }}
       >
         <Box>
           <Typography
             variant="h5"
-            sx={{ fontWeight: 600, color: "#1f2937", mb: 0.5 }}
+            sx={{ fontWeight: 600, color: '#1f2937', mb: 0.5 }}
           >
             Mes Images
           </Typography>
-          <Typography variant="body2" sx={{ color: "#6b7280" }}>
+          <Typography variant="body2" sx={{ color: '#6b7280' }}>
             {userImages?.length} Images
           </Typography>
         </Box>
-        <Box sx={{ display: "flex", gap: 2 }}>
+        <Box sx={{ display: 'flex', gap: 2 }}>
           <TextField
             size="small"
             placeholder="Rechercher..."
@@ -94,10 +94,10 @@ const Dashboard = () => {
               ),
             }}
             sx={{
-              bgcolor: "white",
+              bgcolor: 'white',
               borderRadius: 2,
               minWidth: 250,
-              "& .MuiOutlinedInput-root": {
+              '& .MuiOutlinedInput-root': {
                 borderRadius: 2,
               },
             }}
@@ -109,16 +109,16 @@ const Dashboard = () => {
       </Box>
       <Box
         sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
           mb: 4,
         }}
       >
-        <Box sx={{ display: "flex", gap: 1 }}>
+        <Box sx={{ display: 'flex', gap: 1 }}>
           <Typography
             variant="body2"
-            sx={{ mr: 2, alignSelf: "center", color: "text.secondary" }}
+            sx={{ mr: 2, alignSelf: 'center', color: 'text.secondary' }}
           >
             Filtres:
           </Typography>
@@ -127,15 +127,15 @@ const Dashboard = () => {
               key={filter}
               label={filter}
               onClick={() => handleFilterChange(filter)}
-              variant={activeFilter === filter ? "filled" : "outlined"}
+              variant={activeFilter === filter ? 'filled' : 'outlined'}
               sx={{
                 backgroundColor:
-                  activeFilter === filter ? "#2c3e50" : "transparent",
-                color: activeFilter === filter ? "white" : "text.primary",
-                borderColor: activeFilter === filter ? "#2c3e50" : "#e0e0e0",
-                "&:hover": {
+                  activeFilter === filter ? '#2c3e50' : 'transparent',
+                color: activeFilter === filter ? 'white' : 'text.primary',
+                borderColor: activeFilter === filter ? '#2c3e50' : '#e0e0e0',
+                '&:hover': {
                   backgroundColor:
-                    activeFilter === filter ? "#34495e" : "#f5f5f5",
+                    activeFilter === filter ? '#34495e' : '#f5f5f5',
                 },
                 borderRadius: 2,
               }}
@@ -152,9 +152,9 @@ const Dashboard = () => {
             <Typography
               variant="body1"
               sx={{
-                color: "white",
+                color: 'white',
                 fontWeight: 500,
-                textAlign: "center",
+                textAlign: 'center',
               }}
             >
               {image.title}

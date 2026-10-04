@@ -1,11 +1,11 @@
-import { Button, ButtonProps } from "@mui/material";
-import { forwardRef } from "react";
+import { Button, ButtonProps } from '@mui/material';
+import { forwardRef } from 'react';
 
 export type CustomButtonProps = ButtonProps & {};
 
 export const CustomButton = forwardRef<HTMLButtonElement, CustomButtonProps>(
   (props, ref) => {
-    const { children, sx, variant = "contained", ...rest } = props;
+    const { children, sx, variant = 'contained', ...rest } = props;
 
     return (
       <Button
@@ -13,23 +13,23 @@ export const CustomButton = forwardRef<HTMLButtonElement, CustomButtonProps>(
         variant={variant}
         {...rest}
         sx={{
-          maxHeight: "40px",
-          "&.MuiButton-root.Mui-disabled": {
-            backgroundColor: "rgba(0, 0, 0, 0.12)",
+          maxHeight: '40px',
+          '&.MuiButton-root.Mui-disabled': {
+            backgroundColor: 'rgba(0, 0, 0, 0.12)',
           },
-          "&.MuiButton-contained": {
-            backgroundColor: "#2c3e50",
-            "&:hover": {
-              backgroundColor: "#34495e",
+          '&.MuiButton-contained': {
+            backgroundColor: '#2c3e50',
+            '&:hover': {
+              backgroundColor: '#34495e',
             },
           },
-          "&.MuiButton-outlined": {
-            color: "#2c3e50",
-            borderColor: "#2c3e50",
-            "&:hover": {
-              color: "#34495e",
-              borderColor: "#34495e",
-              backgroundColor: "rgba(0, 0, 0, 0.08)",
+          '&.MuiButton-outlined': {
+            color: '#2c3e50',
+            borderColor: '#2c3e50',
+            '&:hover': {
+              color: '#34495e',
+              borderColor: '#34495e',
+              backgroundColor: 'rgba(0, 0, 0, 0.08)',
             },
           },
 
@@ -40,7 +40,7 @@ export const CustomButton = forwardRef<HTMLButtonElement, CustomButtonProps>(
         {children}
       </Button>
     );
-  }
+  },
 );
 
-CustomButton.displayName = "CustomButton";
+CustomButton.displayName = 'CustomButton';

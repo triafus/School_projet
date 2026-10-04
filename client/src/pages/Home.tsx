@@ -1,20 +1,20 @@
-import React, { useState, useCallback } from "react";
-import { Box } from "@mui/material";
-import { Add } from "@mui/icons-material";
-import { useAuth } from "../hooks/useAuth";
-import { useImages } from "../hooks/useImage";
-import { Image } from "../types/image";
-import { AddImageModal } from "../components/ImageModal/AddImageModal";
-import { ImageViewModal } from "../components/ImageModal/ImageViewModal";
-import { CustomButton } from "../components/CustomButton";
-import { GalleryImageCard } from "../components/GalleryImageCard";
+import React, { useState, useCallback } from 'react';
+import { Box } from '@mui/material';
+import { Add } from '@mui/icons-material';
+import { useAuth } from '../hooks/useAuth';
+import { useImages } from '../hooks/useImage';
+import { Image } from '../types/image';
+import { AddImageModal } from '../components/ImageModal/AddImageModal';
+import { ImageViewModal } from '../components/ImageModal/ImageViewModal';
+import { CustomButton } from '../components/CustomButton';
+import { GalleryImageCard } from '../components/GalleryImageCard';
 
 const Gallery = () => {
   const [selectedImage, setSelectedImage] = useState<Image | null>(null);
   const [favorites, setFavorites] = useState<Set<number>>(new Set());
   const [open, setOpen] = useState<boolean>(false);
   const [imageOrientations, setImageOrientations] = useState<
-    Record<number, "portrait" | "landscape">
+    Record<number, 'portrait' | 'landscape'>
   >({});
 
   const { data: images = [] } = useImages();
@@ -29,14 +29,14 @@ const Gallery = () => {
           return prev;
         }
         const orientation =
-          naturalHeight > naturalWidth ? "portrait" : "landscape";
+          naturalHeight > naturalWidth ? 'portrait' : 'landscape';
         return {
           ...prev,
           [imageId]: orientation,
         };
       });
     },
-    []
+    [],
   );
 
   const toggleFavorite = useCallback((id: number) => {
@@ -48,7 +48,7 @@ const Gallery = () => {
   }, []);
 
   const getImageUploaderUsername = useCallback((image: Image) => {
-    return image.user ? image.user.firstName : "Utilisateur inconnu";
+    return image.user ? image.user.firstName : 'Utilisateur inconnu';
   }, []);
 
   const handleImageClick = useCallback((image: Image) => {
@@ -60,7 +60,7 @@ const Gallery = () => {
       e.stopPropagation();
       toggleFavorite(id);
     },
-    [toggleFavorite]
+    [toggleFavorite],
   );
 
   const handleOpen = () => setOpen(true);
@@ -68,34 +68,34 @@ const Gallery = () => {
   return (
     <Box
       sx={{
-        minHeight: "100vh",
-        backgroundColor: "#ffffff",
+        minHeight: '100vh',
+        backgroundColor: '#ffffff',
         fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
-        position: "relative",
-        overflow: "hidden",
-        p: "3rem 0",
+        position: 'relative',
+        overflow: 'hidden',
+        p: '3rem 0',
       }}
     >
       <Box
         sx={{
-          position: "fixed",
+          position: 'fixed',
           top: 0,
           left: 0,
-          width: "100%",
-          height: "100%",
-          background: "#ffffff",
+          width: '100%',
+          height: '100%',
+          background: '#ffffff',
           zIndex: -1,
         }}
       />
 
-      <Box sx={{ maxWidth: 1400, mx: "auto", px: "2rem" }}>
+      <Box sx={{ maxWidth: 1400, mx: 'auto', px: '2rem' }}>
         <Box
           sx={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
-            gridAutoRows: "200px",
-            gap: "1rem",
-            mb: "4rem",
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))',
+            gridAutoRows: '200px',
+            gap: '1rem',
+            mb: '4rem',
           }}
         >
           {approvedImages.map((image) => (
@@ -113,7 +113,7 @@ const Gallery = () => {
         </Box>
       </Box>
       {user && (
-        <Box sx={{ position: "fixed", bottom: 32, right: 32 }}>
+        <Box sx={{ position: 'fixed', bottom: 32, right: 32 }}>
           <CustomButton startIcon={<Add />} onClick={handleOpen}>
             Ajouter une image
           </CustomButton>

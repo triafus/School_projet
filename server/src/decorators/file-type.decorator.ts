@@ -1,4 +1,4 @@
-import { FileValidator } from "@nestjs/common";
+import { FileValidator } from '@nestjs/common';
 
 export class FileTypeValidator extends FileValidator<
   Record<string, any>,
@@ -8,7 +8,7 @@ export class FileTypeValidator extends FileValidator<
 
   constructor(private readonly allowedTypes: string[]) {
     super({
-      message: `File type must be one of the following: ${allowedTypes.join(", ")}`,
+      message: `File type must be one of the following: ${allowedTypes.join(', ')}`,
     });
     this.validationOptions = {};
   }
@@ -18,6 +18,6 @@ export class FileTypeValidator extends FileValidator<
   }
 
   buildErrorMessage(file: Express.Multer.File) {
-    return `Invalid file type. Allowed types: ${this.allowedTypes.join(", ")}`;
+    return `Invalid file type. Allowed types: ${this.allowedTypes.join(', ')}`;
   }
 }

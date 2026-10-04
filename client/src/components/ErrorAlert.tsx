@@ -1,5 +1,5 @@
-import { Alert, IconButton } from "@mui/material";
-import { Close as CloseIcon } from "@mui/icons-material";
+import { Alert, IconButton } from '@mui/material';
+import { Close as CloseIcon } from '@mui/icons-material';
 
 interface ErrorAlertProps {
   error: string | null;

@@ -8,17 +8,17 @@ import {
   Body,
   UseGuards,
   Req,
-} from "@nestjs/common";
-import { JwtAuthGuard } from "../auth/jwt-auth.guard";
-import { OptionalJwtAuthGuard } from "../auth/optional-jwt-auth.guard";
-import { CollectionsService } from "./collections.service";
-import { CreateCollectionDto } from "./dto/create-collection.dto";
-import { UpdateCollectionDto } from "./dto/update-collection.dto";
-import { UpdateCollectionImagesDto } from "./dto/update-collection-images.dto";
-import { Request } from "express";
-import { User } from "../users/user.entity";
+} from '@nestjs/common';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { OptionalJwtAuthGuard } from '../auth/optional-jwt-auth.guard';
+import { CollectionsService } from './collections.service';
+import { CreateCollectionDto } from './dto/create-collection.dto';
+import { UpdateCollectionDto } from './dto/update-collection.dto';
+import { UpdateCollectionImagesDto } from './dto/update-collection-images.dto';
+import { Request } from 'express';
+import { User } from '../users/user.entity';
 
-@Controller("collections")
+@Controller('collections')
 export class CollectionsController {
   constructor(private readonly collectionsService: CollectionsService) {}
 
@@ -29,12 +29,12 @@ export class CollectionsController {
     return this.collectionsService.findAll(userId);
   }
 
-  @Get(":id")
+  @Get(':id')
   @UseGuards(OptionalJwtAuthGuard)
-  async findOne(@Param("id") id: string, @Req() req: Request) {
+  async findOne(@Param('id') id: string, @Req() req: Request) {
     return this.collectionsService.findOne(
       parseInt(id),
-      req.user ? (req.user as User).id : undefined
+      req.user ? (req.user as User).id : undefined,
     );
   }
 
@@ -44,33 +44,33 @@ export class CollectionsController {
     return this.collectionsService.create(dto, req.user as User);
   }
 
-  @Patch(":id")
+  @Patch(':id')
   @UseGuards(JwtAuthGuard)
   async update(
-    @Param("id") id: string,
+    @Param('id') id: string,
     @Body() dto: UpdateCollectionDto,
-    @Req() req: Request
+    @Req() req: Request,
   ) {
     return this.collectionsService.update(parseInt(id), dto, req.user as User);
   }
 
-  @Patch(":id/images")
+  @Patch(':id/images')
   @UseGuards(JwtAuthGuard)
   async updateImages(
-    @Param("id") id: string,
+    @Param('id') id: string,
     @Body() dto: UpdateCollectionImagesDto,
-    @Req() req: Request
+    @Req() req: Request,
   ) {
     return this.collectionsService.updateImages(
       parseInt(id),
       dto,
-      req.user as User
+      req.user as User,
     );
   }
 
-  @Delete(":id")
+  @Delete(':id')
   @UseGuards(JwtAuthGuard)
-  async remove(@Param("id") id: string, @Req() req: Request) {
+  async remove(@Param('id') id: string, @Req() req: Request) {
     return this.collectionsService.remove(parseInt(id), req.user as User);
   }
 }

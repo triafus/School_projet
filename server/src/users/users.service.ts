@@ -3,28 +3,28 @@ import {
   ConflictException,
   NotFoundException,
   ForbiddenException,
-} from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
-import * as bcrypt from "bcryptjs";
-import { User } from "./user.entity";
-import { CreateUserDto } from "./dto/create-user.dto";
-import { UpdateUserDto } from "./dto/update-user.dto";
-import { PaginationDto } from "../dto/pagination.dto";
-import { UserRole } from "./user-role.enum";
+} from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import * as bcrypt from 'bcryptjs';
+import { User } from './user.entity';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
+import { PaginationDto } from '../dto/pagination.dto';
+import { UserRole } from './user-role.enum';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
-    private usersRepository: Repository<User>
+    private usersRepository: Repository<User>,
   ) {}
 
   async findAll(): Promise<User[]> {
     return this.usersRepository.find({
-      relations: ["images"],
-      select: ["id", "email", "firstName", "lastName", "role", "createdAt"],
-      order: { createdAt: "DESC" },
+      relations: ['images'],
+      select: ['id', 'email', 'firstName', 'lastName', 'role', 'createdAt'],
+      order: { createdAt: 'DESC' },
     });
   }
 
@@ -34,7 +34,7 @@ export class UsersService {
     });
 
     if (existingUser) {
-      throw new ConflictException("Un utilisateur avec cet email existe déjà");
+      throw new ConflictException('Un utilisateur avec cet email existe déjà');
     }
 
     const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
@@ -63,7 +63,7 @@ export class UsersService {
       const existingUser = await this.findByEmail(email);
       if (existingUser) {
         throw new ConflictException(
-          "Un utilisateur avec cet email existe déjà"
+          'Un utilisateur avec cet email existe déjà',
         );
       }
       user.email = email;
@@ -78,7 +78,7 @@ export class UsersService {
   async deleteUser(id: number, currentUserId?: number): Promise<void> {
     if (id === currentUserId) {
       throw new ForbiddenException(
-        "Vous ne pouvez pas supprimer votre propre compte"
+        'Vous ne pouvez pas supprimer votre propre compte',
       );
     }
 
@@ -90,24 +90,24 @@ export class UsersService {
 
   async findByEmail(
     email: string,
-    includePassword = false
+    includePassword = false,
   ): Promise<User | null> {
     const select: (keyof User)[] = [
-      "id",
-      "email",
-      "firstName",
-      "lastName",
-      "role",
-      "createdAt",
+      'id',
+      'email',
+      'firstName',
+      'lastName',
+      'role',
+      'createdAt',
     ];
 
     if (includePassword) {
-      select.push("password");
+      select.push('password');
     }
 
     return this.usersRepository.findOne({
       where: { email },
-      relations: ["images"],
+      relations: ['images'],
       select,
     });
   }
@@ -115,19 +115,19 @@ export class UsersService {
   async findById(id: number): Promise<User> {
     const user = await this.usersRepository.findOne({
       where: { id },
-      relations: ["images"],
-      select: ["id", "email", "firstName", "lastName", "role", "createdAt"],
+      relations: ['images'],
+      select: ['id', 'email', 'firstName', 'lastName', 'role', 'createdAt'],
     });
 
     if (!user) {
-      throw new NotFoundException("Utilisateur non trouvé");
+      throw new NotFoundException('Utilisateur non trouvé');
     }
     return user;
   }
 
   async validatePassword(
     password: string,
-    hashedPassword: string
+    hashedPassword: string,
   ): Promise<boolean> {
     return bcrypt.compare(password, hashedPassword);
   }
@@ -135,20 +135,20 @@ export class UsersService {
   async changePassword(
     id: number,
     currentPassword: string,
-    newPassword: string
+    newPassword: string,
   ): Promise<void> {
     const user = await this.usersRepository.findOne({
       where: { id },
-      select: ["id", "password"],
+      select: ['id', 'password'],
     });
 
     if (!user) {
-      throw new NotFoundException("Utilisateur non trouvé");
+      throw new NotFoundException('Utilisateur non trouvé');
     }
 
     const isValid = await this.validatePassword(currentPassword, user.password);
     if (!isValid) {
-      throw new ForbiddenException("Mot de passe actuel incorrect");
+      throw new ForbiddenException('Mot de passe actuel incorrect');
     }
 
     user.password = await bcrypt.hash(newPassword, 10);

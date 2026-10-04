@@ -1,9 +1,9 @@
-import { apiClient } from "../apiClient";
-import { User, UserRole } from "../types/user";
+import { apiClient } from '../apiClient';
+import { User, UserRole } from '../types/user';
 
 export const UserService = {
   getAllUsers: async (): Promise<User[]> => {
-    const { data } = await apiClient.get<User[]>("/users");
+    const { data } = await apiClient.get<User[]>('/users');
     return data;
   },
 

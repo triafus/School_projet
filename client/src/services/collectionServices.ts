@@ -1,11 +1,10 @@
-import axios from "axios";
-import { Collection, CollectionFormData } from "../types/collection";
-import { apiClient } from "../apiClient";
-
+import axios from 'axios';
+import { Collection, CollectionFormData } from '../types/collection';
+import { apiClient } from '../apiClient';
 
 export const collectionService = {
   getAll: async (): Promise<Collection[]> => {
-    const response = await apiClient.get("/collections");
+    const response = await apiClient.get('/collections');
     return response.data;
   },
 
@@ -16,8 +15,8 @@ export const collectionService = {
 
   create: async (collectionData: CollectionFormData): Promise<Collection> => {
     const { data } = await apiClient.post<Collection>(
-      "/collections",
-      collectionData
+      '/collections',
+      collectionData,
     );
 
     return data;
@@ -25,11 +24,11 @@ export const collectionService = {
 
   update: async (
     id: number,
-    collectionData: CollectionFormData
+    collectionData: CollectionFormData,
   ): Promise<Collection> => {
     const { data } = await apiClient.patch<Collection>(
       `/collections/${id}`,
-      collectionData
+      collectionData,
     );
     return data;
   },
@@ -41,14 +40,14 @@ export const collectionService = {
   updateImages: async (
     id: number,
     addImageIds?: number[],
-    removeImageIds?: number[]
+    removeImageIds?: number[],
   ): Promise<Collection> => {
     const { data } = await apiClient.patch<Collection>(
       `/collections/${id}/images`,
       {
         addImageIds,
         removeImageIds,
-      }
+      },
     );
     return data;
   },

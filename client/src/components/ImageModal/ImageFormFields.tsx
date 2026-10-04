@@ -1,7 +1,7 @@
-import React from "react";
-import { TextField, FormControlLabel, Switch } from "@mui/material";
-import { Controller, UseFormReturn } from "react-hook-form";
-import { ImageFormData } from "../../types/image";
+import React from 'react';
+import { TextField, FormControlLabel, Switch } from '@mui/material';
+import { Controller, UseFormReturn } from 'react-hook-form';
+import { ImageFormData } from '../../types/image';
 
 interface ImageFormFieldsProps {
   form?: UseFormReturn<ImageFormData>;
@@ -32,16 +32,16 @@ export const ImageFormFields = (props: ImageFormFieldsProps) => {
           name="title"
           control={control}
           rules={{
-            required: titleRequired ? "Le titre est requis" : false,
+            required: titleRequired ? 'Le titre est requis' : false,
             minLength: titleRequired
-              ? { value: 1, message: "Le titre ne peut pas être vide" }
+              ? { value: 1, message: 'Le titre ne peut pas être vide' }
               : undefined,
           }}
           render={({ field }) => (
             <TextField
               {...field}
               fullWidth
-              label={titleRequired ? "Titre *" : "Titre"}
+              label={titleRequired ? 'Titre *' : 'Titre'}
               sx={{ mb: 2 }}
               disabled={disabled}
               error={!!errors.title}
@@ -96,7 +96,7 @@ export const ImageFormFields = (props: ImageFormFieldsProps) => {
     <>
       <TextField
         fullWidth
-        label={titleRequired ? "Titre *" : "Titre"}
+        label={titleRequired ? 'Titre *' : 'Titre'}
         value={formData.title}
         onChange={(e) => onFormDataChange({ title: e.target.value })}
         sx={{ mb: 2 }}

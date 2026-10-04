@@ -11,7 +11,7 @@ export const navigationItem = (props: NavItemProps) => {
       text,
       icon,
       path,
-      color: "#f093fb",
+      color: '#f093fb',
     },
   ];
 };

@@ -1,20 +1,20 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { AuthService } from "../services/authServices";
-import { RegisterData } from "../types/auth";
-import { User } from "../types/user";
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { AuthService } from '../services/authServices';
+import { RegisterData } from '../types/auth';
+import { User } from '../types/user';
 
 export const useAuth = () => {
   const queryClient = useQueryClient();
 
   const userQuery = useQuery<User | null>({
-    queryKey: ["auth", "user", "Image"],
+    queryKey: ['auth', 'user', 'Image'],
     queryFn: async () => {
       try {
-        const token = localStorage.getItem("token");
+        const token = localStorage.getItem('token');
         if (!token) return null;
         return await AuthService.getProfile();
       } catch {
-        localStorage.removeItem("token");
+        localStorage.removeItem('token');
         return null;
       }
     },
@@ -26,32 +26,32 @@ export const useAuth = () => {
     mutationFn: (credentials: { email: string; password: string }) =>
       AuthService.login(credentials.email, credentials.password),
     onMutate: () => {
-      queryClient.setQueryData(["auth", "error"], null);
+      queryClient.setQueryData(['auth', 'error'], null);
     },
     onSuccess: async (data) => {
-      localStorage.setItem("token", data.access_token);
+      localStorage.setItem('token', data.access_token);
       await queryClient.refetchQueries({
-        queryKey: ["auth", "user"],
+        queryKey: ['auth', 'user'],
       });
     },
     onError: (error) => {
-      queryClient.setQueryData(["auth", "error"], error);
+      queryClient.setQueryData(['auth', 'error'], error);
     },
   });
 
   const registerMutation = useMutation({
     mutationFn: (userData: RegisterData) => AuthService.register(userData),
     onSuccess: async (data) => {
-      localStorage.setItem("token", data.access_token);
+      localStorage.setItem('token', data.access_token);
       await queryClient.refetchQueries({
-        queryKey: ["auth", "user"],
+        queryKey: ['auth', 'user'],
       });
     },
   });
 
   const logout = () => {
-    localStorage.removeItem("token");
-    queryClient.setQueryData(["auth", "user"], null);
+    localStorage.removeItem('token');
+    queryClient.setQueryData(['auth', 'user'], null);
     queryClient.removeQueries();
   };
 
@@ -66,6 +66,6 @@ export const useAuth = () => {
     register: registerMutation.mutate,
     isRegistering: registerMutation.isPending,
     logout,
-    error: queryClient.getQueryData(["auth", "error"]),
+    error: queryClient.getQueryData(['auth', 'error']),
   };
 };

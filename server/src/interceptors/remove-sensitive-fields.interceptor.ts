@@ -3,9 +3,9 @@ import {
   NestInterceptor,
   ExecutionContext,
   CallHandler,
-} from "@nestjs/common";
-import { Observable } from "rxjs";
-import { map } from "rxjs/operators";
+} from '@nestjs/common';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Injectable()
 export class RemoveSensitiveFieldsInterceptor implements NestInterceptor {
@@ -16,12 +16,12 @@ export class RemoveSensitiveFieldsInterceptor implements NestInterceptor {
           return data.map((item) => this.removeFields(item));
         }
         return this.removeFields(data);
-      })
+      }),
     );
   }
 
   private removeFields(data: any) {
-    if (!data || typeof data !== "object") return data;
+    if (!data || typeof data !== 'object') return data;
 
     const { password, images, ...rest } = data;
     return rest;

@@ -1,15 +1,15 @@
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import { Login } from "./pages/Login";
-import Register from "./pages/Register";
-import Home from "./pages/Home";
-import Administration from "./pages/Administration";
-import Navigation from "./layout/Navigation";
-import { AdminRoute } from "./routes/AdminRoute";
-import { AuthenticatedRoute } from "./routes/AuthenticatedRoute";
-import NotFound from "./pages/NotFound";
-import Dashboard from "./pages/Dashboard";
-import Collection from "./pages/Collection";
-import CollectionDetail from "./pages/CollectionDetail";
+import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+import { Login } from './pages/Login';
+import Register from './pages/Register';
+import Home from './pages/Home';
+import Administration from './pages/Administration';
+import Navigation from './layout/Navigation';
+import { AdminRoute } from './routes/AdminRoute';
+import { AuthenticatedRoute } from './routes/AuthenticatedRoute';
+import NotFound from './pages/NotFound';
+import Dashboard from './pages/Dashboard';
+import Collection from './pages/Collection';
+import CollectionDetail from './pages/CollectionDetail';
 
 const router = createBrowserRouter([
   {
@@ -17,12 +17,12 @@ const router = createBrowserRouter([
     errorElement: <NotFound />,
     children: [
       {
-        path: "/",
+        path: '/',
         element: <Home />,
         errorElement: <NotFound />,
       },
       {
-        path: "/administration",
+        path: '/administration',
         element: (
           <AdminRoute>
             <Administration />
@@ -31,7 +31,7 @@ const router = createBrowserRouter([
         errorElement: <NotFound />,
       },
       {
-        path: "/dashboard",
+        path: '/dashboard',
         element: (
           <AuthenticatedRoute>
             <Dashboard />
@@ -40,7 +40,7 @@ const router = createBrowserRouter([
         errorElement: <NotFound />,
       },
       {
-        path: "/collection",
+        path: '/collection',
         element: (
           <AuthenticatedRoute>
             <Collection />
@@ -49,7 +49,7 @@ const router = createBrowserRouter([
         errorElement: <NotFound />,
       },
       {
-        path: "/collection/:id",
+        path: '/collection/:id',
         element: (
           <AuthenticatedRoute>
             <CollectionDetail />
@@ -60,12 +60,12 @@ const router = createBrowserRouter([
     ],
   },
   {
-    path: "/login",
+    path: '/login',
     element: <Login />,
     errorElement: <NotFound />,
   },
   {
-    path: "/register",
+    path: '/register',
     element: <Register />,
     errorElement: <NotFound />,
   },

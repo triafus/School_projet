@@ -5,11 +5,11 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   OneToMany,
-} from "typeorm";
-import { Exclude } from "class-transformer";
-import { Image } from "../images/image.entity";
+} from 'typeorm';
+import { Exclude } from 'class-transformer';
+import { Image } from '../images/image.entity';
 
-@Entity("users")
+@Entity('users')
 export class User {
   @PrimaryGeneratedColumn()
   id: number;
@@ -27,7 +27,7 @@ export class User {
   @Exclude()
   password: string;
 
-  @Column({ default: "user" })
+  @Column({ default: 'user' })
   role: string;
 
   @OneToMany(() => Image, (image) => image.user, { cascade: true })

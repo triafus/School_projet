@@ -1,5 +1,5 @@
-import { IsArray, IsInt, IsOptional } from "class-validator";
-import { Type } from "class-transformer";
+import { IsArray, IsInt, IsOptional } from 'class-validator';
+import { Type } from 'class-transformer';
 
 export class UpdateCollectionImagesDto {
   @IsArray()

@@ -1,12 +1,12 @@
-import { apiClient } from "../apiClient";
-import { Image, ImageFormData } from "../types/image";
+import { apiClient } from '../apiClient';
+import { Image, ImageFormData } from '../types/image';
 
 export const imageService = {
   getAllImages: async (
     includePrivate = false,
-    onlyApproved = true
+    onlyApproved = true,
   ): Promise<Image[]> => {
-    const { data } = await apiClient.get<Image[]>("/images", {
+    const { data } = await apiClient.get<Image[]>('/images', {
       params: {
         includePrivate,
         onlyApproved,
@@ -18,13 +18,13 @@ export const imageService = {
   postImage: async (file: File, imageData: ImageFormData): Promise<Image> => {
     const formData = new FormData();
 
-    formData.append("file", file);
+    formData.append('file', file);
     Object.entries(imageData).forEach(([key, value]) => {
       formData.append(key, String(value));
     });
 
-    const { data } = await apiClient.post<Image>("/images", formData, {
-      headers: { "Content-Type": "multipart/form-data" },
+    const { data } = await apiClient.post<Image>('/images', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
     });
 
     return data;
@@ -32,11 +32,11 @@ export const imageService = {
 
   patchImage: async (
     imageId: number,
-    updateData: { title?: string; description?: string; is_private?: boolean }
+    updateData: { title?: string; description?: string; is_private?: boolean },
   ): Promise<Image> => {
     const { data } = await apiClient.patch<Image>(
       `/images/${imageId}`,
-      updateData
+      updateData,
     );
     return data;
   },
@@ -47,20 +47,20 @@ export const imageService = {
 
   approveImage: async (
     imageId: number,
-    isApproved: boolean
+    isApproved: boolean,
   ): Promise<Image> => {
     const { data } = await apiClient.patch<Image>(
       `/images/${imageId}/approve`,
       {
         is_approved: isApproved,
-      }
+      },
     );
     return data;
   },
 
   getSignedUrl: async (imageId: number): Promise<{ url: string }> => {
     const { data } = await apiClient.get<{ url: string }>(
-      `/images/${imageId}/signed-url`
+      `/images/${imageId}/signed-url`,
     );
     return data;
   },

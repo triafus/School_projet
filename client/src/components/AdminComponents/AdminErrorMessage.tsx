@@ -1,5 +1,5 @@
-import React from "react";
-import { Box, Alert } from "@mui/material";
+import React from 'react';
+import { Box, Alert } from '@mui/material';
 
 interface AdminErrorMessageProps {
   error: Error | unknown;
@@ -8,9 +8,9 @@ interface AdminErrorMessageProps {
 const AdminErrorMessage = (props: AdminErrorMessageProps) => {
   const { error } = props;
   return (
-    <Box sx={{ textAlign: "center" }}>
+    <Box sx={{ textAlign: 'center' }}>
       <Alert severity="error">
-        {error instanceof Error ? error.message : "Erreur inconnue"}
+        {error instanceof Error ? error.message : 'Erreur inconnue'}
       </Alert>
     </Box>
   );

@@ -1,4 +1,4 @@
-import { useProtectedRoute } from "../hooks/useProtectedRoutes";
+import { useProtectedRoute } from '../hooks/useProtectedRoutes';
 
 export const AuthenticatedRoute = ({
   children,

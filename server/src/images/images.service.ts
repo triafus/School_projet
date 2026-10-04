@@ -3,46 +3,46 @@ import {
   NotFoundException,
   ForbiddenException,
   BadRequestException,
-} from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
-import { Image } from "./image.entity";
-import { CreateImageDto } from "./dto/create-image.dto";
-import { UpdateImageDto } from "./dto/update-image.dto";
-import { SupabaseService } from "../supabase/supabase.service";
-import { User } from "../users/user.entity";
+} from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Image } from './image.entity';
+import { CreateImageDto } from './dto/create-image.dto';
+import { UpdateImageDto } from './dto/update-image.dto';
+import { SupabaseService } from '../supabase/supabase.service';
+import { User } from '../users/user.entity';
 
 @Injectable()
 export class ImagesService {
-  private readonly BUCKET_NAME = "images";
-  private readonly PRIV_BUCKET_NAME = "private_images";
+  private readonly BUCKET_NAME = 'images';
+  private readonly PRIV_BUCKET_NAME = 'private_images';
   private readonly MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
   private readonly ALLOWED_MIME_TYPES = [
-    "image/jpeg",
-    "image/png",
-    "image/gif",
+    'image/jpeg',
+    'image/png',
+    'image/gif',
   ];
 
   constructor(
     @InjectRepository(Image)
     private imagesRepository: Repository<Image>,
-    private supabaseService: SupabaseService
+    private supabaseService: SupabaseService,
   ) {}
 
   async findAll(includePrivate = false, onlyApproved = true) {
     const query = this.imagesRepository
-      .createQueryBuilder("image")
-      .leftJoinAndSelect("image.user", "user");
+      .createQueryBuilder('image')
+      .leftJoinAndSelect('image.user', 'user');
 
     if (onlyApproved) {
-      query.where("image.is_approved = :approved", { approved: true });
+      query.where('image.is_approved = :approved', { approved: true });
     }
 
     if (!includePrivate) {
       if (onlyApproved) {
-        query.andWhere("image.is_private = :private", { private: false });
+        query.andWhere('image.is_private = :private', { private: false });
       } else {
-        query.where("image.is_private = :private", { private: false });
+        query.where('image.is_private = :private', { private: false });
       }
     }
 
@@ -51,16 +51,16 @@ export class ImagesService {
 
   async findSelectable(user?: User) {
     const qb = this.imagesRepository
-      .createQueryBuilder("image")
-      .leftJoinAndSelect("image.user", "user");
+      .createQueryBuilder('image')
+      .leftJoinAndSelect('image.user', 'user');
 
     if (user) {
       qb.where(
-        "(image.is_approved = :appr AND image.is_private = :pub) OR image.userId = :uid",
-        { appr: true, pub: false, uid: user.id }
+        '(image.is_approved = :appr AND image.is_private = :pub) OR image.userId = :uid',
+        { appr: true, pub: false, uid: user.id },
       );
     } else {
-      qb.where("image.is_approved = :appr AND image.is_private = :pub", {
+      qb.where('image.is_approved = :appr AND image.is_private = :pub', {
         appr: true,
         pub: false,
       });
@@ -72,13 +72,13 @@ export class ImagesService {
   async findOne(id: number, userId?: number) {
     const image = await this.imagesRepository.findOne({
       where: { id },
-      relations: ["user"],
+      relations: ['user'],
     });
 
-    if (!image) throw new NotFoundException("Image not found");
+    if (!image) throw new NotFoundException('Image not found');
 
     if (image.is_private && image.user.id !== userId) {
-      throw new ForbiddenException("Access to private image denied");
+      throw new ForbiddenException('Access to private image denied');
     }
 
     return image;
@@ -87,12 +87,12 @@ export class ImagesService {
   async create(
     file: Express.Multer.File,
     createImageDto: CreateImageDto,
-    user: User
+    user: User,
   ) {
     this.validateFile(file);
 
-    if (typeof createImageDto.is_private === "string") {
-      createImageDto.is_private = createImageDto.is_private === "true";
+    if (typeof createImageDto.is_private === 'string') {
+      createImageDto.is_private = createImageDto.is_private === 'true';
     }
 
     const bucketName = createImageDto.is_private
@@ -101,7 +101,7 @@ export class ImagesService {
 
     const { url, key } = await this.supabaseService.uploadFile(
       bucketName,
-      file
+      file,
     );
 
     const image = this.imagesRepository.create({
@@ -110,7 +110,7 @@ export class ImagesService {
       key,
       user,
       userId: user.id,
-      is_approved: user.role === "admin",
+      is_approved: user.role === 'admin',
     });
 
     return this.imagesRepository.save(image);
@@ -134,7 +134,7 @@ export class ImagesService {
       const { url, key } = await this.supabaseService.transferFile(
         sourceBucket,
         destBucket,
-        image.key
+        image.key,
       );
 
       image.url = url;
@@ -155,7 +155,7 @@ export class ImagesService {
 
   async approveImage(id: number, isApproved: boolean) {
     const image = await this.imagesRepository.findOneBy({ id });
-    if (!image) throw new NotFoundException("Image not found");
+    if (!image) throw new NotFoundException('Image not found');
 
     image.is_approved = isApproved;
     return this.imagesRepository.save(image);
@@ -175,7 +175,7 @@ export class ImagesService {
     return {
       url: await this.supabaseService.getSignedUrl(
         this.PRIV_BUCKET_NAME,
-        image.key
+        image.key,
       ),
     };
   }
@@ -183,13 +183,13 @@ export class ImagesService {
   private async verifyOwnership(id: number, user: User) {
     const image = await this.imagesRepository.findOne({
       where: { id },
-      relations: ["user"],
+      relations: ['user'],
     });
 
-    if (!image) throw new NotFoundException("Image not found");
+    if (!image) throw new NotFoundException('Image not found');
 
-    if (user.role !== "admin" && image.user.id !== user.id) {
-      throw new ForbiddenException("You do not own this image");
+    if (user.role !== 'admin' && image.user.id !== user.id) {
+      throw new ForbiddenException('You do not own this image');
     }
 
     return image;
@@ -197,20 +197,20 @@ export class ImagesService {
 
   private validateFile(file: Express.Multer.File) {
     if (!file) {
-      throw new BadRequestException("No file uploaded");
+      throw new BadRequestException('No file uploaded');
     }
 
     if (!this.ALLOWED_MIME_TYPES.includes(file.mimetype)) {
       throw new BadRequestException(
         `Invalid file type. Allowed types: ${this.ALLOWED_MIME_TYPES.join(
-          ", "
-        )}`
+          ', ',
+        )}`,
       );
     }
 
     if (file.size > this.MAX_FILE_SIZE) {
       throw new BadRequestException(
-        `File too large. Max size: ${this.MAX_FILE_SIZE / 1024 / 1024}MB`
+        `File too large. Max size: ${this.MAX_FILE_SIZE / 1024 / 1024}MB`,
       );
     }
   }

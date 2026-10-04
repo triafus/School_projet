@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
-import { useAuth } from "../hooks/useAuth";
-import { useNavigate, Link } from "react-router-dom";
+import { useEffect, useState } from 'react';
+import { useAuth } from '../hooks/useAuth';
+import { useNavigate, Link } from 'react-router-dom';
 import {
   Box,
   Typography,
@@ -9,21 +9,21 @@ import {
   CircularProgress,
   Alert,
   Grid,
-} from "@mui/material";
-import SpainCastle from "/assets/SpainCastle.jpg";
+} from '@mui/material';
+import SpainCastle from '/assets/SpainCastle.jpg';
 
 export const Register = () => {
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    password: "",
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: '',
     images: [],
   });
   const [error, setError] = useState<string | null>(null);
   const { register, isRegistering, isAuthenticated } = useAuth();
   const navigate = useNavigate();
-  const from = "/";
+  const from = '/';
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -49,7 +49,7 @@ export const Register = () => {
       setError(
         err instanceof Error
           ? err.message
-          : "Une erreur est survenue lors de l'inscription"
+          : "Une erreur est survenue lors de l'inscription",
       );
     }
   };
@@ -59,24 +59,24 @@ export const Register = () => {
       display="flex"
       flexDirection="row-reverse"
       sx={{
-        minHeight: "100vh",
-        bgcolor: "#fafafa",
+        minHeight: '100vh',
+        bgcolor: '#fafafa',
       }}
     >
       {/* Partie gauche - Image/Branding */}
       <Box
         sx={{
           flex: 1,
-          display: { xs: "none", md: "flex" },
-          flexDirection: "column",
-          justifyContent: "space-between",
+          display: { xs: 'none', md: 'flex' },
+          flexDirection: 'column',
+          justifyContent: 'space-between',
           p: 6,
-          bgcolor: "white",
+          bgcolor: 'white',
           borderRadius: 8,
-          border: "4px solid white",
+          border: '4px solid white',
           backgroundImage: `url(${SpainCastle})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
         }}
       >
         <Box>
@@ -84,9 +84,9 @@ export const Register = () => {
             variant="h6"
             sx={{
               fontWeight: 400,
-              color: "rgb(236, 237, 240)",
+              color: 'rgb(236, 237, 240)',
               mb: 1,
-              letterSpacing: "0.080em",
+              letterSpacing: '0.080em',
             }}
           >
             Architech
@@ -94,7 +94,7 @@ export const Register = () => {
           <Typography
             variant="body1"
             sx={{
-              color: "rgba(236, 237, 240, 0.71)",
+              color: 'rgba(236, 237, 240, 0.71)',
               fontWeight: 400,
             }}
           >
@@ -107,7 +107,7 @@ export const Register = () => {
             variant="h6"
             sx={{
               fontWeight: 600,
-              color: "rgb(236, 237, 240)",
+              color: 'rgb(236, 237, 240)',
               mb: 0.5,
             }}
           >
@@ -120,15 +120,15 @@ export const Register = () => {
       <Box
         sx={{
           flex: 1,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
           p: 4,
         }}
       >
         <Box
           sx={{
-            width: "100%",
+            width: '100%',
             maxWidth: 400,
           }}
         >
@@ -137,9 +137,9 @@ export const Register = () => {
               variant="h4"
               sx={{
                 fontWeight: 600,
-                color: "#0f172a",
+                color: '#0f172a',
                 mb: 1,
-                letterSpacing: "-0.025em",
+                letterSpacing: '-0.025em',
               }}
             >
               Créer un compte
@@ -147,19 +147,19 @@ export const Register = () => {
             <Typography
               variant="body2"
               sx={{
-                color: "#64748b",
+                color: '#64748b',
               }}
             >
-              J'ai déjà un compte ?{" "}
+              J'ai déjà un compte ?{' '}
               <Typography
                 component={Link}
                 to="/login"
                 sx={{
-                  color: "#3b82f6",
-                  textDecoration: "underline",
+                  color: '#3b82f6',
+                  textDecoration: 'underline',
                   fontWeight: 500,
-                  "&:hover": {
-                    color: "#2563eb",
+                  '&:hover': {
+                    color: '#2563eb',
                   },
                 }}
               >
@@ -174,7 +174,7 @@ export const Register = () => {
                 <Typography
                   variant="body2"
                   sx={{
-                    color: "#374151",
+                    color: '#374151',
                     mb: 1,
                     fontWeight: 500,
                   }}
@@ -192,21 +192,21 @@ export const Register = () => {
                   required
                   disabled={isRegistering}
                   sx={{
-                    "& .MuiOutlinedInput-root": {
-                      bgcolor: "white",
+                    '& .MuiOutlinedInput-root': {
+                      bgcolor: 'white',
                       borderRadius: 2,
-                      "& fieldset": {
-                        borderColor: "#d1d5db",
+                      '& fieldset': {
+                        borderColor: '#d1d5db',
                       },
-                      "&:hover fieldset": {
-                        borderColor: "#9ca3af",
+                      '&:hover fieldset': {
+                        borderColor: '#9ca3af',
                       },
-                      "&.Mui-focused fieldset": {
-                        borderColor: "#3b82f6",
+                      '&.Mui-focused fieldset': {
+                        borderColor: '#3b82f6',
                         borderWidth: 2,
                       },
                     },
-                    "& .MuiOutlinedInput-input": {
+                    '& .MuiOutlinedInput-input': {
                       py: 1.5,
                     },
                   }}
@@ -216,7 +216,7 @@ export const Register = () => {
                 <Typography
                   variant="body2"
                   sx={{
-                    color: "#374151",
+                    color: '#374151',
                     mb: 1,
                     fontWeight: 500,
                   }}
@@ -234,21 +234,21 @@ export const Register = () => {
                   required
                   disabled={isRegistering}
                   sx={{
-                    "& .MuiOutlinedInput-root": {
-                      bgcolor: "white",
+                    '& .MuiOutlinedInput-root': {
+                      bgcolor: 'white',
                       borderRadius: 2,
-                      "& fieldset": {
-                        borderColor: "#d1d5db",
+                      '& fieldset': {
+                        borderColor: '#d1d5db',
                       },
-                      "&:hover fieldset": {
-                        borderColor: "#9ca3af",
+                      '&:hover fieldset': {
+                        borderColor: '#9ca3af',
                       },
-                      "&.Mui-focused fieldset": {
-                        borderColor: "#3b82f6",
+                      '&.Mui-focused fieldset': {
+                        borderColor: '#3b82f6',
                         borderWidth: 2,
                       },
                     },
-                    "& .MuiOutlinedInput-input": {
+                    '& .MuiOutlinedInput-input': {
                       py: 1.5,
                     },
                   }}
@@ -260,7 +260,7 @@ export const Register = () => {
               <Typography
                 variant="body2"
                 sx={{
-                  color: "#374151",
+                  color: '#374151',
                   mb: 1,
                   fontWeight: 500,
                 }}
@@ -279,21 +279,21 @@ export const Register = () => {
                 disabled={isRegistering}
                 sx={{
                   mb: 3,
-                  "& .MuiOutlinedInput-root": {
-                    bgcolor: "white",
+                  '& .MuiOutlinedInput-root': {
+                    bgcolor: 'white',
                     borderRadius: 2,
-                    "& fieldset": {
-                      borderColor: "#d1d5db",
+                    '& fieldset': {
+                      borderColor: '#d1d5db',
                     },
-                    "&:hover fieldset": {
-                      borderColor: "#9ca3af",
+                    '&:hover fieldset': {
+                      borderColor: '#9ca3af',
                     },
-                    "&.Mui-focused fieldset": {
-                      borderColor: "#3b82f6",
+                    '&.Mui-focused fieldset': {
+                      borderColor: '#3b82f6',
                       borderWidth: 2,
                     },
                   },
-                  "& .MuiOutlinedInput-input": {
+                  '& .MuiOutlinedInput-input': {
                     py: 1.5,
                   },
                 }}
@@ -303,7 +303,7 @@ export const Register = () => {
             <Typography
               variant="body2"
               sx={{
-                color: "#374151",
+                color: '#374151',
                 mb: 1,
                 fontWeight: 500,
               }}
@@ -322,21 +322,21 @@ export const Register = () => {
               disabled={isRegistering}
               sx={{
                 mb: 4,
-                "& .MuiOutlinedInput-root": {
-                  bgcolor: "white",
+                '& .MuiOutlinedInput-root': {
+                  bgcolor: 'white',
                   borderRadius: 2,
-                  "& fieldset": {
-                    borderColor: "#d1d5db",
+                  '& fieldset': {
+                    borderColor: '#d1d5db',
                   },
-                  "&:hover fieldset": {
-                    borderColor: "#9ca3af",
+                  '&:hover fieldset': {
+                    borderColor: '#9ca3af',
                   },
-                  "&.Mui-focused fieldset": {
-                    borderColor: "#3b82f6",
+                  '&.Mui-focused fieldset': {
+                    borderColor: '#3b82f6',
                     borderWidth: 2,
                   },
                 },
-                "& .MuiOutlinedInput-input": {
+                '& .MuiOutlinedInput-input': {
                   py: 1.5,
                 },
               }}
@@ -348,11 +348,11 @@ export const Register = () => {
                 sx={{
                   mb: 3,
                   borderRadius: 2,
-                  bgcolor: "#fef2f2",
-                  color: "#dc2626",
-                  border: "1px solid #fecaca",
-                  "& .MuiAlert-icon": {
-                    color: "#dc2626",
+                  bgcolor: '#fef2f2',
+                  color: '#dc2626',
+                  border: '1px solid #fecaca',
+                  '& .MuiAlert-icon': {
+                    color: '#dc2626',
                   },
                 }}
               >
@@ -366,29 +366,29 @@ export const Register = () => {
               disabled={isRegistering}
               sx={{
                 py: 1.5,
-                bgcolor: "#374151",
-                color: "white",
-                fontSize: "1rem",
+                bgcolor: '#374151',
+                color: 'white',
+                fontSize: '1rem',
                 fontWeight: 500,
                 borderRadius: 2,
-                textTransform: "none",
-                "&:hover": {
-                  bgcolor: "#1f2937",
+                textTransform: 'none',
+                '&:hover': {
+                  bgcolor: '#1f2937',
                 },
-                "&:disabled": {
-                  bgcolor: "#d1d5db",
-                  color: "#9ca3af",
+                '&:disabled': {
+                  bgcolor: '#d1d5db',
+                  color: '#9ca3af',
                 },
                 mb: 4,
               }}
             >
               {isRegistering ? (
-                <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                   <CircularProgress size={20} color="inherit" />
                   Inscription...
                 </Box>
               ) : (
-                "Create account"
+                'Create account'
               )}
             </Button>
           </Box>

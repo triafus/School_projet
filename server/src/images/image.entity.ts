@@ -6,9 +6,9 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToMany,
-} from "typeorm";
-import { User } from "../users/user.entity";
-import { Collection } from "../collections/collection.entity";
+} from 'typeorm';
+import { User } from '../users/user.entity';
+import { Collection } from '../collections/collection.entity';
 
 @Entity()
 export class Image {
@@ -42,9 +42,9 @@ export class Image {
   @ManyToMany(() => Collection, (collection) => collection.images)
   collections: Collection[];
 
-  @CreateDateColumn({ name: "created_at" })
+  @CreateDateColumn({ name: 'created_at' })
   created_at: Date;
 
-  @UpdateDateColumn({ name: "updated_at" })
+  @UpdateDateColumn({ name: 'updated_at' })
   updated_at: Date;
 }

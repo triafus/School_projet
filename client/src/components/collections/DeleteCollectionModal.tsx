@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   Dialog,
   DialogTitle,
@@ -7,10 +7,10 @@ import {
   Typography,
   Button,
   Box,
-} from "@mui/material";
-import { Warning as WarningIcon } from "@mui/icons-material";
-import { CustomButton } from "../CustomButton";
-import { useDeleteCollection } from "../../hooks/useCollection";
+} from '@mui/material';
+import { Warning as WarningIcon } from '@mui/icons-material';
+import { CustomButton } from '../CustomButton';
+import { useDeleteCollection } from '../../hooks/useCollection';
 
 interface DeleteCollectionModalProps {
   open: boolean;
@@ -37,7 +37,7 @@ const DeleteCollectionModal = ({
           onSuccess?.();
         },
         onError: (error) => {
-          console.error("Erreur lors de la suppression:", error);
+          console.error('Erreur lors de la suppression:', error);
         },
       });
     }
@@ -54,7 +54,7 @@ const DeleteCollectionModal = ({
       }}
     >
       <DialogTitle sx={{ pb: 1 }}>
-        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
           <WarningIcon color="error" />
           <Typography variant="h6" component="span">
             Supprimer la collection
@@ -64,7 +64,7 @@ const DeleteCollectionModal = ({
 
       <DialogContent>
         <Typography variant="body1" sx={{ mb: 2 }}>
-          Êtes-vous sûr de vouloir supprimer la collection{" "}
+          Êtes-vous sûr de vouloir supprimer la collection{' '}
           <strong>"{collectionTitle}"</strong> ?
         </Typography>
 
@@ -75,8 +75,8 @@ const DeleteCollectionModal = ({
 
         {error && (
           <Typography variant="body2" color="error" sx={{ mt: 2 }}>
-            Erreur lors de la suppression:{" "}
-            {(error as any)?.message || "Erreur inconnue"}
+            Erreur lors de la suppression:{' '}
+            {(error as any)?.message || 'Erreur inconnue'}
           </Typography>
         )}
       </DialogContent>
@@ -90,7 +90,7 @@ const DeleteCollectionModal = ({
           color="error"
           disabled={isPending}
         >
-          {isPending ? "Suppression..." : "Supprimer"}
+          {isPending ? 'Suppression...' : 'Supprimer'}
         </CustomButton>
       </DialogActions>
     </Dialog>
