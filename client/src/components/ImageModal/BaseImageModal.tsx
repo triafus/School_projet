@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   Dialog,
   DialogTitle,
@@ -9,9 +9,9 @@ import {
   IconButton,
   Alert,
   Divider,
-} from "@mui/material";
-import { Close as CloseIcon } from "@mui/icons-material";
-import { CustomButton } from "../CustomButton";
+} from '@mui/material';
+import { Close as CloseIcon } from '@mui/icons-material';
+import { CustomButton } from '../CustomButton';
 
 interface BaseImageModalProps {
   open: boolean;
@@ -49,9 +49,9 @@ export const BaseImageModal = (props: BaseImageModalProps) => {
       <DialogTitle sx={{ pb: 1 }}>
         <Box
           sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
           }}
         >
           <Typography variant="h6" component="div">

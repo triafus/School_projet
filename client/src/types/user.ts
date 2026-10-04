@@ -1,6 +1,6 @@
-import { Image } from "./image";
+import { Image } from './image';
 
-export type UserRole = "user" | "admin";
+export type UserRole = 'user' | 'admin';
 
 export interface User {
   id: number;

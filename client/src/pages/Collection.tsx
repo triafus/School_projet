@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   Box,
   Typography,
@@ -6,18 +6,18 @@ import {
   Button,
   InputAdornment,
   Container,
-} from "@mui/material";
-import { Add as AddIcon, Search as SearchIcon } from "@mui/icons-material";
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "../hooks/useAuth";
-import { useCollections } from "../hooks/useCollection";
-import type { Collection } from "../types/collection";
-import { CollectionFormModal } from "../components/collections/CollectionFormModal";
-import DeleteCollectionModal from "../components/collections/DeleteCollectionModal";
-import CollectionCard from "../components/collections/CollectionCard";
+} from '@mui/material';
+import { Add as AddIcon, Search as SearchIcon } from '@mui/icons-material';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../hooks/useAuth';
+import { useCollections } from '../hooks/useCollection';
+import type { Collection } from '../types/collection';
+import { CollectionFormModal } from '../components/collections/CollectionFormModal';
+import DeleteCollectionModal from '../components/collections/DeleteCollectionModal';
+import CollectionCard from '../components/collections/CollectionCard';
 
 const CollectionPage = () => {
-  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [searchQuery, setSearchQuery] = useState<string>('');
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
   const [selectedCollection, setSelectedCollection] =
@@ -27,7 +27,7 @@ const CollectionPage = () => {
   const { user } = useAuth();
   const { data: collections, isLoading, error } = useCollections();
 
-  const isAdmin = user?.role === "admin";
+  const isAdmin = user?.role === 'admin';
 
   const handleOpenCreateModal = () => {
     setSelectedCollection(null);
@@ -69,36 +69,35 @@ const CollectionPage = () => {
   };
 
   const filteredCollections = collections?.filter((collection) =>
-    collection.title.toLowerCase().includes(searchQuery.toLowerCase())
+    collection.title.toLowerCase().includes(searchQuery.toLowerCase()),
   );
-
 
   const NewCollectionCard = ({ onClick }: { onClick: () => void }) => (
     <Button
       onClick={onClick}
       sx={{
-        cursor: "pointer",
-        border: "2px dashed #e0e0e0",
-        backgroundColor: "transparent",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
+        cursor: 'pointer',
+        border: '2px dashed #e0e0e0',
+        backgroundColor: 'transparent',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
         minHeight: 280,
         minWidth: 280,
-        transition: "all 0.2s",
-        "&:hover": {
-          borderColor: "#1976d2",
-          backgroundColor: "rgba(25, 118, 210, 0.04)",
+        transition: 'all 0.2s',
+        '&:hover': {
+          borderColor: '#1976d2',
+          backgroundColor: 'rgba(25, 118, 210, 0.04)',
         },
       }}
     >
       <AddIcon
         sx={{
-          borderRadius: "999px",
-          bgcolor: "#a8b2c7",
+          borderRadius: '999px',
+          bgcolor: '#a8b2c7',
           fontSize: 48,
-          color: "white",
+          color: 'white',
           mb: 1,
         }}
       />
@@ -116,35 +115,35 @@ const CollectionPage = () => {
   );
 
   return (
-    <Container sx={{ p: 4, bgcolor: "#fafafa", minHeight: "100vh" }}>
+    <Container sx={{ p: 4, bgcolor: '#fafafa', minHeight: '100vh' }}>
       <Box
         sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
           mb: 3,
-          flexWrap: "wrap",
+          flexWrap: 'wrap',
           gap: 2,
         }}
       >
         <Box>
           <Typography
             variant="h5"
-            sx={{ fontWeight: 600, color: "#1f2937", mb: 0.5 }}
+            sx={{ fontWeight: 600, color: '#1f2937', mb: 0.5 }}
           >
             Collections
           </Typography>
           <Typography variant="body2" color="text.secondary">
             {searchQuery
               ? `${filteredCollections?.length || 0} résultat${
-                  (filteredCollections?.length || 0) > 1 ? "s" : ""
+                  (filteredCollections?.length || 0) > 1 ? 's' : ''
                 }`
               : `${collections?.length || 0} Collection${
-                  (collections?.length || 0) > 1 ? "s" : ""
+                  (collections?.length || 0) > 1 ? 's' : ''
                 }`}
           </Typography>
         </Box>
-        <Box sx={{ display: "flex", gap: 2 }}>
+        <Box sx={{ display: 'flex', gap: 2 }}>
           <TextField
             size="small"
             placeholder="Rechercher..."
@@ -158,10 +157,10 @@ const CollectionPage = () => {
               ),
             }}
             sx={{
-              bgcolor: "white",
+              bgcolor: 'white',
               borderRadius: 2,
               minWidth: 250,
-              "& .MuiOutlinedInput-root": {
+              '& .MuiOutlinedInput-root': {
                 borderRadius: 2,
               },
             }}
@@ -172,13 +171,13 @@ const CollectionPage = () => {
             variant="contained"
             startIcon={<AddIcon />}
             sx={{
-              backgroundColor: "#2d3748",
-              "&:hover": {
-                backgroundColor: "#1a202c",
+              backgroundColor: '#2d3748',
+              '&:hover': {
+                backgroundColor: '#1a202c',
               },
               borderRadius: 2,
-              textTransform: "none",
-              fontWeight: "medium",
+              textTransform: 'none',
+              fontWeight: 'medium',
             }}
           >
             Nouvelle Collection
@@ -189,7 +188,7 @@ const CollectionPage = () => {
       {isLoading && (
         <Box
           sx={{
-            textAlign: "center",
+            textAlign: 'center',
             py: 8,
           }}
         >
@@ -202,9 +201,9 @@ const CollectionPage = () => {
       {error && (
         <Box
           sx={{
-            textAlign: "center",
+            textAlign: 'center',
             py: 8,
-            color: "error.main",
+            color: 'error.main',
           }}
         >
           <Typography variant="h6" sx={{ mb: 1 }}>
@@ -220,12 +219,12 @@ const CollectionPage = () => {
         <>
           <Box
             sx={{
-              display: "grid",
+              display: 'grid',
               gridTemplateColumns: {
-                xs: "1fr",
-                sm: "repeat(2, 1fr)",
-                md: "repeat(3, 1fr)",
-                lg: "repeat(4, 1fr)",
+                xs: '1fr',
+                sm: 'repeat(2, 1fr)',
+                md: 'repeat(3, 1fr)',
+                lg: 'repeat(4, 1fr)',
               },
               gap: 3,
             }}
@@ -249,9 +248,9 @@ const CollectionPage = () => {
             (collections?.length === 0 || collections === undefined) && (
               <Box
                 sx={{
-                  textAlign: "center",
+                  textAlign: 'center',
                   py: 8,
-                  color: "text.secondary",
+                  color: 'text.secondary',
                 }}
               >
                 <Typography variant="h6" sx={{ mb: 1 }}>
@@ -266,9 +265,9 @@ const CollectionPage = () => {
           {searchQuery && filteredCollections?.length === 0 && (
             <Box
               sx={{
-                textAlign: "center",
+                textAlign: 'center',
                 py: 8,
-                color: "text.secondary",
+                color: 'text.secondary',
               }}
             >
               <Typography variant="h6" sx={{ mb: 1 }}>
@@ -292,7 +291,7 @@ const CollectionPage = () => {
         open={openDeleteModal}
         onClose={handleCloseDeleteModal}
         collectionId={selectedCollection?.id || null}
-        collectionTitle={selectedCollection?.title || ""}
+        collectionTitle={selectedCollection?.title || ''}
       />
     </Container>
   );

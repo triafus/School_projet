@@ -1,8 +1,8 @@
-import React, { useRef, ChangeEvent } from "react";
-import { Box, Typography } from "@mui/material";
-import { CloudUpload as UploadIcon } from "@mui/icons-material";
-import LoadingSpinner from "../LoadingSpinner";
-import { ImagePreview, processImageFile } from "../../utils/imageUtils";
+import React, { useRef, ChangeEvent } from 'react';
+import { Box, Typography } from '@mui/material';
+import { CloudUpload as UploadIcon } from '@mui/icons-material';
+import LoadingSpinner from '../LoadingSpinner';
+import { ImagePreview, processImageFile } from '../../utils/imageUtils';
 
 interface ImageUploadAreaProps {
   imagePreview: ImagePreview | null;
@@ -46,18 +46,18 @@ export const ImageUploadArea = (props: ImageUploadAreaProps) => {
   return (
     <Box
       sx={{
-        border: "2px dashed",
-        borderColor: imagePreview ? "success.main" : "grey.300",
+        border: '2px dashed',
+        borderColor: imagePreview ? 'success.main' : 'grey.300',
         borderRadius: 2,
         p: 3,
-        textAlign: "center",
+        textAlign: 'center',
         mb: 3,
-        cursor: disabled ? "not-allowed" : "pointer",
-        transition: "all 0.2s",
+        cursor: disabled ? 'not-allowed' : 'pointer',
+        transition: 'all 0.2s',
         opacity: disabled ? 0.6 : 1,
-        "&:hover": {
-          borderColor: disabled ? "inherit" : "primary.main",
-          bgcolor: disabled ? "inherit" : "action.hover",
+        '&:hover': {
+          borderColor: disabled ? 'inherit' : 'primary.main',
+          bgcolor: disabled ? 'inherit' : 'action.hover',
         },
       }}
       onClick={() => !disabled && fileInputRef.current?.click()}
@@ -69,7 +69,7 @@ export const ImageUploadArea = (props: ImageUploadAreaProps) => {
         type="file"
         accept="image/*"
         onChange={handleFileSelect}
-        style={{ display: "none" }}
+        style={{ display: 'none' }}
         disabled={disabled}
       />
 
@@ -82,7 +82,7 @@ export const ImageUploadArea = (props: ImageUploadAreaProps) => {
             src={imagePreview.url}
             alt="Aperçu"
             sx={{
-              maxWidth: "100%",
+              maxWidth: '100%',
               maxHeight: 200,
               borderRadius: 1,
               mb: 2,
@@ -92,12 +92,12 @@ export const ImageUploadArea = (props: ImageUploadAreaProps) => {
             Image sélectionnée • Cliquez pour changer
           </Typography>
           <Typography variant="caption" color="text.secondary">
-            Taille originale:{" "}
+            Taille originale:{' '}
             {(imagePreview.file.size / 1024 / 1024).toFixed(2)} MB
             {imagePreview.compressed && (
               <>
-                {" "}
-                → Compressée:{" "}
+                {' '}
+                → Compressée:{' '}
                 {(imagePreview.compressed.size / 1024 / 1024).toFixed(2)} MB
               </>
             )}
@@ -105,7 +105,7 @@ export const ImageUploadArea = (props: ImageUploadAreaProps) => {
         </Box>
       ) : (
         <Box>
-          <UploadIcon sx={{ fontSize: 48, color: "grey.400", mb: 2 }} />
+          <UploadIcon sx={{ fontSize: 48, color: 'grey.400', mb: 2 }} />
           <Typography variant="h6" gutterBottom>
             Sélectionnez une image
           </Typography>
@@ -115,7 +115,7 @@ export const ImageUploadArea = (props: ImageUploadAreaProps) => {
           <Typography
             variant="caption"
             color="text.secondary"
-            sx={{ mt: 1, display: "block" }}
+            sx={{ mt: 1, display: 'block' }}
           >
             Formats supportés: JPG, PNG • Taille max: 10MB
           </Typography>

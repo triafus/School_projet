@@ -1,9 +1,9 @@
-import React from "react";
-import { Typography, Box } from "@mui/material";
-import { BaseImageModal } from "./BaseImageModal";
-import { CustomButton } from "../CustomButton";
-import { Image } from "../../types/image";
-import { useDeleteImage } from "../../hooks/useImage";
+import React from 'react';
+import { Typography, Box } from '@mui/material';
+import { BaseImageModal } from './BaseImageModal';
+import { CustomButton } from '../CustomButton';
+import { Image } from '../../types/image';
+import { useDeleteImage } from '../../hooks/useImage';
 
 interface DeleteImageModalProps {
   open: boolean;
@@ -39,10 +39,10 @@ export const DeleteImageModal = (props: DeleteImageModalProps) => {
   const actions = (
     <Box
       sx={{
-        display: "flex",
+        display: 'flex',
         gap: 2,
-        justifyContent: "flex-end",
-        width: "100%",
+        justifyContent: 'flex-end',
+        width: '100%',
       }}
     >
       <CustomButton variant="outlined" onClick={onClose} disabled={isPending}>
@@ -53,9 +53,9 @@ export const DeleteImageModal = (props: DeleteImageModalProps) => {
         onClick={handleDelete}
         loading={isPending}
         sx={{
-          backgroundColor: "rgb(170, 14, 14)",
-          "&:hover": {
-            backgroundColor: "rgb(201, 16, 16)",
+          backgroundColor: 'rgb(170, 14, 14)',
+          '&:hover': {
+            backgroundColor: 'rgb(201, 16, 16)',
           },
         }}
       >

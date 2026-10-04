@@ -1,5 +1,5 @@
-import React from "react";
-import { Box, Typography, Select, MenuItem, FormControl } from "@mui/material";
+import React from 'react';
+import { Box, Typography, Select, MenuItem, FormControl } from '@mui/material';
 
 interface AdminRoleFilterProps {
   filterRole: string;
@@ -9,10 +9,10 @@ interface AdminRoleFilterProps {
 const AdminRoleFilter = (props: AdminRoleFilterProps) => {
   const { filterRole, onFilterChange } = props;
   return (
-    <Box sx={{ display: "flex", gap: 2, mb: 3, alignItems: "center" }}>
+    <Box sx={{ display: 'flex', gap: 2, mb: 3, alignItems: 'center' }}>
       <Typography
         variant="body2"
-        sx={{ color: "#6b7280", minWidth: "fit-content" }}
+        sx={{ color: '#6b7280', minWidth: 'fit-content' }}
       >
         Filtrer par:
       </Typography>
@@ -21,12 +21,12 @@ const AdminRoleFilter = (props: AdminRoleFilterProps) => {
           value={filterRole}
           onChange={(e) => onFilterChange(e.target.value)}
           sx={{
-            bgcolor: "white",
-            "& .MuiOutlinedInput-notchedOutline": {
-              border: "1px solid #e5e7eb",
+            bgcolor: 'white',
+            '& .MuiOutlinedInput-notchedOutline': {
+              border: '1px solid #e5e7eb',
             },
-            "&:hover .MuiOutlinedInput-notchedOutline": {
-              border: "1px solid #d1d5db",
+            '&:hover .MuiOutlinedInput-notchedOutline': {
+              border: '1px solid #d1d5db',
             },
           }}
         >

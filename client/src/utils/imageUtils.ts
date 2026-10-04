@@ -6,11 +6,11 @@ export interface ImagePreview {
 
 export const compressImage = (
   file: File,
-  quality: number = 0.8
+  quality: number = 0.8,
 ): Promise<File> => {
   return new Promise((resolve) => {
-    const canvas = document.createElement("canvas");
-    const ctx = canvas.getContext("2d");
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
     const img = new Image();
 
     img.onload = () => {
@@ -32,7 +32,7 @@ export const compressImage = (
         (blob) => {
           if (blob) {
             const compressedFile = new File([blob], file.name, {
-              type: "image/jpeg",
+              type: 'image/jpeg',
               lastModified: Date.now(),
             });
             resolve(compressedFile);
@@ -40,8 +40,8 @@ export const compressImage = (
             resolve(file);
           }
         },
-        "image/jpeg",
-        quality
+        'image/jpeg',
+        quality,
       );
     };
 
@@ -50,12 +50,12 @@ export const compressImage = (
 };
 
 export const validateImageFile = (file: File): string | null => {
-  if (!file.type.startsWith("image/")) {
-    return "Veuillez sélectionner un fichier image valide";
+  if (!file.type.startsWith('image/')) {
+    return 'Veuillez sélectionner un fichier image valide';
   }
 
   if (file.size > 10 * 1024 * 1024) {
-    return "La taille maximale du fichier est de 10MB";
+    return 'La taille maximale du fichier est de 10MB';
   }
 
   return null;
@@ -63,7 +63,7 @@ export const validateImageFile = (file: File): string | null => {
 
 export const processImageFile = async (
   file: File,
-  setCompressing: (compressing: boolean) => void
+  setCompressing: (compressing: boolean) => void,
 ): Promise<ImagePreview | null> => {
   setCompressing(true);
 

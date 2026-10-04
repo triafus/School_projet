@@ -1,5 +1,5 @@
-import { User } from "../../users/user.entity";
-import { Multer } from "multer";
+import { User } from '../../users/user.entity';
+import { Multer } from 'multer';
 
 declare global {
   namespace Express {

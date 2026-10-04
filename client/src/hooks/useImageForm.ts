@@ -1,7 +1,7 @@
-import { useForm } from "react-hook-form";
-import { useState } from "react";
-import { ImageFormData } from "../types/image";
-import { ImagePreview } from "../utils/imageUtils";
+import { useForm } from 'react-hook-form';
+import { useState } from 'react';
+import { ImageFormData } from '../types/image';
+import { ImagePreview } from '../utils/imageUtils';
 
 export const useImageForm = (defaultValues?: Partial<ImageFormData>) => {
   const [imagePreview, setImagePreview] = useState<ImagePreview | null>(null);
@@ -9,12 +9,12 @@ export const useImageForm = (defaultValues?: Partial<ImageFormData>) => {
 
   const form = useForm<ImageFormData>({
     defaultValues: {
-      title: "",
-      description: "",
+      title: '',
+      description: '',
       is_private: false,
       ...defaultValues,
     },
-    mode: "onChange",
+    mode: 'onChange',
   });
 
   const resetForm = () => {

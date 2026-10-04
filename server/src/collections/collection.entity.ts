@@ -8,11 +8,11 @@ import {
   UpdateDateColumn,
   ManyToMany,
   JoinTable,
-} from "typeorm";
-import { User } from "../users/user.entity";
-import { Image } from "../images/image.entity";
+} from 'typeorm';
+import { User } from '../users/user.entity';
+import { Image } from '../images/image.entity';
 
-@Entity("collections")
+@Entity('collections')
 export class Collection {
   @PrimaryGeneratedColumn()
   id: number;
@@ -26,8 +26,8 @@ export class Collection {
   @Column({ default: true })
   is_private: boolean;
 
-  @ManyToOne(() => User, (user) => user.id, { onDelete: "CASCADE" })
-  @JoinColumn({ name: "userId" })
+  @ManyToOne(() => User, (user) => user.id, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'userId' })
   user: User;
 
   @Column()
@@ -35,21 +35,21 @@ export class Collection {
 
   @ManyToMany(() => Image, (image) => image.collections)
   @JoinTable({
-    name: "collection_images",
+    name: 'collection_images',
     joinColumn: {
-      name: "collection_id",
-      referencedColumnName: "id",
+      name: 'collection_id',
+      referencedColumnName: 'id',
     },
     inverseJoinColumn: {
-      name: "image_id",
-      referencedColumnName: "id",
+      name: 'image_id',
+      referencedColumnName: 'id',
     },
   })
   images: Image[];
 
-  @CreateDateColumn({ name: "created_at" })
+  @CreateDateColumn({ name: 'created_at' })
   created_at: Date;
 
-  @UpdateDateColumn({ name: "updated_at" })
+  @UpdateDateColumn({ name: 'updated_at' })
   updated_at: Date;
 }

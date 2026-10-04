@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo } from 'react';
 import {
   Box,
   List,
@@ -9,15 +9,15 @@ import {
   CircularProgress,
   Alert,
   Chip,
-} from "@mui/material";
-import { CheckCircle, Collections } from "@mui/icons-material";
-import { BaseImageModal } from "../ImageModal/BaseImageModal";
-import { CustomButton } from "../CustomButton";
-import { Collection } from "../../types/collection";
-import { Image } from "../../types/image";
-import { useCollections } from "../../hooks/useCollection";
-import { useUpdateCollectionImages } from "../../hooks/useCollection";
-import { useAuth } from "../../hooks/useAuth";
+} from '@mui/material';
+import { CheckCircle, Collections } from '@mui/icons-material';
+import { BaseImageModal } from '../ImageModal/BaseImageModal';
+import { CustomButton } from '../CustomButton';
+import { Collection } from '../../types/collection';
+import { Image } from '../../types/image';
+import { useCollections } from '../../hooks/useCollection';
+import { useUpdateCollectionImages } from '../../hooks/useCollection';
+import { useAuth } from '../../hooks/useAuth';
 
 interface AddToCollectionModalProps {
   open: boolean;
@@ -65,7 +65,7 @@ export const AddToCollectionModal = ({
     if (!selectedCollectionId || !image) return;
 
     const collection = collectionsWithImageStatus.find(
-      (c) => c.id === selectedCollectionId
+      (c) => c.id === selectedCollectionId,
     );
 
     if (collection?.hasImage) {
@@ -83,7 +83,7 @@ export const AddToCollectionModal = ({
     } catch (error) {
       console.error(
         "Erreur lors de l'ajout de l'image à la collection:",
-        error
+        error,
       );
     }
   };
@@ -91,9 +91,9 @@ export const AddToCollectionModal = ({
   const errorMessage =
     error instanceof Error
       ? error.message
-      : typeof error === "string"
-      ? error
-      : null;
+      : typeof error === 'string'
+        ? error
+        : null;
 
   if (!image) {
     return null;
@@ -125,13 +125,13 @@ export const AddToCollectionModal = ({
         </>
       }
     >
-      <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
         {isLoading ? (
           <Box
             sx={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
               minHeight: 200,
             }}
           >
@@ -155,10 +155,10 @@ export const AddToCollectionModal = ({
                     onClick={() => handleSelectCollection(collection.id)}
                     disabled={collection.hasImage}
                   >
-                    <Collections sx={{ mr: 2, color: "text.secondary" }} />
+                    <Collections sx={{ mr: 2, color: 'text.secondary' }} />
                     <ListItemText
                       primary={collection.title}
-                      secondary={collection.description || "Aucune description"}
+                      secondary={collection.description || 'Aucune description'}
                     />
                     {collection.hasImage && (
                       <Chip

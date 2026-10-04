@@ -1,18 +1,13 @@
-import React, { useEffect } from "react";
-import { Controller, useForm } from "react-hook-form";
-import {
-  Box,
-  Checkbox,
-  FormControlLabel,
-  TextField,
-} from "@mui/material";
-import { BaseImageModal } from "../ImageModal/BaseImageModal";
-import { CustomButton } from "../CustomButton";
-import { Collection, CollectionFormData } from "../../types/collection";
+import React, { useEffect } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import { Box, Checkbox, FormControlLabel, TextField } from '@mui/material';
+import { BaseImageModal } from '../ImageModal/BaseImageModal';
+import { CustomButton } from '../CustomButton';
+import { Collection, CollectionFormData } from '../../types/collection';
 import {
   useCreateCollection,
   useUpdateCollection,
-} from "../../hooks/useCollection";
+} from '../../hooks/useCollection';
 
 export interface CollectionFormModalProps {
   open: boolean;
@@ -21,8 +16,8 @@ export interface CollectionFormModalProps {
 }
 
 const toDefaultValues = (c?: Collection | null): CollectionFormData => ({
-  title: c?.title || "",
-  description: c?.description || "",
+  title: c?.title || '',
+  description: c?.description || '',
   is_private: c?.is_private ?? true,
 });
 
@@ -40,7 +35,7 @@ export const CollectionFormModal = ({
     formState: { isValid },
   } = useForm<CollectionFormData>({
     defaultValues: toDefaultValues(initialData || null),
-    mode: "onChange",
+    mode: 'onChange',
   });
 
   useEffect(() => {
@@ -60,9 +55,7 @@ export const CollectionFormModal = ({
 
   const loading = creating || updating;
   const errorMessage =
-    (createError as any)?.message ||
-    (updateError as any)?.message ||
-    null;
+    (createError as any)?.message || (updateError as any)?.message || null;
 
   const onSubmit = handleSubmit(async (data) => {
     const payload: CollectionFormData = {
@@ -84,7 +77,7 @@ export const CollectionFormModal = ({
     <BaseImageModal
       open={open}
       onClose={onClose}
-      title={isEdit ? "Modifier la collection" : "Nouvelle collection"}
+      title={isEdit ? 'Modifier la collection' : 'Nouvelle collection'}
       error={errorMessage}
       loading={loading}
       actions={
@@ -97,21 +90,18 @@ export const CollectionFormModal = ({
           >
             Annuler
           </CustomButton>
-          <CustomButton
-            onClick={onSubmit}
-            disabled={!isValid || loading}
-          >
-            {isEdit ? "Enregistrer" : "Créer"}
+          <CustomButton onClick={onSubmit} disabled={!isValid || loading}>
+            {isEdit ? 'Enregistrer' : 'Créer'}
           </CustomButton>
         </>
       }
     >
-      <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
         {/* Title */}
         <Controller
           name="title"
           control={control}
-          rules={{ required: "Le titre est requis" }}
+          rules={{ required: 'Le titre est requis' }}
           render={({ field, fieldState }) => (
             <TextField
               {...field}

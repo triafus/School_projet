@@ -1,21 +1,21 @@
-import { useEffect, useState } from "react";
-import { useAuth } from "../hooks/useAuth";
-import { useNavigate, Link } from "react-router-dom";
+import { useEffect, useState } from 'react';
+import { useAuth } from '../hooks/useAuth';
+import { useNavigate, Link } from 'react-router-dom';
 import {
   Box,
   Typography,
   TextField,
   Button,
   CircularProgress,
-} from "@mui/material";
-import DeathNature from "/assets/DeathNature.jpg";
+} from '@mui/material';
+import DeathNature from '/assets/DeathNature.jpg';
 
 export const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const { login, isLoggingIn, isAuthenticated } = useAuth();
   const navigate = useNavigate();
-  const from = "/";
+  const from = '/';
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -32,21 +32,21 @@ export const Login = () => {
     <>
       <Box
         sx={{
-          display: "flex",
-          minHeight: "100vh",
-          bgcolor: "#fafafa",
+          display: 'flex',
+          minHeight: '100vh',
+          bgcolor: '#fafafa',
         }}
       >
         <Box
           sx={{
             flex: 1,
-            display: { xs: "none", md: "flex" },
-            flexDirection: "column",
-            justifyContent: "space-between",
+            display: { xs: 'none', md: 'flex' },
+            flexDirection: 'column',
+            justifyContent: 'space-between',
             p: 6,
-            bgcolor: "white",
+            bgcolor: 'white',
             borderRadius: 8,
-            border: "4px solid white",
+            border: '4px solid white',
             backgroundImage: `url(${DeathNature})`,
           }}
         >
@@ -55,9 +55,9 @@ export const Login = () => {
               variant="h6"
               sx={{
                 fontWeight: 400,
-                color: "rgb(236, 237, 240)",
+                color: 'rgb(236, 237, 240)',
                 mb: 1,
-                letterSpacing: "0.080em",
+                letterSpacing: '0.080em',
               }}
             >
               Daria-Yakovleva
@@ -67,15 +67,15 @@ export const Login = () => {
         <Box
           sx={{
             flex: 1,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
             p: 4,
           }}
         >
           <Box
             sx={{
-              width: "100%",
+              width: '100%',
               maxWidth: 400,
             }}
           >
@@ -84,9 +84,9 @@ export const Login = () => {
                 variant="h4"
                 sx={{
                   fontWeight: 600,
-                  color: "#0f172a",
+                  color: '#0f172a',
                   mb: 1,
-                  letterSpacing: "-0.025em",
+                  letterSpacing: '-0.025em',
                 }}
               >
                 Connexion
@@ -94,19 +94,19 @@ export const Login = () => {
               <Typography
                 variant="body2"
                 sx={{
-                  color: "#64748b",
+                  color: '#64748b',
                 }}
               >
-                Je n'ai pas de compte ?{" "}
+                Je n'ai pas de compte ?{' '}
                 <Typography
                   component={Link}
                   to="/register"
                   sx={{
-                    color: "#3b82f6",
-                    textDecoration: "underline",
+                    color: '#3b82f6',
+                    textDecoration: 'underline',
                     fontWeight: 500,
-                    "&:hover": {
-                      color: "#2563eb",
+                    '&:hover': {
+                      color: '#2563eb',
                     },
                   }}
                 >
@@ -119,7 +119,7 @@ export const Login = () => {
               <Typography
                 variant="body2"
                 sx={{
-                  color: "#374151",
+                  color: '#374151',
                   mb: 1,
                   fontWeight: 500,
                 }}
@@ -137,21 +137,21 @@ export const Login = () => {
                 required
                 sx={{
                   mb: 3,
-                  "& .MuiOutlinedInput-root": {
-                    bgcolor: "white",
+                  '& .MuiOutlinedInput-root': {
+                    bgcolor: 'white',
                     borderRadius: 2,
-                    "& fieldset": {
-                      borderColor: "#d1d5db",
+                    '& fieldset': {
+                      borderColor: '#d1d5db',
                     },
-                    "&:hover fieldset": {
-                      borderColor: "#9ca3af",
+                    '&:hover fieldset': {
+                      borderColor: '#9ca3af',
                     },
-                    "&.Mui-focused fieldset": {
-                      borderColor: "#3b82f6",
+                    '&.Mui-focused fieldset': {
+                      borderColor: '#3b82f6',
                       borderWidth: 2,
                     },
                   },
-                  "& .MuiOutlinedInput-input": {
+                  '& .MuiOutlinedInput-input': {
                     py: 1.5,
                   },
                 }}
@@ -159,7 +159,7 @@ export const Login = () => {
               <Typography
                 variant="body2"
                 sx={{
-                  color: "#374151",
+                  color: '#374151',
                   mb: 1,
                   fontWeight: 500,
                 }}
@@ -177,21 +177,21 @@ export const Login = () => {
                 required
                 sx={{
                   mb: 4,
-                  "& .MuiOutlinedInput-root": {
-                    bgcolor: "white",
+                  '& .MuiOutlinedInput-root': {
+                    bgcolor: 'white',
                     borderRadius: 2,
-                    "& fieldset": {
-                      borderColor: "#d1d5db",
+                    '& fieldset': {
+                      borderColor: '#d1d5db',
                     },
-                    "&:hover fieldset": {
-                      borderColor: "#9ca3af",
+                    '&:hover fieldset': {
+                      borderColor: '#9ca3af',
                     },
-                    "&.Mui-focused fieldset": {
-                      borderColor: "#3b82f6",
+                    '&.Mui-focused fieldset': {
+                      borderColor: '#3b82f6',
                       borderWidth: 2,
                     },
                   },
-                  "& .MuiOutlinedInput-input": {
+                  '& .MuiOutlinedInput-input': {
                     py: 1.5,
                   },
                 }}
@@ -203,29 +203,29 @@ export const Login = () => {
                 disabled={isLoggingIn}
                 sx={{
                   py: 1.5,
-                  bgcolor: "#374151",
-                  color: "white",
-                  fontSize: "1rem",
+                  bgcolor: '#374151',
+                  color: 'white',
+                  fontSize: '1rem',
                   fontWeight: 500,
                   borderRadius: 2,
-                  textTransform: "none",
-                  "&:hover": {
-                    bgcolor: "#1f2937",
+                  textTransform: 'none',
+                  '&:hover': {
+                    bgcolor: '#1f2937',
                   },
-                  "&:disabled": {
-                    bgcolor: "#d1d5db",
-                    color: "#9ca3af",
+                  '&:disabled': {
+                    bgcolor: '#d1d5db',
+                    color: '#9ca3af',
                   },
                   mb: 4,
                 }}
               >
                 {isLoggingIn ? (
-                  <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                     <CircularProgress size={20} color="inherit" />
                     Connexion...
                   </Box>
                 ) : (
-                  "Se connecter"
+                  'Se connecter'
                 )}
               </Button>
             </form>

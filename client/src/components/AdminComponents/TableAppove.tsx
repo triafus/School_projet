@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   Box,
   Typography,
@@ -15,13 +15,13 @@ import {
   CircularProgress,
   Alert,
   Button,
-} from "@mui/material";
-import { Visibility as VisibilityIcon } from "@mui/icons-material";
-import { useImages, useApproveImage } from "../../hooks/useImage";
-import { useUsers } from "../../hooks/useUser";
-import { Image } from "../../types/image";
-import { ImageViewModal } from "../ImageModal/ImageViewModal";
-import { CustomButton } from "../CustomButton";
+} from '@mui/material';
+import { Visibility as VisibilityIcon } from '@mui/icons-material';
+import { useImages, useApproveImage } from '../../hooks/useImage';
+import { useUsers } from '../../hooks/useUser';
+import { Image } from '../../types/image';
+import { ImageViewModal } from '../ImageModal/ImageViewModal';
+import { CustomButton } from '../CustomButton';
 
 export const TableAppove = () => {
   const [selectedImage, setSelectedImage] = useState<Image | null>(null);
@@ -39,12 +39,12 @@ export const TableAppove = () => {
 
   const getUserName = (userId: number) => {
     const user = users.find((u) => u.id === userId);
-    return user ? `${user.firstName} ${user.lastName}` : "Utilisateur inconnu";
+    return user ? `${user.firstName} ${user.lastName}` : 'Utilisateur inconnu';
   };
 
   const handleApprovalToggle = async (
     imageId: number,
-    currentStatus: boolean
+    currentStatus: boolean,
   ) => {
     try {
       await approveImageMutation.mutateAsync({
@@ -68,9 +68,9 @@ export const TableAppove = () => {
 
   if (imagesLoading) {
     return (
-      <Box sx={{ p: 4, textAlign: "center" }}>
+      <Box sx={{ p: 4, textAlign: 'center' }}>
         <CircularProgress />
-        <Typography variant="body2" sx={{ mt: 2, color: "#6b7280" }}>
+        <Typography variant="body2" sx={{ mt: 2, color: '#6b7280' }}>
           Chargement des images en attente...
         </Typography>
       </Box>
@@ -92,13 +92,13 @@ export const TableAppove = () => {
       <Box sx={{ mb: 3 }}>
         <Typography
           variant="h6"
-          sx={{ fontWeight: 600, color: "#1f2937", mb: 0.5 }}
+          sx={{ fontWeight: 600, color: '#1f2937', mb: 0.5 }}
         >
           Images en attente d'approbation
         </Typography>
-        <Typography variant="body2" sx={{ color: "#6b7280" }}>
+        <Typography variant="body2" sx={{ color: '#6b7280' }}>
           {unapprovedImages.length} image
-          {unapprovedImages.length !== 1 ? "s" : ""} en attente
+          {unapprovedImages.length !== 1 ? 's' : ''} en attente
         </Typography>
       </Box>
 
@@ -106,12 +106,12 @@ export const TableAppove = () => {
         <Box
           sx={{
             p: 4,
-            textAlign: "center",
-            bgcolor: "#f9fafb",
+            textAlign: 'center',
+            bgcolor: '#f9fafb',
             borderRadius: 2,
           }}
         >
-          <Typography variant="body1" sx={{ color: "#6b7280" }}>
+          <Typography variant="body1" sx={{ color: '#6b7280' }}>
             Aucune image en attente d'approbation
           </Typography>
         </Box>
@@ -120,11 +120,11 @@ export const TableAppove = () => {
           component={Paper}
           sx={{
             borderRadius: 2,
-            border: "1px solid #e5e7eb",
+            border: '1px solid #e5e7eb',
           }}
         >
           <Table>
-            <TableHead sx={{ bgcolor: "#f9fafb" }}>
+            <TableHead sx={{ bgcolor: '#f9fafb' }}>
               <TableRow>
                 <TableCell sx={{ fontWeight: 600 }}>Image</TableCell>
                 <TableCell sx={{ fontWeight: 600 }}>Titre</TableCell>
@@ -141,7 +141,7 @@ export const TableAppove = () => {
                       src={image.url}
                       alt={image.title}
                       variant="rounded"
-                      sx={{ width: 60, height: 60, cursor: "pointer" }}
+                      sx={{ width: 60, height: 60, cursor: 'pointer' }}
                       onClick={() => handleViewImage(image)}
                     />
                   </TableCell>
@@ -152,7 +152,7 @@ export const TableAppove = () => {
                     {image.description && (
                       <Typography
                         variant="caption"
-                        sx={{ color: "#6b7280", display: "block", mt: 0.5 }}
+                        sx={{ color: '#6b7280', display: 'block', mt: 0.5 }}
                       >
                         {image.description.length > 50
                           ? `${image.description.substring(0, 50)}...`
@@ -170,14 +170,14 @@ export const TableAppove = () => {
                       label="En attente"
                       size="small"
                       sx={{
-                        bgcolor: "#fef3c7",
-                        color: "#92400e",
+                        bgcolor: '#fef3c7',
+                        color: '#92400e',
                         fontWeight: 500,
                       }}
                     />
                   </TableCell>
                   <TableCell>
-                    <Box sx={{ display: "flex", gap: 1 }}>
+                    <Box sx={{ display: 'flex', gap: 1 }}>
                       <CustomButton
                         variant="outlined"
                         size="small"

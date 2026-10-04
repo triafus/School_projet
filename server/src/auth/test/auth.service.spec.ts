@@ -1,23 +1,23 @@
-import { Test, TestingModule } from "@nestjs/testing";
-import { UnauthorizedException } from "@nestjs/common";
-import { JwtService } from "@nestjs/jwt";
-import { AuthService } from "../auth.service";
-import { UsersService } from "../../users/users.service";
-import { User } from "../../users/user.entity";
-import { LoginDto } from "../dto/login.dto";
+import { Test, TestingModule } from '@nestjs/testing';
+import { UnauthorizedException } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
+import { AuthService } from '../auth.service';
+import { UsersService } from '../../users/users.service';
+import { User } from '../../users/user.entity';
+import { LoginDto } from '../dto/login.dto';
 
-describe("AuthService", () => {
+describe('AuthService', () => {
   let service: AuthService;
   let usersService: UsersService;
   let jwtService: JwtService;
 
   const mockUser: User = {
     id: 1,
-    email: "test@example.com",
-    firstName: "Test",
-    lastName: "User",
-    password: "hashedPassword123",
-    role: "user",
+    email: 'test@example.com',
+    firstName: 'Test',
+    lastName: 'User',
+    password: 'hashedPassword123',
+    role: 'user',
     images: [],
     createdAt: new Date(),
     updatedAt: new Date(),
@@ -57,78 +57,78 @@ describe("AuthService", () => {
     jest.clearAllMocks();
   });
 
-  describe("validateUser", () => {
-    it("should return user when credentials are valid", async () => {
+  describe('validateUser', () => {
+    it('should return user when credentials are valid', async () => {
       // Arrange
       mockUsersService.findByEmail.mockResolvedValue(mockUser);
       mockUsersService.validatePassword.mockResolvedValue(true);
 
       // Act
       const result = await service.validateUser(
-        "test@example.com",
-        "password123"
+        'test@example.com',
+        'password123',
       );
 
       // Assert
       expect(result).toEqual(mockUser);
       expect(mockUsersService.findByEmail).toHaveBeenCalledWith(
-        "test@example.com",
-        true
+        'test@example.com',
+        true,
       );
       expect(mockUsersService.validatePassword).toHaveBeenCalledWith(
-        "password123",
-        "hashedPassword123"
+        'password123',
+        'hashedPassword123',
       );
     });
 
-    it("should return null when user is not found", async () => {
+    it('should return null when user is not found', async () => {
       // Arrange
       mockUsersService.findByEmail.mockResolvedValue(null);
 
       // Act
       const result = await service.validateUser(
-        "nonexistent@example.com",
-        "password123"
+        'nonexistent@example.com',
+        'password123',
       );
 
       // Assert
       expect(result).toBeNull();
       expect(mockUsersService.findByEmail).toHaveBeenCalledWith(
-        "nonexistent@example.com",
-        true
+        'nonexistent@example.com',
+        true,
       );
       expect(mockUsersService.validatePassword).not.toHaveBeenCalled();
     });
 
-    it("should return null when password is invalid", async () => {
+    it('should return null when password is invalid', async () => {
       // Arrange
       mockUsersService.findByEmail.mockResolvedValue(mockUser);
       mockUsersService.validatePassword.mockResolvedValue(false);
 
       // Act
       const result = await service.validateUser(
-        "test@example.com",
-        "wrongpassword"
+        'test@example.com',
+        'wrongpassword',
       );
 
       // Assert
       expect(result).toBeNull();
       expect(mockUsersService.validatePassword).toHaveBeenCalledWith(
-        "wrongpassword",
-        "hashedPassword123"
+        'wrongpassword',
+        'hashedPassword123',
       );
     });
   });
 
-  describe("login", () => {
+  describe('login', () => {
     const loginDto: LoginDto = {
-      email: "test@example.com",
-      password: "password123",
+      email: 'test@example.com',
+      password: 'password123',
     };
 
-    it("✔️ should return access token and user info when credentials are valid", async () => {
+    it('✔️ should return access token and user info when credentials are valid', async () => {
       // Arrange
-      const mockToken = "mock.jwt.token";
+      const mockToken = 'mock.jwt.token';
       mockUsersService.findByEmail.mockResolvedValue(mockUser);
       mockUsersService.validatePassword.mockResolvedValue(true);
       mockJwtService.sign.mockReturnValue(mockToken);
@@ -149,50 +149,50 @@ describe("AuthService", () => {
       });
       expect(mockJwtService.sign).toHaveBeenCalledWith(
         { email: mockUser.email, sub: mockUser.id, role: mockUser.role },
-        { expiresIn: "1h" }
+        { expiresIn: '1h' },
       );
     });
 
-    it("✔️ should throw UnauthorizedException when credentials are invalid", async () => {
+    it('✔️ should throw UnauthorizedException when credentials are invalid', async () => {
       // Arrange
       mockUsersService.findByEmail.mockResolvedValue(null);
 
       // Act & Assert
       await expect(service.login(loginDto)).rejects.toThrow(
-        UnauthorizedException
+        UnauthorizedException,
       );
       await expect(service.login(loginDto)).rejects.toThrow(
-        "Identifiants invalides"
+        'Identifiants invalides',
       );
     });
 
-    it("✔️ should throw UnauthorizedException when password is wrong", async () => {
+    it('✔️ should throw UnauthorizedException when password is wrong', async () => {
       // Arrange
       mockUsersService.findByEmail.mockResolvedValue(mockUser);
       mockUsersService.validatePassword.mockResolvedValue(false);
 
       // Act & Assert
       await expect(service.login(loginDto)).rejects.toThrow(
-        UnauthorizedException
+        UnauthorizedException,
       );
       await expect(service.login(loginDto)).rejects.toThrow(
-        "Identifiants invalides"
+        'Identifiants invalides',
       );
     });
   });
 
-  describe("register", () => {
+  describe('register', () => {
     const createUserDto = {
-      email: "newuser@example.com",
-      password: "password123",
-      firstName: "New",
-      lastName: "User",
+      email: 'newuser@example.com',
+      password: 'password123',
+      firstName: 'New',
+      lastName: 'User',
     };
 
-    it("should register new user and return access token", async () => {
+    it('should register new user and return access token', async () => {
       // Arrange
       const newUser = { ...mockUser, ...createUserDto, id: 2 };
-      const mockToken = "mock.jwt.token";
+      const mockToken = 'mock.jwt.token';
       mockUsersService.create.mockResolvedValue(newUser);
       mockJwtService.sign.mockReturnValue(mockToken);
 
@@ -213,7 +213,7 @@ describe("AuthService", () => {
       expect(mockUsersService.create).toHaveBeenCalledWith(createUserDto);
       expect(mockJwtService.sign).toHaveBeenCalledWith(
         { email: newUser.email, sub: newUser.id, role: newUser.role },
-        { expiresIn: "1h" }
+        { expiresIn: '1h' },
       );
     });
   });

@@ -1,11 +1,11 @@
-import React from "react";
-import { Divider } from "@mui/material";
-import { usePostImage } from "../../hooks/useImage";
-import { useImageForm } from "../../hooks/useImageForm";
-import { CustomButton } from "../CustomButton";
-import { BaseImageModal } from "./BaseImageModal";
-import { ImageUploadArea } from "./ImageUploadArea";
-import { ImageFormFields } from "./ImageFormFields";
+import React from 'react';
+import { Divider } from '@mui/material';
+import { usePostImage } from '../../hooks/useImage';
+import { useImageForm } from '../../hooks/useImageForm';
+import { CustomButton } from '../CustomButton';
+import { BaseImageModal } from './BaseImageModal';
+import { ImageUploadArea } from './ImageUploadArea';
+import { ImageFormFields } from './ImageFormFields';
 
 interface AddImageModalProps {
   open: boolean;

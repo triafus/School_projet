@@ -1,18 +1,20 @@
-import { useForm } from "react-hook-form";
-import { useState } from "react";
-import { CollectionFormData } from "../types/collection";
+import { useForm } from 'react-hook-form';
+import { useState } from 'react';
+import { CollectionFormData } from '../types/collection';
 
-export const useCollectionForm = (defaultValues?: Partial<CollectionFormData>) => {
+export const useCollectionForm = (
+  defaultValues?: Partial<CollectionFormData>,
+) => {
   const [imageFiles, setImageFiles] = useState<FileList | null>(null);
 
   const form = useForm<CollectionFormData>({
     defaultValues: {
-      title: "",
-      description: "",
+      title: '',
+      description: '',
       is_private: false,
       ...defaultValues,
     },
-    mode: "onChange",
+    mode: 'onChange',
   });
 
   const resetForm = () => {

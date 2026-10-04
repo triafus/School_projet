@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   Box,
   Drawer,
@@ -12,7 +12,7 @@ import {
   Tooltip,
   useTheme,
   useMediaQuery,
-} from "@mui/material";
+} from '@mui/material';
 import {
   AutoAwesomeMosaicOutlined as HomeIcon,
   Dashboard as DashboardIcon,
@@ -21,13 +21,13 @@ import {
   ChevronLeft as ChevronLeftIcon,
   MoreHorizOutlined,
   CollectionsBookmarkOutlined as CollectionsIcon,
-} from "@mui/icons-material";
-import { Link, Outlet, useLocation } from "react-router-dom";
-import { useAuth } from "../hooks/useAuth";
-import { MenuProfile } from "../components/MenuProfile";
-import { Profile } from "../components/Profile";
-import Logo from "/assets/PickU_logo_color.png";
-import { navigationItem } from "./NavItems";
+} from '@mui/icons-material';
+import { Link, Outlet, useLocation } from 'react-router-dom';
+import { useAuth } from '../hooks/useAuth';
+import { MenuProfile } from '../components/MenuProfile';
+import { Profile } from '../components/Profile';
+import Logo from '/assets/PickU_logo_color.png';
+import { navigationItem } from './NavItems';
 
 const DRAWER_WIDTH = 280;
 const COLLAPSED_WIDTH = 72;
@@ -41,36 +41,29 @@ const Navigation = () => {
   const location = useLocation();
   const theme = useTheme();
 
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-  const isAdmin = user?.role === "admin";
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const isAdmin = user?.role === 'admin';
   const isActive = (path: string) => location.pathname === path;
-
 
   const MenuItems = () => {
     const createNavItem = (text: string, icon: React.ReactNode, path: string) =>
       navigationItem({ text, icon, path });
 
-
     const navItems = [
-      createNavItem("Home", <HomeIcon />, "/"),
+      createNavItem('Home', <HomeIcon />, '/'),
       ...(isAuthenticated
         ? [
-            createNavItem("Dashboard", <DashboardIcon />, "/dashboard"),
-            createNavItem("Collections", <CollectionsIcon />, "/collection"),
+            createNavItem('Dashboard', <DashboardIcon />, '/dashboard'),
+            createNavItem('Collections', <CollectionsIcon />, '/collection'),
           ]
         : []),
       ...(isAdmin
-        ? [createNavItem("Administration", <AdminIcon />, "/administration")]
+        ? [createNavItem('Administration', <AdminIcon />, '/administration')]
         : []),
     ];
 
-
     return Object.values(navItems).flat();
-
-
-
   };
-
 
   const handleDrawerToggle = () => {
     if (isMobile) {
@@ -84,34 +77,34 @@ const Navigation = () => {
   const drawerContent = (
     <Box
       sx={{
-        height: "100%",
+        height: '100%',
         background:
-          "linear-gradient(180deg, #2c2c2c 0%, #1a1a1a 50%, #000000 100%)",
-        display: "flex",
-        flexDirection: "column",
-        position: "relative",
-        overflow: "hidden",
+          'linear-gradient(180deg, #2c2c2c 0%, #1a1a1a 50%, #000000 100%)',
+        display: 'flex',
+        flexDirection: 'column',
+        position: 'relative',
+        overflow: 'hidden',
       }}
     >
       {/* Header avec logo */}
       <Box
         sx={{
           p: 3,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-around",
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-around',
           gap: 2,
-          borderBottom: "1px solid rgba(255, 255, 255, 0.1)",
+          borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
           minHeight: 80,
-          padding: "16px",
+          padding: '16px',
         }}
       >
         {isCollapsed ? (
-          <Link to="/" style={{ textDecoration: "none", color: "white" }}>
+          <Link to="/" style={{ textDecoration: 'none', color: 'white' }}>
             <Box
               sx={{
-                display: "flex",
-                justifyContent: "center",
+                display: 'flex',
+                justifyContent: 'center',
                 width: 40,
                 height: 40,
               }}
@@ -119,17 +112,17 @@ const Navigation = () => {
               <img
                 src={Logo}
                 alt="Pict'U"
-                style={{ maxWidth: "100%", height: "40px" }}
+                style={{ maxWidth: '100%', height: '40px' }}
               />
             </Box>
           </Link>
         ) : (
           <Box display="flex" alignItems="center" gap={1}>
-            <Link to="/" style={{ textDecoration: "none", color: "white" }}>
+            <Link to="/" style={{ textDecoration: 'none', color: 'white' }}>
               <Box
                 sx={{
-                  display: "flex",
-                  justifyContent: "center",
+                  display: 'flex',
+                  justifyContent: 'center',
                   width: 40,
                   height: 40,
                 }}
@@ -137,20 +130,20 @@ const Navigation = () => {
                 <img
                   src={Logo}
                   alt="Pict'U"
-                  style={{ maxWidth: "100%", height: "40px" }}
+                  style={{ maxWidth: '100%', height: '40px' }}
                 />
               </Box>
             </Link>
             <Typography
               variant="h6"
               sx={{
-                color: "white",
+                color: 'white',
                 fontWeight: 700,
-                fontSize: "1.25rem",
-                letterSpacing: "-0.02em",
-                whiteSpace: "nowrap",
-                overflow: "hidden",
-                textOverflow: "ellipsis",
+                fontSize: '1.25rem',
+                letterSpacing: '-0.02em',
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
               }}
             >
               Pict'U
@@ -162,14 +155,14 @@ const Navigation = () => {
           <IconButton
             onClick={handleDrawerToggle}
             sx={{
-              color: "white",
-              backgroundColor: "rgba(255, 255, 255, 0.1)",
+              color: 'white',
+              backgroundColor: 'rgba(255, 255, 255, 0.1)',
               width: 32,
               height: 32,
-              "&:hover": {
-                backgroundColor: "rgba(255, 255, 255, 0.2)",
+              '&:hover': {
+                backgroundColor: 'rgba(255, 255, 255, 0.2)',
               },
-              transition: "all 0.2s ease-in-out",
+              transition: 'all 0.2s ease-in-out',
             }}
           >
             <ChevronLeftIcon fontSize="small" />
@@ -190,22 +183,22 @@ const Navigation = () => {
             size="large"
             sx={{
               borderRadius: 2,
-              color: "white",
+              color: 'white',
               width: 48,
               height: 0,
-              "&:hover": {
-                backgroundColor: "rgba(255, 255, 255, 0.2)",
+              '&:hover': {
+                backgroundColor: 'rgba(255, 255, 255, 0.2)',
               },
-              transition: "all 0.2s ease-in-out",
+              transition: 'all 0.2s ease-in-out',
             }}
           >
             <MoreHorizOutlined fontSize="small" />
           </IconButton>
         )}
-        <List sx={{ p: 0, "& .MuiListItem-root": { px: 0 } }}>
+        <List sx={{ p: 0, '& .MuiListItem-root': { px: 0 } }}>
           {MenuItems().map((item) => (
             <ListItem key={item.text} sx={{ mb: 0.5 }}>
-              <Tooltip title={isCollapsed ? item.text : ""} placement="right">
+              <Tooltip title={isCollapsed ? item.text : ''} placement="right">
                 <ListItemButton
                   component={Link}
                   to={item.path}
@@ -215,28 +208,28 @@ const Navigation = () => {
                     px: isCollapsed ? 1.5 : 2,
                     minHeight: 48,
                     backgroundColor: isActive(item.path!)
-                      ? "rgba(255, 255, 255, 0.08)"
-                      : "transparent",
+                      ? 'rgba(255, 255, 255, 0.08)'
+                      : 'transparent',
                     border: isActive(item.path!)
-                      ? "1px solid rgba(255, 255, 255, 0.1)"
-                      : "1px solid transparent",
+                      ? '1px solid rgba(255, 255, 255, 0.1)'
+                      : '1px solid transparent',
                     backdropFilter: isActive(item.path!)
-                      ? "blur(10px)"
-                      : "none",
-                    "&:hover": {
-                      backgroundColor: "rgba(255, 255, 255, 0.05)",
-                      transform: "translateX(2px)",
+                      ? 'blur(10px)'
+                      : 'none',
+                    '&:hover': {
+                      backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                      transform: 'translateX(2px)',
                     },
-                    transition: "all 0.2s ease-in-out",
-                    justifyContent: isCollapsed ? "center" : "flex-start",
-                    alignItems: "center",
+                    transition: 'all 0.2s ease-in-out',
+                    justifyContent: isCollapsed ? 'center' : 'flex-start',
+                    alignItems: 'center',
                   }}
                 >
                   <ListItemIcon
                     sx={{
-                      color: "white",
-                      minWidth: isCollapsed ? "auto" : 40,
-                      justifyContent: "center",
+                      color: 'white',
+                      minWidth: isCollapsed ? 'auto' : 40,
+                      justifyContent: 'center',
                       mr: isCollapsed ? 0 : 1,
                     }}
                   >
@@ -247,10 +240,10 @@ const Navigation = () => {
                       primary={item.text}
                       sx={{
                         m: 0,
-                        "& .MuiListItemText-primary": {
-                          color: "white",
+                        '& .MuiListItemText-primary': {
+                          color: 'white',
                           fontWeight: isActive(item.path!) ? 600 : 500,
-                          fontSize: "0.95rem",
+                          fontSize: '0.95rem',
                         },
                       }}
                     />
@@ -267,7 +260,7 @@ const Navigation = () => {
   );
 
   return (
-    <Box sx={{ display: "flex", minHeight: "100vh" }}>
+    <Box sx={{ display: 'flex', minHeight: '100vh' }}>
       {/* Mobile drawer */}
       {isMobile && (
         <Drawer
@@ -276,10 +269,10 @@ const Navigation = () => {
           onClose={handleDrawerToggle}
           ModalProps={{ keepMounted: true }}
           sx={{
-            "& .MuiDrawer-paper": {
+            '& .MuiDrawer-paper': {
               width: DRAWER_WIDTH,
-              boxSizing: "border-box",
-              border: "none",
+              boxSizing: 'border-box',
+              border: 'none',
             },
           }}
         >
@@ -294,11 +287,11 @@ const Navigation = () => {
           sx={{
             width: isCollapsed ? COLLAPSED_WIDTH : DRAWER_WIDTH,
             flexShrink: 0,
-            "& .MuiDrawer-paper": {
+            '& .MuiDrawer-paper': {
               width: isCollapsed ? COLLAPSED_WIDTH : DRAWER_WIDTH,
-              boxSizing: "border-box",
-              border: "none",
-              transition: theme.transitions.create("width", {
+              boxSizing: 'border-box',
+              border: 'none',
+              transition: theme.transitions.create('width', {
                 easing: theme.transitions.easing.sharp,
                 duration: theme.transitions.duration.enteringScreen,
               }),
@@ -314,17 +307,17 @@ const Navigation = () => {
         <IconButton
           onClick={handleDrawerToggle}
           sx={{
-            position: "fixed",
+            position: 'fixed',
             top: 16,
             left: 16,
             zIndex: 1300,
-            backgroundColor: "rgba(0, 0, 0, 0.8)",
-            color: "white",
-            "&:hover": {
-              backgroundColor: "rgba(0, 0, 0, 0.9)",
+            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+            color: 'white',
+            '&:hover': {
+              backgroundColor: 'rgba(0, 0, 0, 0.9)',
             },
-            backdropFilter: "blur(10px)",
-            border: "1px solid rgba(255, 255, 255, 0.1)",
+            backdropFilter: 'blur(10px)',
+            border: '1px solid rgba(255, 255, 255, 0.1)',
           }}
         >
           <MenuIcon />
@@ -336,8 +329,8 @@ const Navigation = () => {
         component="main"
         sx={{
           flexGrow: 1,
-          minHeight: "100vh",
-          backgroundColor: "#f8fafc",
+          minHeight: '100vh',
+          backgroundColor: '#f8fafc',
           ml: isMobile ? 0 : 0,
         }}
       >

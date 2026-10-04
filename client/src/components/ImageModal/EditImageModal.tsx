@@ -1,13 +1,13 @@
-import React, { useEffect } from "react";
-import { Divider, Box, Typography } from "@mui/material";
-import { useAuth } from "../../hooks/useAuth";
-import { useImageForm } from "../../hooks/useImageForm";
-import { CustomButton } from "../CustomButton";
-import { BaseImageModal } from "./BaseImageModal";
-import { ImageUploadArea } from "./ImageUploadArea";
-import { ImageFormFields } from "./ImageFormFields";
-import { Image, ImageFormData } from "../../types/image";
-import { usePatchImage, useSignedUrl } from "../../hooks/useImage";
+import React, { useEffect } from 'react';
+import { Divider, Box, Typography } from '@mui/material';
+import { useAuth } from '../../hooks/useAuth';
+import { useImageForm } from '../../hooks/useImageForm';
+import { CustomButton } from '../CustomButton';
+import { BaseImageModal } from './BaseImageModal';
+import { ImageUploadArea } from './ImageUploadArea';
+import { ImageFormFields } from './ImageFormFields';
+import { Image, ImageFormData } from '../../types/image';
+import { usePatchImage, useSignedUrl } from '../../hooks/useImage';
 
 interface EditImageModalProps {
   open: boolean;
@@ -23,7 +23,7 @@ export const EditImageModal = (props: EditImageModalProps) => {
   const { mutateAsync: patchImageMutation, isPending } = usePatchImage();
   const { data: signedUrlData } = useSignedUrl(
     image?.id || 0,
-    image?.is_private || false
+    image?.is_private || false,
   );
 
   useEffect(() => {
@@ -61,7 +61,7 @@ export const EditImageModal = (props: EditImageModalProps) => {
         onClick={handleSubmit}
         disabled={!form.formState.isValid || isPending}
       >
-        {isPending ? "Modification en cours..." : "Modifier l'image"}
+        {isPending ? 'Modification en cours...' : "Modifier l'image"}
       </CustomButton>
     </>
   );
@@ -80,11 +80,11 @@ export const EditImageModal = (props: EditImageModalProps) => {
             src={image?.is_private ? signedUrlData?.url : image?.url}
             alt={image.title}
             sx={{
-              maxWidth: "100%",
+              maxWidth: '100%',
               maxHeight: 200,
               borderRadius: 1,
-              border: "1px solid",
-              borderColor: "grey.300",
+              border: '1px solid',
+              borderColor: 'grey.300',
             }}
           />
         </Box>

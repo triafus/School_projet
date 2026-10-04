@@ -1,11 +1,11 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import "./main.css";
-import App from "./App";
-import { QueryProvider } from "./providers/QueryProvider";
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import './main.css';
+import App from './App';
+import { QueryProvider } from './providers/QueryProvider';
 
 const root = ReactDOM.createRoot(
-  document.getElementById("root") as HTMLElement
+  document.getElementById('root') as HTMLElement,
 );
 
 root.render(
@@ -13,5 +13,5 @@ root.render(
     <QueryProvider>
       <App />
     </QueryProvider>
-  </React.StrictMode>
+  </React.StrictMode>,
 );

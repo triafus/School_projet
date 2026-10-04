@@ -3,15 +3,15 @@ import {
   ForbiddenException,
   NotFoundException,
   BadRequestException,
-} from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
-import { In, Repository } from "typeorm";
-import { Collection } from "./collection.entity";
-import { CreateCollectionDto } from "./dto/create-collection.dto";
-import { UpdateCollectionDto } from "./dto/update-collection.dto";
-import { User } from "../users/user.entity";
-import { Image } from "../images/image.entity";
-import { UpdateCollectionImagesDto } from "./dto/update-collection-images.dto";
+} from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { In, Repository } from 'typeorm';
+import { Collection } from './collection.entity';
+import { CreateCollectionDto } from './dto/create-collection.dto';
+import { UpdateCollectionDto } from './dto/update-collection.dto';
+import { User } from '../users/user.entity';
+import { Image } from '../images/image.entity';
+import { UpdateCollectionImagesDto } from './dto/update-collection-images.dto';
 
 @Injectable()
 export class CollectionsService {
@@ -19,23 +19,22 @@ export class CollectionsService {
     @InjectRepository(Collection)
     private collectionsRepository: Repository<Collection>,
     @InjectRepository(Image)
-    private imagesRepository: Repository<Image>
+    private imagesRepository: Repository<Image>,
   ) {}
 
-  
   async findAll(userId?: number) {
     const query = this.collectionsRepository
-      .createQueryBuilder("collection")
-      .leftJoinAndSelect("collection.user", "user")
-      .leftJoinAndSelect("collection.images", "images");
+      .createQueryBuilder('collection')
+      .leftJoinAndSelect('collection.user', 'user')
+      .leftJoinAndSelect('collection.images', 'images');
 
     if (userId) {
       query.where(
-        "collection.is_private = false OR collection.userId = :userId",
-        { userId }
+        'collection.is_private = false OR collection.userId = :userId',
+        { userId },
       );
     } else {
-      query.where("collection.is_private = false");
+      query.where('collection.is_private = false');
     }
 
     return query.getMany();
@@ -44,21 +43,21 @@ export class CollectionsService {
   async findOne(id: number, userId?: number) {
     const collection = await this.collectionsRepository.findOne({
       where: { id },
-      relations: ["user", "images"],
+      relations: ['user', 'images'],
     });
 
-    if (!collection) throw new NotFoundException("Collection non trouvée");
+    if (!collection) throw new NotFoundException('Collection non trouvée');
 
     if (collection.is_private && collection.user.id !== userId) {
-      throw new ForbiddenException("Accès refusé à cette collection privée");
+      throw new ForbiddenException('Accès refusé à cette collection privée');
     }
 
     return collection;
   }
 
   async create(dto: CreateCollectionDto, user: User) {
-    if (typeof (dto as any).is_private === "string") {
-      (dto as any).is_private = (dto as any).is_private === "true";
+    if (typeof (dto as any).is_private === 'string') {
+      (dto as any).is_private = (dto as any).is_private === 'true';
     }
 
     if (dto.is_private === undefined) {
@@ -82,17 +81,17 @@ export class CollectionsService {
       const missing = dto.imageIds.filter((id) => !foundIds.has(id));
       if (missing.length) {
         throw new NotFoundException(
-          `Images non trouvées: ${missing.join(", ")}`
+          `Images non trouvées: ${missing.join(', ')}`,
         );
       }
 
       // Vérifier que l'utilisateur peut accéder à toutes les images
       const inaccessible = images.filter(
-        (img) => !this.canAccessImage(img, user)
+        (img) => !this.canAccessImage(img, user),
       );
       if (inaccessible.length) {
         throw new ForbiddenException(
-          `Vous ne pouvez pas ajouter ces images à votre collection: ${inaccessible.map((i) => i.id).join(", ")}`
+          `Vous ne pouvez pas ajouter ces images à votre collection: ${inaccessible.map((i) => i.id).join(', ')}`,
         );
       }
 
@@ -101,7 +100,7 @@ export class CollectionsService {
         const unapproved = images.filter((img) => !img.is_approved);
         if (unapproved.length) {
           throw new BadRequestException(
-            "Impossible de créer une collection publique avec des images non approuvées."
+            'Impossible de créer une collection publique avec des images non approuvées.',
           );
         }
       }
@@ -127,11 +126,11 @@ export class CollectionsService {
       // Vérifier que l'utilisateur peut accéder à toutes les images
       if (images.length > 0) {
         const inaccessible = images.filter(
-          (img) => !this.canAccessImage(img, user)
+          (img) => !this.canAccessImage(img, user),
         );
         if (inaccessible.length) {
           throw new ForbiddenException(
-            `Vous ne pouvez pas ajouter ces images à votre collection: ${inaccessible.map((i) => i.id).join(", ")}`
+            `Vous ne pouvez pas ajouter ces images à votre collection: ${inaccessible.map((i) => i.id).join(', ')}`,
           );
         }
       }
@@ -142,11 +141,11 @@ export class CollectionsService {
     const nextIsPrivate = dto.is_private ?? collection.is_private;
     if (nextIsPrivate === false) {
       const hasUnapproved = (collection.images || []).some(
-        (img) => !img.is_approved
+        (img) => !img.is_approved,
       );
       if (hasUnapproved) {
         throw new BadRequestException(
-          "Impossible de rendre la collection publique: elle contient des images non approuvées."
+          'Impossible de rendre la collection publique: elle contient des images non approuvées.',
         );
       }
     }
@@ -159,9 +158,9 @@ export class CollectionsService {
 
     const current = await this.collectionsRepository.findOne({
       where: { id: collection.id },
-      relations: ["images"],
+      relations: ['images'],
     });
-    if (!current) throw new NotFoundException("Collection non trouvée");
+    if (!current) throw new NotFoundException('Collection non trouvée');
 
     const addIds = dto.addImageIds ?? [];
     const removeIds = new Set(dto.removeImageIds ?? []);
@@ -176,17 +175,17 @@ export class CollectionsService {
       const missing = addIds.filter((id) => !foundIds.has(id));
       if (missing.length) {
         throw new NotFoundException(
-          `Images non trouvées: ${missing.join(", ")}`
+          `Images non trouvées: ${missing.join(', ')}`,
         );
       }
 
       // Vérifier que l'utilisateur peut accéder à toutes les images
       const inaccessible = imagesToAdd.filter(
-        (img) => !this.canAccessImage(img, user)
+        (img) => !this.canAccessImage(img, user),
       );
       if (inaccessible.length) {
         throw new ForbiddenException(
-          `Vous ne pouvez pas ajouter ces images à votre collection: ${inaccessible.map((i) => i.id).join(", ")}`
+          `Vous ne pouvez pas ajouter ces images à votre collection: ${inaccessible.map((i) => i.id).join(', ')}`,
         );
       }
     }
@@ -201,11 +200,11 @@ export class CollectionsService {
 
     if (current.is_private === false) {
       const hasUnapproved = (current.images || []).some(
-        (img) => !img.is_approved
+        (img) => !img.is_approved,
       );
       if (hasUnapproved) {
         throw new BadRequestException(
-          "Impossible de rendre la collection publique: elle contient des images non approuvées."
+          'Impossible de rendre la collection publique: elle contient des images non approuvées.',
         );
       }
     }
@@ -221,14 +220,14 @@ export class CollectionsService {
   private async verifyOwnership(id: number, user: User) {
     const collection = await this.collectionsRepository.findOne({
       where: { id },
-      relations: ["user"],
+      relations: ['user'],
     });
 
-    if (!collection) throw new NotFoundException("Collection non trouvée");
+    if (!collection) throw new NotFoundException('Collection non trouvée');
 
-    if (user.role !== "admin" && collection.user.id !== user.id) {
+    if (user.role !== 'admin' && collection.user.id !== user.id) {
       throw new ForbiddenException(
-        "Vous n'êtes pas propriétaire de cette collection"
+        "Vous n'êtes pas propriétaire de cette collection",
       );
     }
 
@@ -244,7 +243,7 @@ export class CollectionsService {
    */
   private canAccessImage(image: Image, user: User): boolean {
     // Les admins peuvent accéder à toutes les images
-    if (user.role === "admin") {
+    if (user.role === 'admin') {
       return true;
     }
 

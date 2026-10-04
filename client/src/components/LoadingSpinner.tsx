@@ -1,14 +1,14 @@
-import { Box, CircularProgress, Typography } from "@mui/material";
+import { Box, CircularProgress, Typography } from '@mui/material';
 
 interface LoadingSpinnerProps {
   size?: number;
   message?: string;
   centered?: boolean;
-  color?: "primary" | "secondary" | "error" | "warning" | "info" | "success";
+  color?: 'primary' | 'secondary' | 'error' | 'warning' | 'info' | 'success';
 }
 
 export const LoadingSpinner = (props: LoadingSpinnerProps) => {
-  const { size = 40, message, centered = true, color = "primary" } = props;
+  const { size = 40, message, centered = true, color = 'primary' } = props;
 
   const content = (
     <>
@@ -17,7 +17,7 @@ export const LoadingSpinner = (props: LoadingSpinnerProps) => {
         <Typography
           variant="body2"
           color="text.secondary"
-          sx={{ mt: 2, textAlign: "center" }}
+          sx={{ mt: 2, textAlign: 'center' }}
         >
           {message}
         </Typography>
@@ -29,12 +29,12 @@ export const LoadingSpinner = (props: LoadingSpinnerProps) => {
     return (
       <Box
         sx={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
           minHeight: 200,
-          width: "100%",
+          width: '100%',
         }}
       >
         {content}
@@ -45,9 +45,9 @@ export const LoadingSpinner = (props: LoadingSpinnerProps) => {
   return (
     <Box
       sx={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
       }}
     >
       {content}
