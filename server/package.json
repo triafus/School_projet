@@ -13,12 +13,13 @@
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
-    "test": "jest",
-    "test:watch": "jest --watch",
+    "test": "jest --config ./test_unit/jest.config.js",
+    "test:watch": "jest --watch --config ./test_unit/jest.config.js",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "dotenv -e .env.test -- jest --config ./test_e2e/jest-e2e.json --detectOpenHandles",
-    "test:e2e:ci": "jest --config ./test_e2e/jest-e2e.json --forceExit"
+    "test:integration": "dotenv -e .env.test -- jest --config ./test_integration/jest.config.js --detectOpenHandles",
+    "test:e2e": "dotenv -e .env.test -- jest --config ./test_e2e/jest.config.js --detectOpenHandles",
+    "test:e2e:ci": "jest --config ./test_e2e/jest.config.js --forceExit"
   },
   "dependencies": {
     "@nestjs/common": "^10.4.20",
@@ -53,6 +54,7 @@
     "@types/passport-jwt": "^3.0.13",
     "@types/passport-local": "^1.0.38",
     "@types/supertest": "^2.0.16",
+    "@types/uuid": "^9.0.8",
     "@typescript-eslint/eslint-plugin": "^6.13.1",
     "@typescript-eslint/parser": "^6.13.1",
     "dotenv-cli": "^10.0.0",
@@ -68,7 +70,8 @@
     "ts-loader": "^9.5.1",
     "ts-node": "^10.9.1",
     "tsconfig-paths": "^4.2.0",
-    "typescript": "^5.3.3"
+    "typescript": "^5.3.3",
+    "uuid": "^9.0.1"
   },
   "jest": {
     "moduleFileExtensions": [
