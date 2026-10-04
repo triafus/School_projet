@@ -41,7 +41,8 @@
       "tar": ">=7.4.0",
       "path-to-regexp": ">=8.2.0",
       "uuid": "9",
-      "file-type": ">=21.3.2"
+      "file-type": ">=21.3.2",
+      "@nestjs/config": "^4.0.2"
     }
   }
 }
