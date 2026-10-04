@@ -2,6 +2,10 @@ import { Injectable } from "@nestjs/common";
 import { createClient, SupabaseClient } from "@supabase/supabase-js";
 import { Multer } from "multer";
 
+if (typeof (globalThis as any).WebSocket === "undefined") {
+  (globalThis as any).WebSocket = class {};
+}
+
 @Injectable()
 export class SupabaseService {
   private supabase: SupabaseClient;
