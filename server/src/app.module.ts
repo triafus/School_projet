@@ -19,15 +19,21 @@ import { HealthController } from "./health/health.controller";
     }),
     TypeOrmModule.forRoot({
       type: "postgres",
-      host: process.env.DB_HOST,
-      port: Number(process.env.DB_PORT),
-      username: process.env.DB_USERNAME,
-      password: process.env.DB_PASSWORD,
-      database: process.env.NODE_ENV === "test" 
-        ? (process.env.DB_TEST_DATABASE || process.env.DB_DATABASE || process.env.DB_NAME) 
-        : (process.env.DB_DATABASE || process.env.DB_NAME),
+      ...(process.env.DATABASE_URL
+        ? { url: process.env.DATABASE_URL }
+        : {
+            host: process.env.DB_HOST,
+            port: Number(process.env.DB_PORT),
+            username: process.env.DB_USERNAME,
+            password: process.env.DB_PASSWORD,
+            database:
+              process.env.NODE_ENV === "test"
+                ? process.env.DB_TEST_DATABASE || process.env.DB_DATABASE || process.env.DB_NAME
+                : process.env.DB_DATABASE || process.env.DB_NAME,
+          }),
       ssl:
-        process.env.DB_SSL === "true"
+        process.env.DB_SSL === "true" ||
+        process.env.DATABASE_URL?.includes("supabase")
           ? { rejectUnauthorized: false }
           : false,
       entities: [User, Image, Collection],
