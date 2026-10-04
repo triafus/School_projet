@@ -15,6 +15,7 @@ import type { Collection } from '../types/collection';
 import { CollectionFormModal } from '../components/collections/CollectionFormModal';
 import DeleteCollectionModal from '../components/collections/DeleteCollectionModal';
 import CollectionCard from '../components/collections/CollectionCard';
+import { CustomButton } from '../components/CustomButton';
 
 const CollectionPage = () => {
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -87,18 +88,23 @@ const CollectionPage = () => {
         minWidth: 280,
         transition: 'all 0.2s',
         '&:hover': {
-          borderColor: '#1976d2',
-          backgroundColor: 'rgba(25, 118, 210, 0.04)',
+          borderColor: '#CD7476',
+          backgroundColor: 'rgba(205, 116, 118, 0.04)',
+        },
+        '&:focus-visible': {
+          outline: '2px solid #8E383A',
+          outlineOffset: '2px',
         },
       }}
     >
       <AddIcon
         sx={{
           borderRadius: '999px',
-          bgcolor: '#a8b2c7',
+          bgcolor: '#CD7476',
           fontSize: 48,
-          color: 'white',
+          color: '#111827',
           mb: 1,
+          p: 0.5,
         }}
       />
       <Typography
@@ -166,22 +172,13 @@ const CollectionPage = () => {
             }}
           />
 
-          <Button
+          <CustomButton
             onClick={handleOpenCreateModal}
-            variant="contained"
             startIcon={<AddIcon />}
-            sx={{
-              backgroundColor: '#2d3748',
-              '&:hover': {
-                backgroundColor: '#1a202c',
-              },
-              borderRadius: 2,
-              textTransform: 'none',
-              fontWeight: 'medium',
-            }}
+            sx={{ px: 2.5 }}
           >
             Nouvelle Collection
-          </Button>
+          </CustomButton>
         </Box>
       </Box>
 
