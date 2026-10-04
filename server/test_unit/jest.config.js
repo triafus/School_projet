@@ -6,6 +6,7 @@ module.exports = {
   transform: {
     '^.+\\.(t|j)s$': 'ts-jest',
   },
+  transformIgnorePatterns: ['/node_modules/(?!(@nestjs)/)'],
   moduleNameMapper: {
     '^typeorm$': require.resolve('typeorm'),
     '^uuid$': require.resolve('uuid'),

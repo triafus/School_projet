@@ -28,7 +28,7 @@
   "scripts": {
     "start": "vite",
     "build": "vite build",
-    "test": "vitest run",
+    "test": "vitest run --passWithNoTests",
     "eject": "echo \"No eject for vite!\"",
     "lint": "eslint \"src/**/*.{ts,tsx}\" --fix",
     "format": "prettier --write \"src/**/*.{ts,tsx}\""
