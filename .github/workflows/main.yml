@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - feat/9---CICD-github-action
+      - feature/**
   pull_request:
     branches:
       - main
@@ -14,31 +15,23 @@ jobs:
   build-and-test:
     runs-on: ubuntu-latest
 
-    # services: # PostgreSQL désactivé car on utilise SQLite pour les tests
-
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
       - name: Install pnpm
-        uses: pnpm/action-setup@v2
+        uses: pnpm/action-setup@v4
         with:
-          version: 8
+          version: 10
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "20"
           cache: "pnpm"
-          cache-dependency-path: |
-            client/pnpm-lock.yaml
-            server/pnpm-lock.yaml
 
-      - name: Install Client Dependencies
-        run: cd client && pnpm install --no-frozen-lockfile
-
-      - name: Install Server Dependencies
-        run: cd server && pnpm install --no-frozen-lockfile
+      - name: Install Dependencies
+        run: pnpm install --no-frozen-lockfile
 
       - name: Setup Test Environment
         run: |
@@ -54,28 +47,24 @@ jobs:
           echo "SUPABASE_URL=http://localhost/fake" >> .env.test
           echo "SUPABASE_SERVICE_ROLE_KEY=fake-key-12345" >> .env.test
 
-      # Plus besoin d'attendre Postgres quand on utilise SQLite
-      - name: Skip DB Wait
-        run: echo "Using SQLite for tests"
-
       - name: Run Server Unit Tests
-        run: cd server && pnpm run test
+        run: pnpm --filter server run test
         env:
           CI: true
 
       - name: Run Server E2E Tests
-        run: cd server && pnpm run test:e2e
+        run: pnpm --filter server run test:e2e:ci
         env:
           CI: true
         timeout-minutes: 10
 
       - name: Build Client
-        run: cd client && pnpm run build
+        run: pnpm --filter client run build
         env:
           NODE_ENV: production
 
       - name: Build Server
-        run: cd server && pnpm run build
+        run: pnpm --filter server run build
         env:
           NODE_ENV: production
 
@@ -89,4 +78,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: server-build
-          path: server/dist/
+          path: server/dist/

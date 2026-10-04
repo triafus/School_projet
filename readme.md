@@ -8,7 +8,7 @@
 
 ## Description du projet
 
-**School_projet** est une application web complète destinée à la gestion d'une école. Elle permet aux utilisateurs de s'inscrire, de se connecter, et d'accéder à des fonctionnalités d'administration. Le projet est structuré en deux parties principales : un client construit avec React et TypeScript, et un serveur utilisant NestJS pour gérer la logique métier et les API.
+**School_projet** est une application web complète basée sur une galerie de partage d'images. Elle permet aux utilisateurs de s'inscrire, de se connecter, et d'accéder à des fonctionnalités d'administration. Le projet est structuré en deux parties principales : un client construit avec React et TypeScript, et un serveur utilisant NestJS pour gérer la logique métier et les API.
 
 ### Fonctionnalités clés
 

@@ -3,29 +3,32 @@
   "version": "1.0.0",
   "description": "Template fullstack React TypeScript + NestJS avec authentification",
   "scripts": {
-    "build": "npm run build:client && npm run build:server",
-    "build:client": "cd client && pnpm run build",
-    "build:server": "cd server && pnpm run build",
-    "start": "concurrently \"npm run start:server\" \"npm run start:client\"",
-    "start:client": "cd client && pnpm start",
-    "start:server": "cd server && pnpm run start:dev",
-    "start:prod": "cd server && pnpm run start:prod",
-    "install:all": "pnpm install && cd client && pnpm install && cd ../server && pnpm install",
+    "build": "pnpm run build:client && pnpm run build:server",
+    "build:client": "pnpm --filter client run build",
+    "build:server": "pnpm --filter server run build",
+    "start": "concurrently \"pnpm run start:server\" \"pnpm run start:client\"",
+    "start:client": "pnpm --filter client run start",
+    "start:server": "pnpm --filter server run start:dev",
+    "start:prod": "pnpm --filter server run start:prod",
+    "test": "pnpm --filter server run test",
+    "test:e2e": "pnpm --filter server run test:e2e",
     "dev": "concurrently \"pnpm run start:server\" \"pnpm run start:client\""
   },
   "devDependencies": {
-    "@types/jest": "^30.0.0",
     "concurrently": "^8.2.2"
   },
-  "workspaces": [
-    "client",
-    "server"
-  ],
-  "dependencies": {
-    "@nestjs/common": "^11.1.5",
-    "@nestjs/core": "^11.1.5",
-    "@nestjs/platform-express": "^11.1.5",
-    "@nestjs/testing": "^11.1.5",
-    "react-scripts": "^0.0.0"
+  "pnpm": {
+    "overrides": {
+      "qs": "^6.14.1",
+      "validator": "^13.15.23"
+    },
+    "onlyBuiltDependencies": [
+      "sqlite3",
+      "@parcel/watcher",
+      "core-js",
+      "core-js-pure",
+      "esbuild",
+      "sharp"
+    ]
   }
 }

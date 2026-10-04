@@ -18,7 +18,7 @@ import { HealthController } from "./health/health.controller";
       isGlobal: true,
     }),
     TypeOrmModule.forRoot(
-      process.env.NODE_ENV === "test" && process.env.USE_SQLITE !== "false"
+      process.env.NODE_ENV === "test" || process.env.USE_SQLITE === "true"
         ? {
             type: "sqlite",
             database: ":memory:",
