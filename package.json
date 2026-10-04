@@ -15,7 +15,9 @@
   },
   "devDependencies": {
     "@types/jest": "^30.0.0",
-    "concurrently": "^8.2.2"
+    "concurrently": "^8.2.2",
+    "husky": "^9.1.7",
+    "lint-staged": "^17.6.0"
   },
   "workspaces": [
     "client",
