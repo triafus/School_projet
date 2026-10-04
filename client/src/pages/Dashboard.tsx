@@ -131,12 +131,13 @@ const Dashboard = () => {
               sx={{
                 backgroundColor:
                   activeFilter === filter ? '#CD7476' : 'transparent',
-                color: activeFilter === filter ? '#111827' : 'text.primary',
+                color: activeFilter === filter ? '#FFFFFF' : 'text.primary',
                 borderColor: activeFilter === filter ? '#CD7476' : '#e0e0e0',
                 fontWeight: activeFilter === filter ? 600 : 400,
                 '&:hover': {
                   backgroundColor:
                     activeFilter === filter ? '#BA6264' : '#f5f5f5',
+                  color: activeFilter === filter ? '#FFFFFF' : 'text.primary',
                 },
                 borderRadius: 2,
               }}

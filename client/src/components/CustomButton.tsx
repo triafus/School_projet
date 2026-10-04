@@ -27,11 +27,11 @@ export const CustomButton = forwardRef<HTMLButtonElement, CustomButtonProps>(
           },
           '&.MuiButton-contained:not(.MuiButton-containedError)': {
             backgroundColor: '#CD7476',
-            color: '#111827',
+            color: '#FFFFFF',
             boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)',
             '&:hover': {
               backgroundColor: '#BA6264',
-              color: '#000000',
+              color: '#FFFFFF',
               boxShadow: '0 4px 6px -1px rgba(205, 116, 118, 0.3)',
             },
             '&:active': {

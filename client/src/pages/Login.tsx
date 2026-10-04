@@ -204,7 +204,7 @@ export const Login = () => {
                 sx={{
                   py: 1.5,
                   bgcolor: '#CD7476',
-                  color: '#111827',
+                  color: '#FFFFFF',
                   fontSize: '1rem',
                   fontWeight: 600,
                   borderRadius: 2,
@@ -213,7 +213,7 @@ export const Login = () => {
                   transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
                   '&:hover': {
                     bgcolor: '#BA6264',
-                    color: '#000000',
+                    color: '#FFFFFF',
                     boxShadow: '0 4px 6px -1px rgba(205, 116, 118, 0.3)',
                   },
                   '&:active': {
