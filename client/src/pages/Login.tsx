@@ -203,14 +203,26 @@ export const Login = () => {
                 disabled={isLoggingIn}
                 sx={{
                   py: 1.5,
-                  bgcolor: '#374151',
-                  color: 'white',
+                  bgcolor: '#CD7476',
+                  color: '#FFFFFF',
                   fontSize: '1rem',
-                  fontWeight: 500,
+                  fontWeight: 600,
                   borderRadius: 2,
                   textTransform: 'none',
+                  boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)',
+                  transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
                   '&:hover': {
-                    bgcolor: '#1f2937',
+                    bgcolor: '#BA6264',
+                    color: '#FFFFFF',
+                    boxShadow: '0 4px 6px -1px rgba(205, 116, 118, 0.3)',
+                  },
+                  '&:active': {
+                    bgcolor: '#A84C4E',
+                    color: '#FFFFFF',
+                  },
+                  '&:focus-visible': {
+                    outline: '2px solid #8E383A',
+                    outlineOffset: '2px',
                   },
                   '&:disabled': {
                     bgcolor: '#d1d5db',

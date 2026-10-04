@@ -130,12 +130,14 @@ const Dashboard = () => {
               variant={activeFilter === filter ? 'filled' : 'outlined'}
               sx={{
                 backgroundColor:
-                  activeFilter === filter ? '#2c3e50' : 'transparent',
-                color: activeFilter === filter ? 'white' : 'text.primary',
-                borderColor: activeFilter === filter ? '#2c3e50' : '#e0e0e0',
+                  activeFilter === filter ? '#CD7476' : 'transparent',
+                color: activeFilter === filter ? '#FFFFFF' : 'text.primary',
+                borderColor: activeFilter === filter ? '#CD7476' : '#e0e0e0',
+                fontWeight: activeFilter === filter ? 600 : 400,
                 '&:hover': {
                   backgroundColor:
-                    activeFilter === filter ? '#34495e' : '#f5f5f5',
+                    activeFilter === filter ? '#BA6264' : '#f5f5f5',
+                  color: activeFilter === filter ? '#FFFFFF' : 'text.primary',
                 },
                 borderRadius: 2,
               }}

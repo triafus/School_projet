@@ -40,7 +40,11 @@ export const EditImageModal = (props: EditImageModalProps) => {
 
     patchImageMutation({
       imageId: image.id,
-      updateData: { ...data },
+      updateData: {
+        title: data.title,
+        description: data.description,
+        is_private: data.is_private,
+      },
     }).then(() => {
       handleClose();
       onUpdate && onUpdate();
