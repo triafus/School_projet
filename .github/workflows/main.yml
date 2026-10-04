@@ -1,44 +1,52 @@
-name: CI/CD Workflow
+name: CI/CD Pipeline
 
 on:
   push:
     branches:
       - main
-      - feat/9---CICD-github-action
   pull_request:
     branches:
       - main
   workflow_dispatch:
+    inputs:
+      version_bump:
+        description: 'Version bump type (patch, minor, major)'
+        required: true
+        default: 'patch'
 
 jobs:
-  build-and-test:
+  integration:
+    if: github.event_name == 'push' || github.event_name == 'pull_request'
     runs-on: ubuntu-latest
-
-    # services: # PostgreSQL désactivé car on utilise SQLite pour les tests
-
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
-
-      - name: Install pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 8
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "20"
-          cache: "pnpm"
-          cache-dependency-path: |
-            client/pnpm-lock.yaml
-            server/pnpm-lock.yaml
 
-      - name: Install Client Dependencies
-        run: cd client && pnpm install --no-frozen-lockfile
+      - name: Install pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 8
 
-      - name: Install Server Dependencies
-        run: cd server && pnpm install --no-frozen-lockfile
+      - name: Install dependencies
+        run: pnpm install --no-frozen-lockfile
+
+      - name: Run security audit
+        run: pnpm audit --prod
+
+      - name: Run lint
+        run: |
+          cd client && pnpm run lint
+          cd ../server && pnpm run lint
+
+      - name: Build client and server
+        run: |
+          cd client && pnpm run build
+          cd ../server && pnpm run build
 
       - name: Setup Test Environment
         run: |
@@ -54,39 +62,46 @@ jobs:
           echo "SUPABASE_URL=http://localhost/fake" >> .env.test
           echo "SUPABASE_SERVICE_ROLE_KEY=fake-key-12345" >> .env.test
 
-      # Plus besoin d'attendre Postgres quand on utilise SQLite
-      - name: Skip DB Wait
-        run: echo "Using SQLite for tests"
+      - name: Run tests
+        run: |
+          cd server
+          pnpm run test
+          pnpm run test:e2e
 
-      - name: Run Server Unit Tests
-        run: cd server && pnpm run test
-        env:
-          CI: true
-
-      - name: Run Server E2E Tests
-        run: cd server && pnpm run test:e2e
-        env:
-          CI: true
-        timeout-minutes: 10
-
-      - name: Build Client
-        run: cd client && pnpm run build
-        env:
-          NODE_ENV: production
-
-      - name: Build Server
-        run: cd server && pnpm run build
-        env:
-          NODE_ENV: production
-
-      - name: Upload Client Build
-        uses: actions/upload-artifact@v4
+  release_and_deploy:
+    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
         with:
-          name: client-build
-          path: client/dist/
+          fetch-depth: 0
 
-      - name: Upload Server Build
-        uses: actions/upload-artifact@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          name: server-build
-          path: server/dist/
+          node-version: "20"
+
+      - name: Setup Git
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Bump version
+        id: bump
+        run: |
+          NEW_VER=$(npm --no-git-tag-version version ${{ github.event.inputs.version_bump }})
+          git commit -am "chore(release): bump version to $NEW_VER"
+          git tag -a "$NEW_VER" -m "Release $NEW_VER"
+          echo "version=$NEW_VER" >> $GITHUB_OUTPUT
+
+      - name: Push changes and tags
+        run: git push --follow-tags
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.bump.outputs.version }}
+          generate_release_notes: true
