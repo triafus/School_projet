@@ -30,7 +30,7 @@ jobs:
           version: 8
       - run: cd client && pnpm install --no-frozen-lockfile
       - run: cd client && pnpm run lint
-      - run: cd client && pnpm audit --prod
+      - run: cd client && pnpm audit --prod --audit-level=high
       - run: cd client && pnpm run build
 
   backend-build:
@@ -45,7 +45,7 @@ jobs:
           version: 8
       - run: cd server && pnpm install --no-frozen-lockfile
       - run: cd server && pnpm run lint
-      - run: cd server && pnpm audit --prod
+      - run: cd server && pnpm audit --prod --audit-level=high
       - run: cd server && pnpm run build
 
   frontend-unit-test:
