@@ -1,5 +1,3 @@
-const path = require('path');
-
 module.exports = {
   moduleFileExtensions: ['js', 'json', 'ts'],
   rootDir: '.',
@@ -11,7 +9,7 @@ module.exports = {
   setupFiles: ['<rootDir>/setup-env.ts'],
   moduleNameMapper: {
     '^typeorm$': require.resolve('typeorm'),
-    '^uuid$': path.resolve(__dirname, '../../node_modules/.pnpm/uuid@11.1.1/node_modules/uuid/dist/cjs/index.js'),
+    '^uuid$': require.resolve('uuid'),
   },
   testTimeout: 30000,
 };
