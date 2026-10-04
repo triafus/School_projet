@@ -16,8 +16,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.62.0",
-    "react-router-dom": "^6.20.1",
-    "react-scripts": "^5.0.1",
+    "react-router-dom": "^7.18.4",
     "typescript": "^4.9.5"
   },
   "overrides": {
@@ -29,14 +28,8 @@
   "scripts": {
     "start": "vite",
     "build": "vite build",
-    "test": "react-scripts test",
+    "test": "vitest run",
     "eject": "echo \"No eject for vite!\""
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
   },
   "browserslist": {
     "production": [
@@ -54,6 +47,7 @@
   "devDependencies": {
     "@netlify/vite-plugin": "^2.5.4",
     "@vitejs/plugin-react": "^4.7.0",
-    "vite": "^6.3.5"
+    "vite": "^6.3.5",
+    "vitest": "^5.0.3"
   }
 }
