@@ -102,7 +102,7 @@ const CollectionPage = () => {
           borderRadius: '999px',
           bgcolor: '#CD7476',
           fontSize: 48,
-          color: '#111827',
+          color: '#FFFFFF',
           mb: 1,
           p: 0.5,
         }}
