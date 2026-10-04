@@ -11,15 +11,17 @@ export class SupabaseService {
   private supabase: SupabaseClient;
 
   constructor() {
-    this.supabase = createClient(
-      process.env.SUPABASE_URL,
-      process.env.SUPABASE_SERVICE_ROLE_KEY,
-      {
-        auth: {
-          persistSession: false,
-        },
+    const supabaseUrl =
+      process.env.SUPABASE_URL || 'https://placeholder.supabase.co';
+    const supabaseKey =
+      process.env.SUPABASE_SERVICE_ROLE_KEY ||
+      'placeholder-service-role-key-12345';
+
+    this.supabase = createClient(supabaseUrl, supabaseKey, {
+      auth: {
+        persistSession: false,
       },
-    );
+    });
   }
 
   getClient() {
