@@ -6,10 +6,7 @@ module.exports = {
   transform: {
     '^.+\\.(t|j)s$': 'ts-jest',
   },
+  transformIgnorePatterns: ['/node_modules/(?!(@nestjs|uuid)/)'],
   setupFiles: ['<rootDir>/setup-env.ts'],
-  moduleNameMapper: {
-    '^typeorm$': require.resolve('typeorm'),
-    '^uuid$': require.resolve('uuid'),
-  },
   testTimeout: 30000,
 };

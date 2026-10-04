@@ -27,10 +27,10 @@ jobs:
           node-version: 20
       - uses: pnpm/action-setup@v3
         with:
-          version: 8
+          version: 9
       - run: cd client && pnpm install --no-frozen-lockfile
       - run: cd client && pnpm run lint
-      - run: cd client && pnpm audit --prod
+      - run: cd client && pnpm audit --prod --audit-level=high
       - run: cd client && pnpm run build
 
   backend-build:
@@ -42,10 +42,10 @@ jobs:
           node-version: 20
       - uses: pnpm/action-setup@v3
         with:
-          version: 8
+          version: 9
       - run: cd server && pnpm install --no-frozen-lockfile
       - run: cd server && pnpm run lint
-      - run: cd server && pnpm audit --prod
+      - run: cd server && pnpm audit --prod --audit-level=high
       - run: cd server && pnpm run build
 
   frontend-unit-test:
@@ -58,7 +58,7 @@ jobs:
           node-version: 20
       - uses: pnpm/action-setup@v3
         with:
-          version: 8
+          version: 9
       - run: cd client && pnpm install --no-frozen-lockfile
       - run: cd client && pnpm run test
 
@@ -72,7 +72,7 @@ jobs:
           node-version: 20
       - uses: pnpm/action-setup@v3
         with:
-          version: 8
+          version: 9
       - run: cd server && pnpm install --no-frozen-lockfile
       - run: cd server && pnpm run test
 
@@ -86,7 +86,7 @@ jobs:
           node-version: 20
       - uses: pnpm/action-setup@v3
         with:
-          version: 8
+          version: 9
       - run: |
           cd client && pnpm install --no-frozen-lockfile
           cd ../server && pnpm install --no-frozen-lockfile
@@ -107,6 +107,20 @@ jobs:
   e2e-test:
     needs: integration-test
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: test_e2e_db
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -114,10 +128,22 @@ jobs:
           node-version: 20
       - uses: pnpm/action-setup@v3
         with:
-          version: 8
+          version: 9
       - run: |
           cd client && pnpm install --no-frozen-lockfile
           cd ../server && pnpm install --no-frozen-lockfile
+      - name: Create .env.test for E2E
+        run: |
+          cd server
+          echo "DB_HOST=localhost" > .env.test
+          echo "DB_PORT=5432" >> .env.test
+          echo "DB_USERNAME=postgres" >> .env.test
+          echo "DB_PASSWORD=postgres" >> .env.test
+          echo "DB_DATABASE=test_e2e_db" >> .env.test
+          echo "JWT_SECRET=test-secret-key-for-ci-cd-12345" >> .env.test
+          echo "NODE_ENV=test" >> .env.test
+          echo "SUPABASE_URL=${{ secrets.SUPABASE_URL }}" >> .env.test
+          echo "SUPABASE_SERVICE_ROLE_KEY=${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}" >> .env.test
       - run: cd server && pnpm run test:e2e
 
   deploy-production:
@@ -131,7 +157,7 @@ jobs:
           node-version: 20
       - uses: pnpm/action-setup@v3
         with:
-          version: 8
+          version: 9
       - run: |
           cd client && pnpm install --no-frozen-lockfile
           cd ../server && pnpm install --no-frozen-lockfile

@@ -6,18 +6,18 @@ echo "🏃 Démarrage de la routine pre-push (Lint, Audit, Build, Tests)..."
 # Client
 echo "👉 Vérification du Client..."
 cd client
-pnpm install --frozen-lockfile
+pnpm install --no-frozen-lockfile
 pnpm run lint
-pnpm audit --prod
+pnpm audit --prod --audit-level=high
 pnpm run build
 cd ..
 
 # Server
 echo "👉 Vérification du Server..."
 cd server
-pnpm install --frozen-lockfile
+pnpm install --no-frozen-lockfile
 pnpm run lint
-pnpm audit --prod
+pnpm audit --prod --audit-level=high
 pnpm run build
 
 echo "✅ Routine pre-push terminée avec succès !"

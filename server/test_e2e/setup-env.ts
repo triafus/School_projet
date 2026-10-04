@@ -1,5 +1,11 @@
 // Setup environment for e2e tests
 process.env.NODE_ENV = 'test';
+process.env.SUPABASE_URL =
+  process.env.SUPABASE_URL || 'https://placeholder.supabase.co';
+process.env.SUPABASE_SERVICE_ROLE_KEY =
+  process.env.SUPABASE_SERVICE_ROLE_KEY || 'placeholder-service-role-key-12345';
+process.env.JWT_SECRET =
+  process.env.JWT_SECRET || 'test-jwt-secret-key-for-e2e-testing-12345';
 
 if (typeof (globalThis as any).Headers === 'undefined') {
   (globalThis as any).Headers = class Headers {
@@ -9,16 +15,30 @@ if (typeof (globalThis as any).Headers === 'undefined') {
         if (Array.isArray(init)) {
           init.forEach(([k, v]) => this.map.set(k.toLowerCase(), v));
         } else if (typeof init === 'object') {
-          Object.entries(init).forEach(([k, v]) => this.map.set(k.toLowerCase(), String(v)));
+          Object.entries(init).forEach(([k, v]) =>
+            this.map.set(k.toLowerCase(), String(v)),
+          );
         }
       }
     }
-    append(k: string, v: string) { this.map.set(k.toLowerCase(), v); }
-    delete(k: string) { this.map.delete(k.toLowerCase()); }
-    get(k: string) { return this.map.get(k.toLowerCase()) || null; }
-    has(k: string) { return this.map.has(k.toLowerCase()); }
-    set(k: string, v: string) { this.map.set(k.toLowerCase(), v); }
-    forEach(cb: any) { this.map.forEach(cb); }
+    append(k: string, v: string) {
+      this.map.set(k.toLowerCase(), v);
+    }
+    delete(k: string) {
+      this.map.delete(k.toLowerCase());
+    }
+    get(k: string) {
+      return this.map.get(k.toLowerCase()) || null;
+    }
+    has(k: string) {
+      return this.map.has(k.toLowerCase());
+    }
+    set(k: string, v: string) {
+      this.map.set(k.toLowerCase(), v);
+    }
+    forEach(cb: any) {
+      this.map.forEach(cb);
+    }
   };
 }
 

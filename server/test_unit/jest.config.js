@@ -6,9 +6,9 @@ module.exports = {
   transform: {
     '^.+\\.(t|j)s$': 'ts-jest',
   },
-  transformIgnorePatterns: ['/node_modules/(?!(@nestjs)/)'],
+  // Permet à Jest de transformer uuid et autres modules ESM si nécessaire
+  transformIgnorePatterns: ['/node_modules/(?!(@nestjs|uuid)/)'],
   moduleNameMapper: {
     '^typeorm$': require.resolve('typeorm'),
-    '^uuid$': require.resolve('uuid'),
   },
 };
