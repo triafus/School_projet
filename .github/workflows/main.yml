@@ -164,7 +164,10 @@ jobs:
       - run: |
           cd client && pnpm run build
           cd ../server && pnpm run build
-      - name: Deploy to Vercel
+      - name: Deploy Client to Vercel
         run: |
           npm install -g vercel
-          cd client && vercel --prod --yes --name school-projet-client --token=${{ secrets.VERCEL_TOKEN }}
+          cd client && vercel --prod --yes --name pict-u-client --token=${{ secrets.VERCEL_TOKEN }}
+      - name: Deploy Server to Vercel
+        run: |
+          cd server && vercel --prod --yes --name pict-u-server --token=${{ secrets.VERCEL_TOKEN }}
